@@ -3,7 +3,8 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme inline {
-  --breakpoint-xxs: 320px;
+  --breakpoint-3xs: 300px;
+  --breakpoint-2xs: 400px;
   --breakpoint-xs: 480px;
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
@@ -30,7 +31,7 @@
 }
 
 :root {
-  @apply text-[16px] xxs:text-[16px] xs:text-[17px] sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[21px] 2xl:text-[22px] dark:bg-black dark:text-white text-black bg-white transition-[background] duration-500;
+  @apply text-[14px] 3xs:text-[15px] 2xs:text-[16px] xs:text-[17px] sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[21px] 2xl:text-[22px] dark:bg-black dark:text-white text-black bg-white transition-[background] duration-500;
 }
 
 h1 {
@@ -64,11 +65,11 @@ body {
 }
 
 main {
-  @apply max-w-2xl mx-auto py-4;
+  @apply max-w-2xl mx-auto p-4 w-dvw wrap-break-word;
 }
 
 header {
-  @apply w-dvw min-h-96 h-[60dvh] flex-col flex justify-center items-center mt-12 text-center;
+  @apply w-dvw min-h-96 h-[60dvh] flex-col flex justify-center items-center text-center;
 }
 
 button {
