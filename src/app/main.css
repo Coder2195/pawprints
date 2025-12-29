@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme inline {
+  --breakpoint-xxs: 320px;
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  --font-rit: var(--font-rit);
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-orange: #f76902;
+  --color-primary: var(--color-orange);
+  --color-pms-427c: #d0d3d4;
+  --color-pms-429c: #a2aaad;
+  --color-pms-430c: #7c878e;
+  --color-pms-gray-1c: #d7d2cb;
+  --color-pms-gray-5c: #aca39a;
+  --color-green: #84bd00;
+  --color-lime: #c4d600;
+  --color-blue: #009cbd;
+  --color-purple: #7d55c7;
+  --color-red: #da291c;
+  --color-yellow: #f6be00;
+}
+
+:root {
+  @apply text-[16px] xxs:text-[16px] xs:text-[17px] sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[21px] 2xl:text-[22px] dark:bg-black dark:text-white text-black bg-white transition-[background] duration-500;
+}
+
+h1 {
+  @apply font-bold text-6xl;
+}
+
+h2 {
+  @apply font-bold text-5xl;
+}
+
+h3 {
+  @apply font-bold text-4xl;
+}
+
+h4 {
+  @apply font-medium text-3xl;
+}
+
+h5 {
+  @apply font-medium text-2xl;
+}
+
+h6 {
+  @apply font-medium text-xl;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  @apply font-rit;
+}
+
+main {
+  @apply max-w-2xl mx-auto py-4;
+}
+
+header {
+  @apply w-dvw min-h-96 h-[60dvh] flex-col flex justify-center items-center;
+}
+
+button {
+  @apply cursor-pointer;
+}
+
+.bg-solid {
+  @apply bg-white dark:bg-black text-black dark:text-white;
+}
