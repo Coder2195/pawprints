@@ -37,7 +37,7 @@ const Profile: FC = () => {
         />
       </button>
 
-      <div className="absolute hover:max-h-24 peer-hover:max-h-24 z-50 max-h-0 w-max rounded-lg right-0 top-full transition-all duration-300 ease-in overflow-hidden text-pms-430c">
+      <div className="absolute hover:max-h-24 peer-hover:max-h-24 z-10 max-h-0 w-max rounded-lg right-0 top-full transition-all duration-300 ease-in overflow-hidden text-pms-430c">
         <span className="border-2 border-orange rounded-lg bg-solid flex flex-col justify-stretch">
           <div className="p-0.5 px-2 border-b-2 border-orange">
             Hello, {session.user.name}!

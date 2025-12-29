@@ -3,7 +3,7 @@ import "./main.css";
 import localFont from "next/font/local";
 import Navbar from "../components/ui/navbar";
 import { FC, ReactNode } from "react";
-import Providers from "@/components/providers";
+import { ThemeProvider } from "next-themes";
 
 const ritFont = localFont({
   src: [
@@ -95,11 +95,16 @@ const RootLayout: FC<
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${ritFont.className} antialiased`}>
-        <Providers>
+        <ThemeProvider
+          attribute="data-theme"
+          themes={["dark", "light"]}
+          storageKey="theme"
+          enableSystem
+        >
           <Navbar />
           {children}
           {pawprint}
-        </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -68,7 +68,7 @@ main {
 }
 
 header {
-  @apply w-dvw min-h-96 h-[60dvh] flex-col flex justify-center items-center;
+  @apply w-dvw min-h-96 h-[60dvh] flex-col flex justify-center items-center mt-12 text-center;
 }
 
 button {

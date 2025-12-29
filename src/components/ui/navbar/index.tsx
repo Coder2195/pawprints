@@ -6,7 +6,7 @@ import ThemeButton from "./theme";
 
 const Navbar: FC = () => {
   return (
-    <nav className="flex gap-2 bg-primary p-2 justify-between items-center text-white">
+    <nav className="flex gap-2 bg-primary p-2 justify-between items-center text-white fixed top-0 left-0 w-full z-50">
       <Link className="flex gap-2 items-center font-bold " href="/">
         <Image
           src="/pawprints.svg"
