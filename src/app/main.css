@@ -2,7 +2,7 @@
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-@theme inline {
+@theme {
   --breakpoint-3xs: 300px;
   --breakpoint-2xs: 400px;
   --breakpoint-xs: 480px;
@@ -30,52 +30,64 @@
   --color-yellow: #f6be00;
 }
 
-:root {
-  @apply text-[14px] 3xs:text-[15px] 2xs:text-[16px] xs:text-[17px] sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[21px] 2xl:text-[22px] dark:bg-black dark:text-white text-black bg-white transition-[background] duration-500;
+@layer base {
+  * {
+    @apply border-pms-430c/30;
+  }
+
+  :root {
+    @apply text-[14px] 3xs:text-[15px] 2xs:text-[16px] xs:text-[17px] sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[21px] 2xl:text-[22px] dark:bg-black dark:text-white text-black bg-white transition-[background] duration-500;
+  }
+
+  body:has(dialog[open]) {
+    overflow: hidden;
+  }
+
+  h1 {
+    @apply font-bold text-6xl;
+  }
+
+  h2 {
+    @apply font-bold text-5xl;
+  }
+
+  h3 {
+    @apply font-bold text-4xl;
+  }
+
+  h4 {
+    @apply font-medium text-3xl;
+  }
+
+  h5 {
+    @apply font-medium text-2xl;
+  }
+
+  h6 {
+    @apply font-medium text-xl;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    @apply font-rit;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
 }
 
-h1 {
-  @apply font-bold text-6xl;
-}
+@layer components {
+  .restrict-width {
+    @apply max-w-5xl mx-auto w-full wrap-break-word;
+  }
 
-h2 {
-  @apply font-bold text-5xl;
-}
+  .banner {
+    @apply w-dvw min-h-125 pt-18 h-[70dvh] flex-col flex justify-center items-center text-center;
+  }
 
-h3 {
-  @apply font-bold text-4xl;
-}
-
-h4 {
-  @apply font-medium text-3xl;
-}
-
-h5 {
-  @apply font-medium text-2xl;
-}
-
-h6 {
-  @apply font-medium text-xl;
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  @apply font-rit;
-}
-
-main {
-  @apply max-w-2xl mx-auto p-4 w-dvw wrap-break-word;
-}
-
-header {
-  @apply w-dvw min-h-96 h-[60dvh] flex-col flex justify-center items-center text-center;
-}
-
-button {
-  @apply cursor-pointer;
-}
-
-.bg-solid {
-  @apply bg-white dark:bg-black text-black dark:text-white;
+  .bg-solid {
+    @apply bg-white dark:bg-black text-black dark:text-white;
+  }
 }

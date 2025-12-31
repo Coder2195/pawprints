@@ -1,6 +1,7 @@
 import { RPCHandler } from "@orpc/server/fetch";
 import { onError } from "@orpc/server";
-import { router } from "@/lib/rpc/router";
+import { router } from "@/lib/rpc";
+import { db } from "@/lib/db";
 
 const handler = new RPCHandler(router, {
   interceptors: [
@@ -13,7 +14,10 @@ const handler = new RPCHandler(router, {
 async function handleRequest(request: Request) {
   const { response } = await handler.handle(request, {
     prefix: "/api/rpc",
-    context: {}, // Provide initial context if needed
+    context: {
+      headers: request.headers,
+      db: db,
+    }, // Provide initial context if needed
   });
 
   return response ?? new Response("Not found", { status: 404 });

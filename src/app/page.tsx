@@ -1,39 +1,26 @@
 import { FC } from "react";
-import Link from "next/link";
 
 import "@/lib/rpc/server";
-import { getPawprints } from "@/lib/rpc/router";
-import { getServerSession } from "@/lib/auth/server";
-import Image from "next/image";
+import Banner from "@/components/home/banner";
+import Pawprint from "@/components/home/pawprint";
+import { getServerSession } from "@/lib/auth/session";
+import { client } from "@/lib/rpc";
+import { headers } from "next/headers";
 
 const Home: FC = async () => {
-  const pawprintList = await getPawprints();
+  const pawprintList = await client.getPawprints();
 
-  const session = await getServerSession();
+  const session = await getServerSession(await headers());
 
   return (
     <>
-      <header className="relative ">
-        <h1 className="text-white ">Pawprints</h1>
-        <h2 className="text-pms-427c underline decoration-orange decoration-10">
-          For the students, without the vibe coders.
-        </h2>
-        <Image
-          src="/banners/global-village.jpg"
-          alt="Global Village"
-          fill
-          className="object-cover -z-50"
-        />
-      </header>
-      <main>
-        {pawprintList.map((pawprint) => (
-          <div key={pawprint.id}>
-            <Link href={`/pawprint/${pawprint.id}`}>
-              {pawprint.title} - {pawprint.author?.name} (id: {pawprint.id})
-            </Link>
-          </div>
-        ))}
-
+      <Banner />
+      <main className="restrict-width">
+        <div className="grid lg:grid-cols-3 gap-4 p-4 w-full sm:grid-cols-2 grid-cols-1">
+          {pawprintList.map((pawprint) => (
+            <Pawprint key={pawprint.id} pawprint={pawprint} />
+          ))}
+        </div>
         {JSON.stringify(session)}
       </main>
     </>
