@@ -2,14 +2,11 @@ import type { Metadata } from "next";
 import "./main.css";
 import localFont from "next/font/local";
 import Navbar from "../components/ui/navbar";
-import { FC, ReactNode } from "react";
+import { FC, PropsWithChildren } from "react";
 import Providers from "@/components/providers";
 import "@/lib/rpc/server";
-import Transition from "@/components/providers/page-transition";
 import { client } from "@/lib/rpc";
-import HomeClient from "@/components/home";
-import Banner from "@/components/home/banner";
-import Pawprint from "@/components/home/pawprint";
+import TransitionLayout from "@/components/transition";
 
 const ritFont = localFont({
   src: [
@@ -92,12 +89,7 @@ export const metadata: Metadata = {
   description: "Make your mark on RIT with Pawprints.",
 };
 
-const RootLayout: FC<
-  Readonly<{
-    children: ReactNode;
-    pawprint: ReactNode;
-  }>
-> = async ({ children, pawprint }) => {
+const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
   const pawprintList = await client.getPawprints();
 
   return (
@@ -105,17 +97,9 @@ const RootLayout: FC<
       <body className={`${ritFont.className} antialiased`}>
         <Providers>
           <Navbar />
-          <HomeClient>
-            <Banner />
-            <main className="restrict-width">
-              <div className="grid lg:grid-cols-3 gap-4 p-4 w-full sm:grid-cols-2 grid-cols-1">
-                {pawprintList.map((pawprint) => (
-                  <Pawprint key={pawprint.id} pawprint={pawprint} />
-                ))}
-              </div>
-            </main>
-          </HomeClient>
-          <Transition>{children}</Transition>
+          <TransitionLayout pawprintList={pawprintList}>
+            {children}
+          </TransitionLayout>
         </Providers>
       </body>
     </html>

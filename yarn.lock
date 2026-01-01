@@ -2294,15 +2294,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"delegate-it@npm:^6.1.0":
-  version: 6.3.0
-  resolution: "delegate-it@npm:6.3.0"
-  dependencies:
-    typed-query-selector: "npm:^2.11.2"
-  checksum: 10c0/adea219ff1a0755e35d833f3e6945fbd9355130227ca9342ed56b838cf8e9247257067b26d82e165e26d7c5e301ebf665ef72f0811eb29822fb0ba2d3f90466e
-  languageName: node
-  linkType: hard
-
 "denque@npm:^2.1.0":
   version: 2.1.0
   resolution: "denque@npm:2.1.0"
@@ -4205,19 +4196,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-transition-router@npm:^0.2.11":
-  version: 0.2.11
-  resolution: "next-transition-router@npm:0.2.11"
-  dependencies:
-    delegate-it: "npm:^6.1.0"
-  peerDependencies:
-    next: ">=14.0.0"
-    react: ">=18.2.0"
-    react-dom: ">=18.2.0"
-  checksum: 10c0/628f89f5c4338a58772ed2696859e8a5090c35369b0272947976f1d36a355c2e2b10fdd608f651cb751d99d969625babc67497f8d85c691fcff55329532a098d
-  languageName: node
-  linkType: hard
-
 "next@npm:16.1.1":
   version: 16.1.1
   resolution: "next@npm:16.1.1"
@@ -4471,7 +4449,6 @@ __metadata:
     mysql2: "npm:^3.16.0"
     next: "npm:16.1.1"
     next-themes: "npm:^0.4.6"
-    next-transition-router: "npm:^0.2.11"
     pg: "npm:^8.16.3"
     react: "npm:19.2.3"
     react-dom: "npm:19.2.3"
@@ -5400,13 +5377,6 @@ __metadata:
     possible-typed-array-names: "npm:^1.0.0"
     reflect.getprototypeof: "npm:^1.0.6"
   checksum: 10c0/e38f2ae3779584c138a2d8adfa8ecf749f494af3cd3cdafe4e688ce51418c7d2c5c88df1bd6be2bbea099c3f7cea58c02ca02ed438119e91f162a9de23f61295
-  languageName: node
-  linkType: hard
-
-"typed-query-selector@npm:^2.11.2":
-  version: 2.12.0
-  resolution: "typed-query-selector@npm:2.12.0"
-  checksum: 10c0/069509887ecfff824a470f5f93d300cc9223cb059a36c47ac685f2812c4c9470340e07615893765e4264cef1678507532fa78f642fd52f276b589f7f5d791f79
   languageName: node
   linkType: hard
 

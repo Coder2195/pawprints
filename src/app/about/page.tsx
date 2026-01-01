@@ -1,10 +1,22 @@
+"use client";
+
+import Banner from "@/components/about/banner";
+import { motion } from "motion/react";
 import { FC } from "react";
 
 const About: FC = () => {
   return (
-    <main className="restrict-width p-4">
-      <h1 className="text-3xl font-bold mb-4">About Pawprints</h1>
-    </main>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1, transition: { delay: 0.5, duration: 0.5 } }}
+      exit={{ opacity: 0, transition: { duration: 0.5 } }}
+    >
+      <Banner />
+      <Banner />
+      <Banner />
+      <Banner />
+      <Banner />
+    </motion.div>
   );
 };
 
