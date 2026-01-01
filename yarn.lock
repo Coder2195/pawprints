@@ -2294,6 +2294,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"delegate-it@npm:^6.1.0":
+  version: 6.3.0
+  resolution: "delegate-it@npm:6.3.0"
+  dependencies:
+    typed-query-selector: "npm:^2.11.2"
+  checksum: 10c0/adea219ff1a0755e35d833f3e6945fbd9355130227ca9342ed56b838cf8e9247257067b26d82e165e26d7c5e301ebf665ef72f0811eb29822fb0ba2d3f90466e
+  languageName: node
+  linkType: hard
+
 "denque@npm:^2.1.0":
   version: 2.1.0
   resolution: "denque@npm:2.1.0"
@@ -3127,6 +3136,28 @@ __metadata:
   dependencies:
     is-callable: "npm:^1.2.7"
   checksum: 10c0/0e0b50f6a843a282637d43674d1fb278dda1dd85f4f99b640024cfb10b85058aac0cc781bf689d5fe50b4b7f638e91e548560723a4e76e04fe96ae35ef039cee
+  languageName: node
+  linkType: hard
+
+"framer-motion@npm:^12.23.26":
+  version: 12.23.26
+  resolution: "framer-motion@npm:12.23.26"
+  dependencies:
+    motion-dom: "npm:^12.23.23"
+    motion-utils: "npm:^12.23.6"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/7dbbc4a392b969804e04a056e3d89a55bf31572dc7f6cd79050b90616fbb84a1762e4ac4e2537c735d347bbf4ceebea126f5c090234149b12cffa3ea6c518a34
   languageName: node
   linkType: hard
 
@@ -4062,6 +4093,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"motion-dom@npm:^12.23.23":
+  version: 12.23.23
+  resolution: "motion-dom@npm:12.23.23"
+  dependencies:
+    motion-utils: "npm:^12.23.6"
+  checksum: 10c0/139705731085063519b88f23fcc5b1c13e15707a4ff3365da02ef9a4bf2a2d8ebed9a151c57e7f215ccd9e822365d93c16e28e619fbf25611f61dcff5ee81d75
+  languageName: node
+  linkType: hard
+
+"motion-utils@npm:^12.23.6":
+  version: 12.23.6
+  resolution: "motion-utils@npm:12.23.6"
+  checksum: 10c0/c058e8ba6423b3baa63e985bcc669877ee7d9579d938f5348b4e60c5ea1b4b33dd7f4877434436a4a5807f3cf00370d3fd4079a6fdd6309c5c87aa62b311a897
+  languageName: node
+  linkType: hard
+
+"motion@npm:^12.23.26":
+  version: 12.23.26
+  resolution: "motion@npm:12.23.26"
+  dependencies:
+    framer-motion: "npm:^12.23.26"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/80ac9c2caaa149fb6feaad4146294b304dda52a643360063eb7a672bf7e7c8e134ec201ddcfafc0a918113004aed939ddbacf546b0e2297ea23955c78235c497
+  languageName: node
+  linkType: hard
+
 "ms@npm:^2.1.1, ms@npm:^2.1.3":
   version: 2.1.3
   resolution: "ms@npm:2.1.3"
@@ -4134,6 +4202,19 @@ __metadata:
     react: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
     react-dom: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
   checksum: 10c0/83590c11d359ce7e4ced14f6ea9dd7a691d5ce6843fe2dc520fc27e29ae1c535118478d03e7f172609c41b1ef1b8da6b8dd2d2acd6cd79cac1abbdbd5b99f2c4
+  languageName: node
+  linkType: hard
+
+"next-transition-router@npm:^0.2.11":
+  version: 0.2.11
+  resolution: "next-transition-router@npm:0.2.11"
+  dependencies:
+    delegate-it: "npm:^6.1.0"
+  peerDependencies:
+    next: ">=14.0.0"
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+  checksum: 10c0/628f89f5c4338a58772ed2696859e8a5090c35369b0272947976f1d36a355c2e2b10fdd608f651cb751d99d969625babc67497f8d85c691fcff55329532a098d
   languageName: node
   linkType: hard
 
@@ -4370,6 +4451,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "pawprints@workspace:."
   dependencies:
+    "@bprogress/core": "npm:^1.3.4"
     "@bprogress/next": "npm:^3.2.12"
     "@orpc/client": "npm:^1.13.1"
     "@orpc/server": "npm:^1.13.1"
@@ -4385,9 +4467,11 @@ __metadata:
     drizzle-orm: "npm:1.0.0-beta.6-ea4d663"
     eslint: "npm:^9.39.2"
     eslint-config-next: "npm:16.1.1"
+    motion: "npm:^12.23.26"
     mysql2: "npm:^3.16.0"
     next: "npm:16.1.1"
     next-themes: "npm:^0.4.6"
+    next-transition-router: "npm:^0.2.11"
     pg: "npm:^8.16.3"
     react: "npm:19.2.3"
     react-dom: "npm:19.2.3"
@@ -5316,6 +5400,13 @@ __metadata:
     possible-typed-array-names: "npm:^1.0.0"
     reflect.getprototypeof: "npm:^1.0.6"
   checksum: 10c0/e38f2ae3779584c138a2d8adfa8ecf749f494af3cd3cdafe4e688ce51418c7d2c5c88df1bd6be2bbea099c3f7cea58c02ca02ed438119e91f162a9de23f61295
+  languageName: node
+  linkType: hard
+
+"typed-query-selector@npm:^2.11.2":
+  version: 2.12.0
+  resolution: "typed-query-selector@npm:2.12.0"
+  checksum: 10c0/069509887ecfff824a470f5f93d300cc9223cb059a36c47ac685f2812c4c9470340e07615893765e4264cef1678507532fa78f642fd52f276b589f7f5d791f79
   languageName: node
   linkType: hard
 

@@ -1,10 +1,11 @@
 import type { RouterClient } from "@orpc/server";
 import { RPCLink } from "@orpc/client/fetch";
 import { createORPCClient } from "@orpc/client";
-import { getPawprint, getPawprints } from "./procedures";
+
+type Router = typeof import("./server").router;
 
 declare global {
-  var $client: RouterClient<typeof router> | undefined;
+  var $client: RouterClient<Router> | undefined;
 }
 
 const link = new RPCLink({
@@ -15,16 +16,11 @@ const link = new RPCLink({
   }/api/rpc`,
 });
 
-export const router = {
-  getPawprints,
-  getPawprint,
-};
-
 /**
  * Fallback to client-side client if server-side client is not available.
  */
 
-export const client: RouterClient<typeof router> =
+export const client: RouterClient<Router> =
   globalThis.$client ?? createORPCClient(link);
 
 export type GetPawprintResult = Awaited<ReturnType<typeof client.getPawprint>>;

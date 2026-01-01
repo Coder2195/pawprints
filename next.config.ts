@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
       new URL("https://iili.io/**"),
     ],
   },
+  experimental: {
+    viewTransition: true,
+  },
 };
 
 export default nextConfig;

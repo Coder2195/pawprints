@@ -18,7 +18,11 @@ const Navbar: FC = () => {
           />
           <span className="3xs:inline hidden text-lg">Pawprints</span>
         </Link>
-        <div className="flex-1"></div>
+        <div className="flex-1">
+          <Link href="/about" className="ml-4 hover:underline">
+            About
+          </Link>
+        </div>
         <ThemeButton />
         <Profile />
       </nav>

@@ -74,7 +74,7 @@
   }
 
   button {
-    @apply cursor-pointer;
+    @apply enabled:cursor-pointer text-left;
   }
 }
 

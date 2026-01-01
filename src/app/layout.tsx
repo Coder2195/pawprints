@@ -5,6 +5,11 @@ import Navbar from "../components/ui/navbar";
 import { FC, ReactNode } from "react";
 import Providers from "@/components/providers";
 import "@/lib/rpc/server";
+import Transition from "@/components/providers/page-transition";
+import { client } from "@/lib/rpc";
+import HomeClient from "@/components/home";
+import Banner from "@/components/home/banner";
+import Pawprint from "@/components/home/pawprint";
 
 const ritFont = localFont({
   src: [
@@ -93,13 +98,24 @@ const RootLayout: FC<
     pawprint: ReactNode;
   }>
 > = async ({ children, pawprint }) => {
+  const pawprintList = await client.getPawprints();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${ritFont.className} antialiased`}>
         <Providers>
           <Navbar />
-          {children}
-          {pawprint}
+          <HomeClient>
+            <Banner />
+            <main className="restrict-width">
+              <div className="grid lg:grid-cols-3 gap-4 p-4 w-full sm:grid-cols-2 grid-cols-1">
+                {pawprintList.map((pawprint) => (
+                  <Pawprint key={pawprint.id} pawprint={pawprint} />
+                ))}
+              </div>
+            </main>
+          </HomeClient>
+          <Transition>{children}</Transition>
         </Providers>
       </body>
     </html>

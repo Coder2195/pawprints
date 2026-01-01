@@ -1,22 +1,12 @@
-import { RPCHandler } from "@orpc/server/fetch";
-import { onError } from "@orpc/server";
-import { router } from "@/lib/rpc";
-import { db } from "@/lib/db";
+import "server-only";
 
-const handler = new RPCHandler(router, {
-  interceptors: [
-    onError((error) => {
-      console.error(error);
-    }),
-  ],
-});
+import { handler } from "@/lib/rpc/server";
 
 async function handleRequest(request: Request) {
   const { response } = await handler.handle(request, {
     prefix: "/api/rpc",
     context: {
       headers: request.headers,
-      db: db,
     }, // Provide initial context if needed
   });
 

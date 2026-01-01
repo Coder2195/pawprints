@@ -3,6 +3,7 @@
 import { ThemeProvider } from "next-themes";
 import { FC, PropsWithChildren } from "react";
 import { ProgressProvider } from "@bprogress/next/app";
+import PawprintOverlayProvider from "./pawprint-overlay";
 
 const Providers: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -18,7 +19,7 @@ const Providers: FC<PropsWithChildren> = ({ children }) => {
         options={{ showSpinner: false }}
         shallowRouting
       >
-        {children}
+        <PawprintOverlayProvider>{children}</PawprintOverlayProvider>
       </ProgressProvider>
     </ThemeProvider>
   );

@@ -5,6 +5,8 @@ import {
   timestamp,
   cockroachEnum,
   varchar,
+  primaryKey,
+  boolean,
 } from "drizzle-orm/cockroach-core";
 
 export const accountTypes = cockroachEnum("account_type", [
@@ -34,6 +36,7 @@ export const pawprints = cockroachTable("pawprints", {
   userEmail: varchar("user_email", { length: 254 }).notNull(),
   title: varchar("title", { length: 256 }).notNull(),
   description: varchar("description", { length: 5000 }).notNull(),
+  completed: boolean("completed").notNull().default(false),
 
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
@@ -43,11 +46,15 @@ export const pawprints = cockroachTable("pawprints", {
     .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
-export const signatures = cockroachTable("signatures", {
-  userEmail: varchar("user_email", { length: 254 }).notNull(),
-  pawprintId: varchar("pawprint_id", { length: 25 }).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-});
+export const signatures = cockroachTable(
+  "signatures",
+  {
+    userEmail: varchar("user_email", { length: 254 }).notNull(),
+    pawprintId: varchar("pawprint_id", { length: 25 }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.userEmail, table.pawprintId] })]
+);
 
 export const relations = defineRelations(
   { pawprints, users, signatures },

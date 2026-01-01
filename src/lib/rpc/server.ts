@@ -2,8 +2,23 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { createRouterClient } from "@orpc/server";
-import { router } from ".";
-import { db } from "../db";
+import { getPawprint, getPawprints, signPawprint } from "./procedures";
+import { RPCHandler } from "@orpc/server/fetch";
+import { onError } from "@orpc/server";
+
+export const router = {
+  getPawprints,
+  getPawprint,
+  signPawprint,
+};
+
+export const handler = new RPCHandler(router, {
+  interceptors: [
+    onError((error) => {
+      console.error(error);
+    }),
+  ],
+});
 
 globalThis.$client = createRouterClient(router, {
   /**
@@ -15,6 +30,5 @@ globalThis.$client = createRouterClient(router, {
    */
   context: async () => ({
     headers: await headers(), // provide headers if initial context required
-    db,
   }),
 });
