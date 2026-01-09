@@ -89,6 +89,8 @@ export const metadata: Metadata = {
   description: "Make your mark on RIT with Pawprints.",
 };
 
+export const dynamic = "force-dynamic";
+
 const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
   const pawprintList = await client.getPawprints().catch(() => []);
 
