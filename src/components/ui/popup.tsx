@@ -23,7 +23,7 @@ const OverlayPopup: FC<
     >
       <motion.dialog
         open
-        className="sm:w-3/4 h-3/4 w-[calc(100%-1rem)] m-2 fixed sm:left-1/8 top-1/8 bg-solid border rounded-xl p-2 flex flex-col justify-stretch"
+        className="sm:w-3/4 h-3/4 w-[calc(100%-1rem)] m-2 fixed sm:left-1/8 top-1/8 bg-solid border rounded-xl flex flex-col justify-stretch"
         initial={{
           translateY: "20%",
           opacity: 0,
@@ -32,8 +32,8 @@ const OverlayPopup: FC<
           translateY: "0%",
           opacity: 1,
           transition: {
-            delay: 1,
-            duration: 0.4,
+            delay: 0.9,
+            duration: 0.3,
             ease: easeOut,
           },
         }}
@@ -41,12 +41,12 @@ const OverlayPopup: FC<
           translateY: "20%",
           opacity: 0,
           transition: {
-            duration: 0.4,
+            duration: 0.3,
           },
         }}
       >
-        <div className="flex flex-row items-start w-full">
-          <h3 className="whitespace-nowrap flex-1 overflow-auto p-2">
+        <div className="flex flex-row items-start h-14 flex-none border-b">
+          <h3 className="whitespace-nowrap flex-1 overflow-auto p-2 px-3 ">
             {title}
           </h3>
           <button
@@ -57,7 +57,7 @@ const OverlayPopup: FC<
           </button>
         </div>
 
-        {children}
+        <div className="flex-1 overflow-auto flex-col flex">{children}</div>
       </motion.dialog>
     </motion.div>
   );

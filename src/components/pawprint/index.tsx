@@ -26,7 +26,7 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
       }}
       title={pawprint.title}
     >
-      <div className="flex-1 flex flex-col gap-2">
+      <div className="flex-1 flex flex-col gap-2 p-2 overflow-auto">
         <Dialogue
           name={pawprint.author?.name}
           avatar={pawprint.author?.avatar || undefined}
@@ -35,7 +35,7 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
         >
           <p>{pawprint.description}</p>
         </Dialogue>
-        <hr />
+        <hr className="-mx-2" />
         <h5 className="sm:ml-14">Updates</h5>
         {pawprint.responses.map((response, index) => (
           <Dialogue
@@ -51,7 +51,7 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
         ))}
       </div>
 
-      <div className="pt-2">
+      <div className="p-2 border-t">
         <button
           disabled={signedIn && (signed || signing)}
           className={` ${

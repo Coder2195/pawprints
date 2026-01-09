@@ -3,6 +3,8 @@ import "@/lib/rpc/server";
 import { client } from "@/lib/rpc";
 import { FC } from "react";
 
+export const dynamic = "force-dynamic";
+
 const Pawprint: FC<{ params: Promise<{ pawprint: string }> }> = async ({
   params,
 }) => {
