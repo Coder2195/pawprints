@@ -15,7 +15,7 @@ const OverlayPopup: FC<
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.3, delay: 0.5 } }}
       exit={{ opacity: 0, transition: { duration: 0.3, delay: 0.5 } }}
-      className="w-screen h-screen bg-pms-430c/20 backdrop-blur-xs z-50 fixed top-0 left-0"
+      className="w-dvw h-dvh bg-pms-430c/20 backdrop-blur-xs z-50 fixed top-0 left-0"
       onClick={(e) => {
         if (e.target != e.currentTarget) return;
         onClose();
