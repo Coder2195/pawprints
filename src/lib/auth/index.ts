@@ -59,8 +59,16 @@ export const auth = betterAuth({
     }),
   ],
   session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
     cookieCache: {
-      version: "1", // Change the version to invalidate all sessions
+      enabled: true,
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      strategy: "jwt", // or "compact" or "jwe"
+      refreshCache: true, // enables fully stateless mode
     },
+  },
+  account: {
+    storeStateStrategy: "cookie",
+    storeAccountCookie: true, // Store account data after OAuth flow in a cookie (useful for database-less flows)
   },
 });
