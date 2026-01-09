@@ -4,8 +4,8 @@ import localFont from "next/font/local";
 import Navbar from "../components/ui/navbar";
 import { FC, PropsWithChildren } from "react";
 import Providers from "@/components/providers";
-import "@/lib/rpc/server";
 import { client } from "@/lib/rpc";
+import "@/lib/rpc/server";
 import TransitionLayout from "@/components/transition";
 
 const ritFont = localFont({
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
 };
 
 const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
-  const pawprintList = await client.getPawprints();
+  const pawprintList = await client.getPawprints().catch(() => []);
 
   return (
     <html lang="en" suppressHydrationWarning>
