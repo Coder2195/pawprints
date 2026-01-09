@@ -37,6 +37,7 @@
 
   :root {
     @apply text-[14px] 3xs:text-[15px] 2xs:text-[16px] xs:text-[17px] sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[21px] 2xl:text-[22px] dark:bg-black dark:text-white text-black bg-white transition-[background] duration-500;
+    scrollbar-gutter: stable both-edges;
   }
 
   body:has(dialog[open]) {
@@ -84,7 +85,7 @@
   }
 
   .banner {
-    @apply w-dvw min-h-125 pt-18 h-[70dvh] flex-col flex justify-center items-center text-center;
+    @apply w-full min-h-125 pt-18 h-[70dvh] flex-col flex justify-center items-center text-center;
   }
 
   .bg-solid {
