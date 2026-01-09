@@ -12,7 +12,7 @@ const link = new RPCLink({
   url: `${
     typeof window !== "undefined"
       ? window.location.origin
-      : "http://localhost:3000"
+      : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
   }/api/rpc`,
 });
 
