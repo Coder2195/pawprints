@@ -1,9 +1,9 @@
 import { os } from "@orpc/server";
 import { signatures } from "../db/schema";
 import { and, eq } from "drizzle-orm";
-import z from "zod";
 import { getServerSession } from "../auth/session";
 import { db } from "../db";
+import { type } from "arktype";
 
 const pub = os
   .errors({
@@ -24,6 +24,10 @@ const pub = os
     DOES_NOT_EXIST: {
       message: "The requested pawprint does not exist.",
       status: 404,
+    },
+    GUEST_NOT_ALLOWED: {
+      message: "You must be a member of RIT to perform this action.",
+      status: 401,
     },
   })
   .$context<{ headers: Headers }>();
@@ -55,8 +59,29 @@ const sessionRequired = sessionOptional.use(
   }
 );
 
+const ritRequired = sessionRequired.use(
+  async ({
+    context: {
+      session: { user },
+    },
+    errors,
+    next,
+  }) => {
+    if (user.accountType == "GUEST") throw errors.GUEST_NOT_ALLOWED();
+
+    return next({
+      context: {
+        user,
+      },
+    });
+  }
+);
+
 export const getPawprints = pub.handler(async () => {
   return db.query.pawprints.findMany({
+    where: {
+      published: true,
+    },
     with: {
       author: {
         columns: {
@@ -73,8 +98,8 @@ export const getPawprints = pub.handler(async () => {
 
 export const getPawprint = sessionOptional
   .input(
-    z.object({
-      id: z.string(),
+    type({
+      id: "string",
     })
   )
   .handler(async ({ input: { id }, context: { session }, errors }) => {
@@ -83,6 +108,33 @@ export const getPawprint = sessionOptional
     const pawprint = await db.query.pawprints.findFirst({
       where: {
         id,
+      },
+      with: {
+        author: {
+          columns: {
+            name: true,
+            avatar: true,
+          },
+        },
+        responses: {
+          columns: {
+            createdAt: true,
+            updatedAt: true,
+            content: true,
+            id: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          with: {
+            author: {
+              columns: {
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+        },
       },
       extras: {
         signs: (table) =>
@@ -103,11 +155,11 @@ export const getPawprint = sessionOptional
 
 export const signPawprint = sessionRequired
   .input(
-    z.object({
-      id: z.string(),
+    type({
+      id: "string",
     })
   )
-  .handler(async ({ input: { id }, context: { session }, errors }) => {
+  .handler(async ({ input: { id }, context: { session } }) => {
     const userEmail = session.user.email;
 
     await db
@@ -118,3 +170,19 @@ export const signPawprint = sessionRequired
       })
       .onConflictDoNothing();
   });
+
+export const getMyPawprints = sessionRequired.handler(
+  async ({
+    context: {
+      session: {
+        user: { email: userEmail },
+      },
+    },
+  }) => {
+    return db.query.pawprints.findMany({
+      where: {
+        userEmail,
+      },
+    });
+  }
+);

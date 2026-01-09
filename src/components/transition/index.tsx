@@ -2,12 +2,11 @@
 
 import { type GetPawprintsResult } from "@/lib/rpc";
 import { FC, PropsWithChildren, useContext, useRef } from "react";
-import Pawprint from "../home/pawprint";
 import { AnimatePresence } from "motion/react";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
-import Banner from "../home/banner";
 import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import HomePage from "../home";
 
 const FrozenRouter: FC<PropsWithChildren> = ({ children }) => {
   const context = useContext(LayoutRouterContext);
@@ -51,14 +50,7 @@ const TransitionLayout: FC<
             exit={{ opacity: 0 }}
             key="homepage"
           >
-            <Banner />
-            <main className="restrict-width">
-              <div className="grid lg:grid-cols-3 gap-4 p-4 w-full sm:grid-cols-2 grid-cols-1">
-                {pawprintList.map((pawprint) => (
-                  <Pawprint key={pawprint.id} pawprint={pawprint} />
-                ))}
-              </div>
-            </main>
+            <HomePage pawprintList={pawprintList} />
           </motion.div>
         )}
       </AnimatePresence>

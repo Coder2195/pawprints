@@ -12,6 +12,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ark/schema@npm:0.56.0":
+  version: 0.56.0
+  resolution: "@ark/schema@npm:0.56.0"
+  dependencies:
+    "@ark/util": "npm:0.56.0"
+  checksum: 10c0/89fb7e4e1304ea9b34c834a8cb34bc05201b4e3a1b26277f7d74b9505a2d7ed398bb55a77e491e7a14a7f0807424a5467e1d32ee725ee2f7b9d158ae30d8121a
+  languageName: node
+  linkType: hard
+
+"@ark/util@npm:0.56.0":
+  version: 0.56.0
+  resolution: "@ark/util@npm:0.56.0"
+  checksum: 10c0/dfef779c90f9f814ba97069c63bf91fa67569b87c5cd925d0e2d96b91aa677c019ed1dd5ff95332d9bb0598f785057439074b8cbfcaa2578770616e260fc5761
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.27.1":
   version: 7.27.1
   resolution: "@babel/code-frame@npm:7.27.1"
@@ -1750,6 +1766,26 @@ __metadata:
   version: 5.3.2
   resolution: "aria-query@npm:5.3.2"
   checksum: 10c0/003c7e3e2cff5540bf7a7893775fc614de82b0c5dde8ae823d47b7a28a9d4da1f7ed85f340bdb93d5649caa927755f0e31ecc7ab63edfdfc00c8ef07e505e03e
+  languageName: node
+  linkType: hard
+
+"arkregex@npm:0.0.5":
+  version: 0.0.5
+  resolution: "arkregex@npm:0.0.5"
+  dependencies:
+    "@ark/util": "npm:0.56.0"
+  checksum: 10c0/1a39510e04d69b9287b9b53d3965afcc4ef27bdd9ff9c21a78092fcb841f35c11227d8476be66d2f76347deccfd10c202f395bd871383c328057ad004ffe7ebd
+  languageName: node
+  linkType: hard
+
+"arktype@npm:^2.1.29":
+  version: 2.1.29
+  resolution: "arktype@npm:2.1.29"
+  dependencies:
+    "@ark/schema": "npm:0.56.0"
+    "@ark/util": "npm:0.56.0"
+    arkregex: "npm:0.0.5"
+  checksum: 10c0/c89cd5cc9eee7a5e14df0f32b228c06760b99440dabf2ed2d9272877a1607d7f27641d4105d1466b70fc620007fe864ddd826acee11c07102388c8dd301a20fe
   languageName: node
   linkType: hard
 
@@ -4439,6 +4475,7 @@ __metadata:
     "@types/pg": "npm:^8.16.0"
     "@types/react": "npm:^19.2.7"
     "@types/react-dom": "npm:^19.2.3"
+    arktype: "npm:^2.1.29"
     better-auth: "npm:^1.4.9"
     dotenv: "npm:^17.2.3"
     drizzle-kit: "npm:1.0.0-beta.6-ea4d663"
@@ -4455,7 +4492,6 @@ __metadata:
     react-icons: "npm:^5.5.0"
     tailwindcss: "npm:^4.1.18"
     typescript: "npm:^5.9.3"
-    zod: "npm:^4.2.1"
   languageName: unknown
   linkType: soft
 
@@ -5640,7 +5676,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^4.1.12, zod@npm:^4.2.1":
+"zod@npm:^4.1.12":
   version: 4.2.1
   resolution: "zod@npm:4.2.1"
   checksum: 10c0/ecb5219bddf76a42d092a843fb98ad4cb78f1e1077082772b03ef032ee5cbc80790a4051836b962d26fb4af854323bc784d628bd1b8d9898149eba7af21c5560

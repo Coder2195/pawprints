@@ -1,8 +1,8 @@
-import CreatePawprint from "@/components/create";
+import CreatePawprintClient from "@/components/create";
 import { FC } from "react";
 
 const Create: FC = () => {
-  return <CreatePawprint />;
+  return <CreatePawprintClient />;
 };
 
 export default Create;

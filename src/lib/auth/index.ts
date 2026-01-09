@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth";
+import { APIError, betterAuth } from "better-auth";
 import { customSession } from "better-auth/plugins";
 import { db } from "../db";
 import { users } from "../db/schema";
@@ -10,14 +10,22 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
-  hooks: {},
+  onAPIError: {
+    throw: true,
+    errorURL: "/api/auth/error",
+  },
   plugins: [
     customSession(async ({ user, session }) => {
-      user.email = user.email?.replace("@g.rit.edu", "@rit.edu");
+      if (user.email == null)
+        throw new APIError("UNAUTHORIZED", {
+          message: "User email is required",
+        });
+
+      user.email = user.email.replace("@g.rit.edu", "@rit.edu");
 
       const dbUser =
         (await db.query.users.findFirst({
-          where: { email: user.email! },
+          where: { email: user.email },
         })) ||
         (
           await db
@@ -32,8 +40,6 @@ export const auth = betterAuth({
             })
             .returning()
         )[0];
-
-      if (user.email == null) throw new Error("User email is required");
 
       return {
         user: {

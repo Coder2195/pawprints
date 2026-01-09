@@ -1,22 +1,19 @@
-"use client";
+import type { Metadata } from "next";
 
 import Banner from "@/components/about/banner";
-import { motion } from "motion/react";
 import { FC } from "react";
+import TransitionWrapper from "@/components/transition/wrapper";
+
+export const metadata: Metadata = {
+  title: "About Pawprints",
+  description: "The philosophy and motivation behind Pawprints.",
+};
 
 const About: FC = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1, transition: { delay: 0.5, duration: 0.5 } }}
-      exit={{ opacity: 0, transition: { duration: 0.5 } }}
-    >
+    <TransitionWrapper>
       <Banner />
-      <Banner />
-      <Banner />
-      <Banner />
-      <Banner />
-    </motion.div>
+    </TransitionWrapper>
   );
 };
 

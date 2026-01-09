@@ -7,10 +7,9 @@ import { BiX } from "react-icons/bi";
 const OverlayPopup: FC<
   PropsWithChildren & {
     title: ReactNode;
-    footer: ReactNode;
     onClose: () => void;
   }
-> = ({ title, children, footer, onClose }) => {
+> = ({ title, children, onClose }) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -24,9 +23,9 @@ const OverlayPopup: FC<
     >
       <motion.dialog
         open
-        className="w-3/4 h-3/4 fixed left-1/8 top-1/8 bg-solid border rounded-xl p-2 flex flex-col justify-stretch"
+        className="sm:w-3/4 h-3/4 w-[calc(100%-1rem)] m-2 fixed sm:left-1/8 top-1/8 bg-solid border rounded-xl p-2 flex flex-col justify-stretch"
         initial={{
-          translateY: "30%",
+          translateY: "20%",
           opacity: 0,
         }}
         animate={{
@@ -39,7 +38,7 @@ const OverlayPopup: FC<
           },
         }}
         exit={{
-          translateY: "30%",
+          translateY: "20%",
           opacity: 0,
           transition: {
             duration: 0.4,
@@ -58,11 +57,7 @@ const OverlayPopup: FC<
           </button>
         </div>
 
-        <div className="flex-1 overflow-auto bg-pms-427c/10 p-2 border rounded-lg">
-          {children}
-        </div>
-
-        <div className="pt-2">{footer}</div>
+        {children}
       </motion.dialog>
     </motion.div>
   );

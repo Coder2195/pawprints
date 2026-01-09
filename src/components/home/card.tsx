@@ -4,7 +4,9 @@ import { GetPawprintsResultItem } from "@/lib/rpc/";
 import Link from "next/link";
 import { FC } from "react";
 
-const Pawprint: FC<{ pawprint: GetPawprintsResultItem }> = ({ pawprint }) => {
+const PawprintCard: FC<{ pawprint: GetPawprintsResultItem }> = ({
+  pawprint,
+}) => {
   const percent = (pawprint.signatures / SIGNATURE_THRESHOLD) * 100;
 
   return (
@@ -12,7 +14,7 @@ const Pawprint: FC<{ pawprint: GetPawprintsResultItem }> = ({ pawprint }) => {
       href={`/pawprint/${pawprint.id}`}
       className="block p-2 border rounded-lg bg-pms-427c/10 "
     >
-      <div className="w-full h-2 rounded-full border  bg-pms-429c/30">
+      <div className="w-full h-2 rounded-full border  bg-pms-429c/30 overflow-hidden">
         <div
           className="bg-orange h-full rounded-full"
           style={{ width: `${percent}%` }}
@@ -28,4 +30,4 @@ const Pawprint: FC<{ pawprint: GetPawprintsResultItem }> = ({ pawprint }) => {
   );
 };
 
-export default Pawprint;
+export default PawprintCard;

@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useRouter } from "next/navigation";
 import OverlayPopup from "../ui/popup";
 
-const CreatePawprint: FC = () => {
+const CreatePawprintClient: FC = () => {
   const router = useRouter();
   return (
     <OverlayPopup
@@ -16,4 +16,4 @@ const CreatePawprint: FC = () => {
   );
 };
 
-export default CreatePawprint;
+export default CreatePawprintClient;

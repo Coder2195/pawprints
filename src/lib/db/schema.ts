@@ -16,10 +16,12 @@ export const accountTypes = cockroachEnum("account_type", [
   "ADMIN",
 ]);
 
+export type AccountType = (typeof accountTypes.enumValues)[number];
+
 export const users = cockroachTable("users", {
   email: varchar("email", { length: 254 }).primaryKey(),
   name: varchar("name", { length: 256 }).notNull(),
-  accountType: accountTypes().notNull().default("GUEST"),
+  accountType: accountTypes("account_type").notNull().default("GUEST"),
   avatar: varchar("avatar", { length: 256 }),
 
   createdAt: timestamp("created_at", { withTimezone: true }),
@@ -28,15 +30,16 @@ export const users = cockroachTable("users", {
     .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
+const defaultId = () => createId();
+
 export const pawprints = cockroachTable("pawprints", {
-  id: varchar("id", { length: 25 })
-    .primaryKey()
-    .$defaultFn(() => createId()),
+  id: varchar("id", { length: 25 }).primaryKey().$defaultFn(defaultId),
 
   userEmail: varchar("user_email", { length: 254 }).notNull(),
   title: varchar("title", { length: 256 }).notNull(),
   description: varchar("description", { length: 5000 }).notNull(),
   completed: boolean("completed").notNull().default(false),
+  published: boolean("published").notNull().default(false),
 
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
@@ -56,8 +59,20 @@ export const signatures = cockroachTable(
   (table) => [primaryKey({ columns: [table.userEmail, table.pawprintId] })]
 );
 
+export const responses = cockroachTable("responses", {
+  id: varchar("id", { length: 25 }).primaryKey().$defaultFn(defaultId),
+
+  userEmail: varchar("user_email", { length: 254 }).notNull(),
+  content: varchar("description", { length: 5000 }).notNull(),
+  pawprintId: varchar("pawprint_id", { length: 25 }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
+});
+
 export const relations = defineRelations(
-  { pawprints, users, signatures },
+  { pawprints, users, signatures, responses },
   (r) => ({
     users: {
       pawprints: r.many.pawprints({
@@ -67,6 +82,10 @@ export const relations = defineRelations(
       signatures: r.many.signatures({
         from: r.users.email,
         to: r.signatures.userEmail,
+      }),
+      responses: r.many.responses({
+        from: r.users.email,
+        to: r.responses.userEmail,
       }),
     },
     pawprints: {
@@ -78,6 +97,10 @@ export const relations = defineRelations(
         from: r.pawprints.userEmail,
         to: r.users.email,
       }),
+      responses: r.many.responses({
+        from: r.pawprints.id,
+        to: r.responses.pawprintId,
+      }),
     },
     signatures: {
       pawprint: r.one.pawprints({
@@ -86,6 +109,16 @@ export const relations = defineRelations(
       }),
       signer: r.one.users({
         from: r.signatures.userEmail,
+        to: r.users.email,
+      }),
+    },
+    responses: {
+      pawprint: r.one.pawprints({
+        from: r.responses.pawprintId,
+        to: r.pawprints.id,
+      }),
+      author: r.one.users({
+        from: r.responses.userEmail,
         to: r.users.email,
       }),
     },
