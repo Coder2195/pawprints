@@ -6,11 +6,7 @@ import OverlayPopup from "../ui/popup";
 const CreatePawprintClient: FC = () => {
   const router = useRouter();
   return (
-    <OverlayPopup
-      onClose={() => router.push("/")}
-      title="Create Pawprint"
-      footer={<></>}
-    >
+    <OverlayPopup onClose={() => router.push("/")} title="Create Pawprint">
       <div></div>
     </OverlayPopup>
   );

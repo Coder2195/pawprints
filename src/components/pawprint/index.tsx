@@ -14,7 +14,7 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
   const [pawprint, setPawprint] = useState(initial);
   const [signing, setSigning] = useState(false);
   const router = useRouter();
-  const { data, isPending } = authClient.useSession();
+  const { data } = authClient.useSession();
 
   const signedIn = !!data?.user?.email;
   const signed = pawprint.signs > 0;
