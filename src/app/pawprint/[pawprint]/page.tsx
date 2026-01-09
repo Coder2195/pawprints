@@ -1,4 +1,5 @@
 import OverlayPawprint from "@/components/pawprint";
+import "@/lib/rpc/server";
 import { client } from "@/lib/rpc";
 import { FC } from "react";
 
