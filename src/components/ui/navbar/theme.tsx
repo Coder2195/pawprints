@@ -15,7 +15,7 @@ const ThemeButton: FC = () => {
   return (
     <button
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className="p-2 hover:bg-pms-429c/30 rounded-full transition-colors duration-300 ease-in-out"
+      className="icon-button button-transparent"
     >
       {resolvedTheme === "dark" ? (
         <MdOutlineDarkMode size={28} />

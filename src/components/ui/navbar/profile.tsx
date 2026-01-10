@@ -1,6 +1,6 @@
 "use client";
 
-import { authClient, login } from "@/lib/auth/client";
+import { authClient, signIn } from "@/lib/auth/client";
 import { useClickAway } from "@/lib/hooks";
 import Image from "next/image";
 import { FC, Ref, useState } from "react";
@@ -24,7 +24,7 @@ const Profile: FC = () => {
 
   if (!session)
     return (
-      <button onClick={login} className="button button-secondary">
+      <button onClick={signIn} className="button button-secondary">
         Login
       </button>
     );
@@ -56,7 +56,7 @@ const Profile: FC = () => {
           </div>
           <button
             onClick={() => authClient.signOut()}
-            className="p-1 px-4 transition-colors duration-300 ease-in-out bg-red hover:bg-red/70 rounded-md text-white font-bold flex items-center gap-2 justify-center"
+            className="button button-red font-bold flex items-center gap-2 justify-center"
           >
             <MdLogout size={20} />
             Logout

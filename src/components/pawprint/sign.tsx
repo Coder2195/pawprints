@@ -1,5 +1,5 @@
 "use client";
-import { authClient, login } from "@/lib/auth/client";
+import { authClient, signIn } from "@/lib/auth/client";
 import { client, GetPawprintResult } from "@/lib/rpc";
 import { BProgress } from "@bprogress/core";
 import { FC, useState } from "react";
@@ -21,7 +21,7 @@ const SignButton: FC<{
       className="button button-primary"
       onClick={async () => {
         if (!signedIn) {
-          login();
+          signIn();
           return;
         }
 

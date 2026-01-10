@@ -8,6 +8,8 @@ export const authClient = createAuthClient({
   plugins: [customSessionClient<typeof auth>()],
 });
 
-export function login() {
+export function signIn() {
   authClient.signIn.social({ provider: "google" });
 }
+
+export const signOut = authClient.signOut;

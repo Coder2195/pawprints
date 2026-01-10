@@ -10,10 +10,7 @@ const PawprintCard: FC<{ pawprint: GetPawprintsResultItem }> = ({
   const percent = (pawprint.signatures / SIGNATURE_THRESHOLD) * 100;
 
   return (
-    <Link
-      href={`/pawprint/${pawprint.id}`}
-      className="block p-2 border rounded-lg bg-pms-427c/10 "
-    >
+    <Link href={`/pawprint/${pawprint.id}`} className="card" prefetch={false}>
       <div className="w-full h-2 rounded-full border  bg-pms-429c/30 overflow-hidden">
         <div
           className="bg-orange h-full rounded-full"

@@ -93,14 +93,30 @@
   }
 
   .button {
-    @apply p-0.5 px-4 rounded-lg  transition-all duration-300 ease-in-out text-lg font-bold hover:enabled:brightness-75 active:enabled:brightness-80;
+    @apply p-0.5 px-4 rounded-lg  transition-all duration-300 ease-in-out text-lg font-bold hover:enabled:brightness-110 active:enabled:brightness-75 disabled:bg-pms-430c;
   }
 
   .button-primary {
-    @apply text-white bg-primary disabled:bg-pms-430c;
+    @apply text-white bg-primary;
   }
 
   .button-secondary {
-    @apply text-primary bg-white disabled:bg-pms-430c;
+    @apply text-primary bg-white;
+  }
+
+  .button-red {
+    @apply text-white bg-red;
+  }
+
+  .button-transparent {
+    @apply bg-transparent enabled:hover:bg-pms-429c/20 enabled:active:bg-pms-429c/40;
+  }
+
+  .card {
+    @apply block p-2 border rounded-lg transition-colors duration-300 ease-in-out bg-transparent hover:bg-pms-429c/20 active:bg-pms-429c/40;
+  }
+
+  .icon-button {
+    @apply p-2 rounded-full transition-colors duration-300 ease-in-out;
   }
 }

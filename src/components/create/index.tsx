@@ -2,7 +2,7 @@
 import { FC } from "react";
 import { useRouter } from "next/navigation";
 import OverlayPopup from "../ui/popup";
-import { authClient, login } from "@/lib/auth/client";
+import { authClient, signIn } from "@/lib/auth/client";
 
 const CreatePawprintClient: FC = () => {
   const router = useRouter();
@@ -36,7 +36,7 @@ const CreatePawprintClient: FC = () => {
               : "Sorry, only members of RIT can create pawprints."}
           </h6>
           {!isPending && needsLogin && (
-            <button onClick={login} className="button button-primary">
+            <button onClick={signIn} className="button button-primary">
               Log In
             </button>
           )}
