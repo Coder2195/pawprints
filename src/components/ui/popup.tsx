@@ -15,7 +15,7 @@ const OverlayPopup: FC<
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.3, delay: 0.5 } }}
       exit={{ opacity: 0, transition: { duration: 0.3, delay: 0.5 } }}
-      className="w-dvw h-dvh bg-pms-430c/20 backdrop-blur-xs z-50 fixed top-0 left-0"
+      className="w-dvw h-dvh bg-pms-430c/20 backdrop-blur-xs z-50 fixed top-0 left-0 flex items-center"
       onClick={(e) => {
         if (e.target != e.currentTarget) return;
         onClose();
@@ -23,7 +23,7 @@ const OverlayPopup: FC<
     >
       <motion.dialog
         open
-        className="sm:w-3/4 h-3/4 w-[calc(100%-1rem)] m-2 fixed sm:left-1/8 top-1/8 bg-solid border rounded-xl flex flex-col justify-stretch"
+        className="min-h-3/4 min-w-3/4 h-[min(calc(600px),calc(100%-1rem))] w-[min(calc(600px),calc(100%-1rem))] bg-solid border rounded-xl flex flex-col justify-stretch justify-self-center"
         initial={{
           translateY: "20%",
           opacity: 0,

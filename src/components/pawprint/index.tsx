@@ -35,20 +35,24 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
         >
           <p>{pawprint.description}</p>
         </Dialogue>
-        <hr className="-mx-2" />
-        <h5 className="sm:ml-14">Updates</h5>
-        {pawprint.responses.map((response, index) => (
-          <Dialogue
-            name={response.author?.name}
-            ping={index == 0}
-            avatar={response.author?.avatar || undefined}
-            key={response.id}
-            createdAt={response.createdAt!}
-            updatedAt={response.updatedAt!}
-          >
-            <p>{response.content}</p>
-          </Dialogue>
-        ))}
+        {pawprint.responses.length > 0 && (
+          <>
+            <hr className="-mx-2" />
+            <h5 className="sm:ml-14">Updates</h5>
+            {pawprint.responses.map((response, index) => (
+              <Dialogue
+                name={response.author?.name}
+                ping={index == 0}
+                avatar={response.author?.avatar || undefined}
+                key={response.id}
+                createdAt={response.createdAt!}
+                updatedAt={response.updatedAt!}
+              >
+                <p>{response.content}</p>
+              </Dialogue>
+            ))}
+          </>
+        )}
       </div>
 
       <div className="p-2 border-t">
