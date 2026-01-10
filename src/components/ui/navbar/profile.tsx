@@ -1,6 +1,6 @@
 "use client";
 
-import { authClient } from "@/lib/auth/client";
+import { authClient, login } from "@/lib/auth/client";
 import { useClickAway } from "@/lib/hooks";
 import Image from "next/image";
 import { FC, Ref, useState } from "react";
@@ -24,10 +24,7 @@ const Profile: FC = () => {
 
   if (!session)
     return (
-      <button
-        onClick={() => authClient.signIn.social({ provider: "google" })}
-        className="bg-white p-0.5 px-4 rounded-lg text-primary hover:bg-white/70 active:bg-white/90 transition-all duration-300 ease-in-out text-lg font-bold"
-      >
+      <button onClick={login} className="button button-secondary">
         Login
       </button>
     );

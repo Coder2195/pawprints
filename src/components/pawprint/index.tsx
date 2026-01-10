@@ -1,23 +1,17 @@
 "use client";
-import { authClient } from "@/lib/auth/client";
-import { client } from "@/lib/rpc";
 import { GetPawprintResult } from "@/lib/rpc";
 import { FC, useState } from "react";
-import { BProgress } from "@bprogress/core";
 import { useRouter } from "next/navigation";
 import OverlayPopup from "../ui/popup";
 import Dialogue from "./dialogue";
+import SignButton from "./sign";
 
 const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
   pawprint: initial,
 }) => {
   const [pawprint, setPawprint] = useState(initial);
-  const [signing, setSigning] = useState(false);
-  const router = useRouter();
-  const { data } = authClient.useSession();
 
-  const signedIn = !!data?.user?.email;
-  const signed = pawprint.signs > 0;
+  const router = useRouter();
 
   return (
     <OverlayPopup
@@ -56,46 +50,7 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
       </div>
 
       <div className="p-2 border-t">
-        <button
-          disabled={signedIn && (signed || signing)}
-          className={` ${
-            signing || signed ? "bg-pms-430c" : "bg-orange"
-          } text-white font-bold p-1 px-4 rounded-lg mr-4`}
-          onClick={async () => {
-            if (!signedIn) {
-              authClient.signIn.social({
-                provider: "google",
-              });
-              return;
-            }
-
-            if (signed || signing) return;
-
-            setSigning(true);
-            BProgress.start();
-            client
-              .signPawprint({ id: pawprint.id })
-              .then(() => {
-                setPawprint({
-                  ...pawprint,
-                  signs: pawprint.signs + 1,
-                });
-
-                setSigning(false);
-              })
-              .finally(() => {
-                BProgress.done();
-              });
-          }}
-        >
-          {!signedIn
-            ? "Login to sign pawprints"
-            : signing
-            ? "Signing..."
-            : signed
-            ? "Signed"
-            : "Not Signed"}
-        </button>
+        <SignButton pawprint={pawprint} setPawprint={setPawprint} />
       </div>
     </OverlayPopup>
   );

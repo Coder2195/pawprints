@@ -7,6 +7,7 @@ import {
   varchar,
   primaryKey,
   boolean,
+  text,
 } from "drizzle-orm/cockroach-core";
 
 export const accountTypes = cockroachEnum("account_type", [
@@ -37,7 +38,11 @@ export const pawprints = cockroachTable("pawprints", {
 
   userEmail: varchar("user_email", { length: 254 }).notNull(),
   title: varchar("title", { length: 256 }).notNull(),
-  description: varchar("description", { length: 5000 }).notNull(),
+  description: varchar("description", { length: 10000 }).notNull(),
+  tags: text("tags")
+    .array()
+    .notNull()
+    .default(sql`ARRAY[]::TEXT[]`),
   completed: boolean("completed").notNull().default(false),
   published: boolean("published").notNull().default(false),
 

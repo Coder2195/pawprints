@@ -1110,6 +1110,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@orpc/shared@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@orpc/shared@npm:1.13.2"
+  dependencies:
+    radash: "npm:^12.1.1"
+    type-fest: "npm:^5.3.1"
+  peerDependencies:
+    "@opentelemetry/api": ">=1.9.0"
+  peerDependenciesMeta:
+    "@opentelemetry/api":
+      optional: true
+  checksum: 10c0/0225e36f58a01621bf862f3046954dc9798696b490bfdd7f2fe9fd5faa2e7513f0217d2d29e10dae209f18bcbc024a87bc1026c127053bd02dc97caf32963e4e
+  languageName: node
+  linkType: hard
+
 "@orpc/standard-server-aws-lambda@npm:1.13.1":
   version: 1.13.1
   resolution: "@orpc/standard-server-aws-lambda@npm:1.13.1"
@@ -1175,6 +1190,18 @@ __metadata:
   dependencies:
     "@orpc/shared": "npm:1.13.1"
   checksum: 10c0/9c86ac1a4696ed20b7d93adcd47839f9856139418861da8637a08bf7d6f3a590256601af15d43ce6c962ff565ae5a2d1cf5bb8cb420998ae736bbfd1eed7f0c5
+  languageName: node
+  linkType: hard
+
+"@orpc/tanstack-query@npm:^1.13.2":
+  version: 1.13.2
+  resolution: "@orpc/tanstack-query@npm:1.13.2"
+  dependencies:
+    "@orpc/shared": "npm:1.13.2"
+  peerDependencies:
+    "@orpc/client": 1.13.2
+    "@tanstack/query-core": ">=5.80.2"
+  checksum: 10c0/25d153defe189e9bacb70380d2c643d728fbad163c3c4558443c48f2c5a65af0f16186000c3d7682994c22bcdcaaae8c490acbc1676a3f94e2e419daa3f70455
   languageName: node
   linkType: hard
 
@@ -1375,6 +1402,24 @@ __metadata:
     postcss: "npm:^8.4.41"
     tailwindcss: "npm:4.1.18"
   checksum: 10c0/230d29ca8103c77113803bab1ac0209ad5102a8f5228ade5fe3fbc295e185e9d443416ac9802798e054b0c1ca3c5fa00a907b04d24fb8670b6f795a6d0ac1390
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-core@npm:5.90.16":
+  version: 5.90.16
+  resolution: "@tanstack/query-core@npm:5.90.16"
+  checksum: 10c0/f6a4827feeed2b4118323056bbda8d5099823202d1f29b538204ae2591be4e80f2946f3311eed30fefe866643f431c04b560457f03415d40caf2f353ba1efac0
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.90.16":
+  version: 5.90.16
+  resolution: "@tanstack/react-query@npm:5.90.16"
+  dependencies:
+    "@tanstack/query-core": "npm:5.90.16"
+  peerDependencies:
+    react: ^18 || ^19
+  checksum: 10c0/03bd2aa23187003b45dc3d4b465a68f19806369283487a004acd6dd2ad8ba1fa0ec343da616cb1c43c342609202d0776fee68867246caa5ad6915f090539c168
   languageName: node
   linkType: hard
 
@@ -4469,8 +4514,10 @@ __metadata:
     "@bprogress/next": "npm:^3.2.12"
     "@orpc/client": "npm:^1.13.1"
     "@orpc/server": "npm:^1.13.1"
+    "@orpc/tanstack-query": "npm:^1.13.2"
     "@paralleldrive/cuid2": "npm:3.1.0"
     "@tailwindcss/postcss": "npm:^4.1.18"
+    "@tanstack/react-query": "npm:^5.90.16"
     "@types/node": "npm:^25.0.3"
     "@types/pg": "npm:^8.16.0"
     "@types/react": "npm:^19.2.7"
@@ -5354,7 +5401,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^5.2.0":
+"type-fest@npm:^5.2.0, type-fest@npm:^5.3.1":
   version: 5.3.1
   resolution: "type-fest@npm:5.3.1"
   dependencies:

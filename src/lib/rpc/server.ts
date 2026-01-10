@@ -2,7 +2,13 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { createRouterClient } from "@orpc/server";
-import { getPawprint, getPawprints, signPawprint } from "./procedures";
+import {
+  getDrafts,
+  getMyPawprints,
+  getPawprint,
+  getPawprints,
+  signPawprint,
+} from "./procedures";
 import { RPCHandler } from "@orpc/server/fetch";
 import { onError } from "@orpc/server";
 
@@ -10,6 +16,8 @@ export const router = {
   getPawprints,
   getPawprint,
   signPawprint,
+  getDrafts,
+  getMyPawprints,
 };
 
 export const handler = new RPCHandler(router, {

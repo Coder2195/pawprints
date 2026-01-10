@@ -171,7 +171,7 @@ export const signPawprint = sessionRequired
       .onConflictDoNothing();
   });
 
-export const getMyPawprints = sessionRequired.handler(
+export const getMyPawprints = ritRequired.handler(
   async ({
     context: {
       session: {
@@ -182,6 +182,23 @@ export const getMyPawprints = sessionRequired.handler(
     return db.query.pawprints.findMany({
       where: {
         userEmail,
+      },
+    });
+  }
+);
+
+export const getDrafts = ritRequired.handler(
+  async ({
+    context: {
+      session: {
+        user: { email: userEmail },
+      },
+    },
+  }) => {
+    return db.query.pawprints.findMany({
+      where: {
+        userEmail,
+        published: false,
       },
     });
   }

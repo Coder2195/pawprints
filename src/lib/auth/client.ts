@@ -7,3 +7,7 @@ export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
   plugins: [customSessionClient<typeof auth>()],
 });
+
+export function login() {
+  authClient.signIn.social({ provider: "google" });
+}
