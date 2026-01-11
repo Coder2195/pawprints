@@ -92,7 +92,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
-  const pawprintList = await client.getPawprints().catch(() => []);
+  const pawprintList = await client.getPawprints({}).catch(() => []);
 
   return (
     <html lang="en" suppressHydrationWarning>

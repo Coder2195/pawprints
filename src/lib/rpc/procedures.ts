@@ -77,24 +77,41 @@ const ritRequired = sessionRequired.use(
   }
 );
 
-export const getPawprints = pub.handler(async () => {
-  return db.query.pawprints.findMany({
-    where: {
-      published: true,
-    },
-    with: {
-      author: {
-        columns: {
-          name: true,
+export const getPawprints = pub
+  .input(
+    type({
+      "tags?": "string[]",
+      "before?": "Date",
+      "after?": "Date",
+    })
+  )
+  .handler(async ({ input }) => {
+    return db.query.pawprints.findMany({
+      where: {
+        published: true,
+        ...(input.tags ? { tags: { arrayOverlaps: input.tags } } : {}),
+        ...(input.before || input.after
+          ? {
+              createdAt: {
+                ...(input.before ? { lt: input.before } : {}),
+                ...(input.after ? { gt: input.after } : {}),
+              },
+            }
+          : {}),
+      },
+      with: {
+        author: {
+          columns: {
+            name: true,
+          },
         },
       },
-    },
-    extras: {
-      signatures: (table) =>
-        db.$count(signatures, eq(table.id, signatures.pawprintId)),
-    },
+      extras: {
+        signatures: (table) =>
+          db.$count(signatures, eq(table.id, signatures.pawprintId)),
+      },
+    });
   });
-});
 
 export const getPawprint = sessionOptional
   .input(
