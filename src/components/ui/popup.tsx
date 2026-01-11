@@ -50,7 +50,7 @@ const OverlayPopup: FC<
             {title}
           </h3>
           <button
-            className=" rounded-full m-1 w-7 h-7 flex items-center justify-center"
+            className="icon-button button-transparent rounded-full w-9 h-9 m-1 p-1 flex items-center justify-center"
             onClick={onClose}
           >
             <BiX size={28} className="w-full h-full" />

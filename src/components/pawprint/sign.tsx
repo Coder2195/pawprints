@@ -1,8 +1,9 @@
 "use client";
 import { authClient, signIn } from "@/lib/auth/client";
-import { client, GetPawprintResult } from "@/lib/rpc";
+import { GetPawprintResult, orpc } from "@/lib/rpc";
 import { BProgress } from "@bprogress/core";
-import { FC, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { FC } from "react";
 
 const SignButton: FC<{
   pawprint: GetPawprintResult;
@@ -10,7 +11,24 @@ const SignButton: FC<{
 }> = ({ pawprint, setPawprint }) => {
   const { data, isPending } = authClient.useSession();
 
-  const [signing, setSigning] = useState(false);
+  const mutation = useMutation(
+    orpc.signPawprint.mutationOptions({
+      onMutate: () => {
+        BProgress.start();
+      },
+      onSettled: () => {
+        BProgress.done();
+      },
+      onSuccess: () => {
+        setPawprint({
+          ...pawprint,
+          signs: pawprint.signs + 1,
+        });
+      },
+    })
+  );
+
+  const signing = mutation.isPending;
 
   const signedIn = !!data?.user?.email;
   const signed = pawprint.signs > 0;
@@ -27,20 +45,7 @@ const SignButton: FC<{
 
         if (signed || signing) return;
 
-        setSigning(true);
-        BProgress.start();
-        client
-          .signPawprint({ id: pawprint.id })
-          .then(() => {
-            setPawprint({
-              ...pawprint,
-              signs: pawprint.signs + 1,
-            });
-          })
-          .finally(() => {
-            setSigning(false);
-            BProgress.done();
-          });
+        mutation.mutate({ id: pawprint.id });
       }}
     >
       {isPending
