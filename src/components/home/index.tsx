@@ -5,6 +5,7 @@ import Banner from "./banner";
 import { useQuery } from "@tanstack/react-query";
 import Filters from "./filters";
 import PawprintCard from "./card";
+import { AnimatePresence } from "motion/react";
 
 const HomePage: FC = () => {
   const [input, setInput] = useState<GetPawprintsInput>({});
@@ -12,6 +13,7 @@ const HomePage: FC = () => {
     orpc.getPawprints.queryOptions({
       input,
       queryKey: ["getPawprints", input],
+      placeholderData: (prev) => prev,
     })
   );
 
@@ -22,15 +24,13 @@ const HomePage: FC = () => {
       <main className="restrict-width">
         <Filters input={input} setInput={setInput} />
         <div className="min-h-96">
-          {status == "pending" ? (
-            <b className="h-96 w-full flex items-center justify-center">
-              Fetching pawprints...
-            </b>
-          ) : data ? (
+          {data?.length ? (
             <div className="grid lg:grid-cols-3 gap-4 p-4 w-full sm:grid-cols-2 grid-cols-1">
-              {data?.map((pawprint) => (
-                <PawprintCard key={pawprint.id} pawprint={pawprint} />
-              ))}
+              <AnimatePresence>
+                {data.map((pawprint) => (
+                  <PawprintCard key={pawprint.id} pawprint={pawprint} />
+                ))}
+              </AnimatePresence>
             </div>
           ) : (
             <b className="h-96 w-full flex items-center justify-center">

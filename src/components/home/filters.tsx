@@ -34,6 +34,7 @@ const Tag: FC<InputProps & { id: string }> = ({ input, setInput, id }) => {
 
 const Filters: FC<InputProps> = ({ input, setInput }) => {
   const ref = useRef<HTMLInputElement>(null);
+
   return (
     <div className="p-4 flex flex-col gap-3">
       <form
@@ -58,7 +59,7 @@ const Filters: FC<InputProps> = ({ input, setInput }) => {
           ref={ref}
         />
 
-        <button type="submit" className="button button-primary">
+        <button type="submit" className="button button-primary font-bold">
           Search
         </button>
       </form>

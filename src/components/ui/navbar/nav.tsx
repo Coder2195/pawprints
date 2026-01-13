@@ -6,7 +6,7 @@ import { motion } from "motion/react";
 const Nav: FC<PropsWithChildren> = ({ children }) => {
   return (
     <motion.nav
-      className="flex gap-2 bg-primary/70 backdrop-blur-md p-2 justify-between items-center text-white rounded-xl restrict-width mx-auto h-12"
+      className="flex gap-2 bg-primary/85 backdrop-blur-lg p-2 justify-between items-center text-white rounded-xl restrict-width mx-auto h-12"
       initial={{
         scaleX: 0.5,
         opacity: 0,
