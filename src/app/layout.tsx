@@ -4,7 +4,6 @@ import localFont from "next/font/local";
 import Navbar from "../components/ui/navbar";
 import { FC, PropsWithChildren } from "react";
 import Providers from "@/components/providers";
-import { client } from "@/lib/rpc";
 import "@/lib/rpc/server";
 import TransitionLayout from "@/components/transition";
 
@@ -89,19 +88,13 @@ export const metadata: Metadata = {
   description: "Make your mark on RIT with Pawprints.",
 };
 
-export const dynamic = "force-dynamic";
-
 const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
-  const pawprintList = await client.getPawprints({}).catch(() => []);
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${ritFont.className} antialiased`}>
         <Providers>
           <Navbar />
-          <TransitionLayout pawprintList={pawprintList}>
-            {children}
-          </TransitionLayout>
+          <TransitionLayout>{children}</TransitionLayout>
         </Providers>
       </body>
     </html>

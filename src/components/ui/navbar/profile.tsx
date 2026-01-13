@@ -58,7 +58,7 @@ const Profile: FC = () => {
             onClick={() => authClient.signOut()}
             className="button button-red font-bold flex items-center gap-2 justify-center"
           >
-            <MdLogout size={20} />
+            <MdLogout size={20} aria-label="(Logout Icon)" />
             Logout
           </button>
         </span>

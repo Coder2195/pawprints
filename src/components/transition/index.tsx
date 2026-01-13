@@ -1,6 +1,4 @@
 "use client";
-
-import { type GetPawprintsResult } from "@/lib/rpc";
 import { FC, PropsWithChildren, useContext, useRef } from "react";
 import { AnimatePresence } from "motion/react";
 import { motion } from "motion/react";
@@ -20,9 +18,7 @@ const FrozenRouter: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-const TransitionLayout: FC<
-  PropsWithChildren & { pawprintList: GetPawprintsResult }
-> = ({ pawprintList, children }) => {
+const TransitionLayout: FC<PropsWithChildren> = ({ children }) => {
   const pathname = usePathname();
   const show =
     pathname === "/" ||
@@ -50,7 +46,7 @@ const TransitionLayout: FC<
             exit={{ opacity: 0 }}
             key="homepage"
           >
-            <HomePage pawprintList={pawprintList} />
+            <HomePage />
           </motion.div>
         )}
       </AnimatePresence>

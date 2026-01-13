@@ -36,7 +36,7 @@
   }
 
   :root {
-    @apply text-[14px] 3xs:text-[15px] 2xs:text-[16px] xs:text-[17px] sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[21px] 2xl:text-[22px] dark:bg-black dark:text-white text-black bg-white transition-[background] duration-500;
+    @apply text-[14px] 3xs:text-[15px] 2xs:text-[16px] xs:text-[17px] sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[21px] 2xl:text-[22px] dark:bg-black dark:text-white text-black bg-white transition-[border,background,filter] duration-500;
     scrollbar-gutter: stable both-edges;
   }
 
@@ -77,6 +77,10 @@
   button {
     @apply enabled:cursor-pointer text-left;
   }
+
+  input[type="text"] {
+    @apply p-1 border rounded-md bg-transparent focus:border-orange outline-none duration-300;
+  }
 }
 
 @layer components {
@@ -93,7 +97,7 @@
   }
 
   .button {
-    @apply p-0.5 px-4 rounded-lg  transition-all duration-300 ease-in-out text-lg font-bold hover:enabled:brightness-110 active:enabled:brightness-75 disabled:bg-pms-430c;
+    @apply p-0.5 px-4 rounded-lg duration-300 ease-in-out hover:enabled:brightness-110 active:enabled:brightness-75 disabled:bg-pms-430c;
   }
 
   .button-primary {
@@ -113,10 +117,10 @@
   }
 
   .card {
-    @apply block p-2 border rounded-lg transition-colors duration-300 ease-in-out bg-transparent hover:bg-pms-429c/20 active:bg-pms-429c/40;
+    @apply block p-2 border rounded-lg duration-300 ease-in-out bg-transparent hover:bg-pms-429c/20 active:bg-pms-429c/40;
   }
 
   .icon-button {
-    @apply p-2 rounded-full transition-colors duration-300 ease-in-out;
+    @apply p-2 rounded-full duration-300 ease-in-out;
   }
 }

@@ -83,13 +83,14 @@ export const getPawprints = pub
       "tags?": "string[]",
       "before?": "Date",
       "after?": "Date",
+      "search?": "string",
     })
   )
   .handler(async ({ input }) => {
     return db.query.pawprints.findMany({
       where: {
         published: true,
-        ...(input.tags ? { tags: { arrayOverlaps: input.tags } } : {}),
+        ...(input.tags?.length ? { tags: { arrayOverlaps: input.tags } } : {}),
         ...(input.before || input.after
           ? {
               createdAt: {
@@ -98,6 +99,18 @@ export const getPawprints = pub
               },
             }
           : {}),
+        OR: [
+          input.search
+            ? {
+                title: { like: `%${input.search}%` },
+              }
+            : {},
+          input.search
+            ? {
+                description: { like: `%${input.search}%` },
+              }
+            : {},
+        ],
       },
       with: {
         author: {

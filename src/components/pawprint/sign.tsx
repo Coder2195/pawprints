@@ -36,7 +36,7 @@ const SignButton: FC<{
   return (
     <button
       disabled={signedIn && (signed || signing)}
-      className="button button-primary"
+      className="button button-primary text-lg font-bold"
       onClick={async () => {
         if (!signedIn) {
           signIn();

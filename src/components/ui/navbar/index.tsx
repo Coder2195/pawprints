@@ -17,9 +17,9 @@ const Navbar: FC = () => {
             height={28}
             className="w-7 h-7"
           />
-          <span className="3xs:inline hidden text-lg">Pawprints</span>
+          <span className="3xs:inline hidden text-xl">Pawprints</span>
         </Link>
-        <div className="flex-1">
+        <div className="flex-1 font-semibold">
           <Link href="/about" className="ml-4 hover:underline">
             About
           </Link>

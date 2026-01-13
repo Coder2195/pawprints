@@ -33,6 +33,7 @@ type Result<T extends (...args: any) => Promise<any>> = Awaited<ReturnType<T>>;
 export type GetPawprintResult = Result<typeof client.getPawprint>;
 
 export type GetPawprintsResult = Result<typeof client.getPawprints>;
+export type GetPawprintsInput = Parameters<typeof client.getPawprints>[0];
 
 export type GetPawprintsResultItem = GetPawprintsResult[number];
 

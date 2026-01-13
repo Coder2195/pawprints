@@ -18,9 +18,9 @@ const ThemeButton: FC = () => {
       className="icon-button button-transparent"
     >
       {resolvedTheme === "dark" ? (
-        <MdOutlineDarkMode size={28} />
+        <MdOutlineDarkMode aria-label="Switch to light mode" size={28} />
       ) : (
-        <MdOutlineLightMode size={28} />
+        <MdOutlineLightMode aria-label="Switch to dark mode" size={28} />
       )}
     </button>
   );
