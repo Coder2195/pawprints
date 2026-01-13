@@ -40,6 +40,10 @@
     scrollbar-gutter: stable both-edges;
   }
 
+  body {
+    overflow-x: clip;
+  }
+
   body:has(dialog[open]) {
     overflow: hidden;
   }

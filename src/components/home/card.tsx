@@ -13,10 +13,10 @@ const PawprintCard: FC<{ pawprint: GetPawprintsResultItem }> = ({
   return (
     <motion.div
       layout="position"
-      initial={{ opacity: 0, scale: 1.2 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 1.2 }}
-      transition={{ duration: 0.3, delay: 0.2, ease: "easeInOut" }}
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1, transition: { delay: 0.4 } }}
+      exit={{ opacity: 0, scale: 0 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       <Link href={`/pawprint/${pawprint.id}`} className="card" prefetch={false}>
         <div className="w-full h-2 rounded-full border  bg-pms-429c/30 overflow-hidden">

@@ -40,9 +40,12 @@ const Filters: FC<InputProps> = ({ input, setInput }) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          if (!ref.current) return;
+          ref.current.value = ref.current.value.trim();
+          if (ref.current.value == input.search) return;
           setInput({
             ...input,
-            search: ref.current?.value || undefined,
+            search: ref.current.value,
           });
         }}
         className="flex gap-2 w-full items-stretch"
@@ -56,12 +59,11 @@ const Filters: FC<InputProps> = ({ input, setInput }) => {
           id="search-text"
           name="search-text"
           placeholder="Text to search"
+          onBlur={(e) => {
+            (e.currentTarget.parentElement as HTMLFormElement).requestSubmit();
+          }}
           ref={ref}
         />
-
-        <button type="submit" className="button button-primary font-bold">
-          Search
-        </button>
       </form>
       <div className="flex gap-1 flex-wrap items-center">
         <br />
