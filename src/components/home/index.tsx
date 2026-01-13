@@ -1,21 +1,32 @@
 "use client";
 import { GetPawprintsInput, orpc } from "@/lib/rpc";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Banner from "./banner";
 import { useQuery } from "@tanstack/react-query";
 import Filters from "./filters";
 import PawprintCard from "./card";
 import { AnimatePresence } from "motion/react";
+import { BProgress } from "@bprogress/core";
 
 const HomePage: FC = () => {
   const [input, setInput] = useState<GetPawprintsInput>({});
-  const { data, status } = useQuery(
+  const { data, isPlaceholderData, status } = useQuery(
     orpc.getPawprints.queryOptions({
       input,
       queryKey: ["getPawprints", input],
-      placeholderData: (prev) => prev,
+      placeholderData: (prev) => {
+        return prev;
+      },
     })
   );
+
+  useEffect(() => {
+    if (isPlaceholderData || status == "pending") {
+      BProgress.start();
+    } else {
+      BProgress.done();
+    }
+  }, [isPlaceholderData, status]);
 
   return (
     <>
