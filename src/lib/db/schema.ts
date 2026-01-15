@@ -44,8 +44,7 @@ export const pawprints = cockroachTable("pawprints", {
     .notNull()
     .default(sql`ARRAY[]::TEXT[]`),
   completed: boolean("completed").notNull().default(false),
-  published: boolean("published").notNull().default(false),
-
+  publishedAt: timestamp("published_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

@@ -14,6 +14,7 @@ const HomePage: FC = () => {
     orpc.getPawprints.queryOptions({
       input,
       queryKey: ["getPawprints", input],
+      initialData: undefined,
       placeholderData: (prev) => {
         return prev;
       },
@@ -35,7 +36,7 @@ const HomePage: FC = () => {
       <main className="restrict-width">
         <Filters input={input} setInput={setInput} />
         <div className="min-h-96">
-          {status === "pending" ? (
+          {status === "pending" || data == undefined ? (
             <b className="h-96 w-full flex items-center justify-center">
               Loading...
             </b>

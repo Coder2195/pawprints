@@ -89,7 +89,7 @@ export const getPawprints = pub
   .handler(async ({ input }) => {
     return db.query.pawprints.findMany({
       where: {
-        published: true,
+        publishedAt: { isNotNull: true },
         ...(input.tags?.length ? { tags: { arrayOverlaps: input.tags } } : {}),
         ...(input.before || input.after
           ? {
@@ -228,7 +228,7 @@ export const getDrafts = ritRequired.handler(
     return db.query.pawprints.findMany({
       where: {
         userEmail,
-        published: false,
+        publishedAt: { isNull: true },
       },
     });
   }
