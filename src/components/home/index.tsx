@@ -35,7 +35,11 @@ const HomePage: FC = () => {
       <main className="restrict-width">
         <Filters input={input} setInput={setInput} />
         <div className="min-h-96">
-          {data?.length ? (
+          {status === "pending" ? (
+            <b className="h-96 w-full flex items-center justify-center">
+              Loading...
+            </b>
+          ) : data?.length ? (
             <div className="grid lg:grid-cols-3 gap-4 p-4 w-full sm:grid-cols-2 grid-cols-1">
               <AnimatePresence>
                 {data.map((pawprint) => (
