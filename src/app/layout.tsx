@@ -6,6 +6,7 @@ import { FC, PropsWithChildren } from "react";
 import Providers from "@/components/providers";
 import "@/lib/rpc/server";
 import TransitionLayout from "@/components/transition";
+import Footer from "@/components/ui/footer";
 
 const ritFont = localFont({
   src: [
@@ -95,6 +96,7 @@ const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
         <Providers>
           <Navbar />
           <TransitionLayout>{children}</TransitionLayout>
+          <Footer />
         </Providers>
       </body>
     </html>

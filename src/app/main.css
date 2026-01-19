@@ -30,6 +30,16 @@
   --color-yellow: #f6be00;
 }
 
+@keyframes countdown {
+  0% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0%;
+  }
+}
+
 @layer base {
   * {
     @apply border-pms-430c/30;
@@ -101,7 +111,7 @@
   }
 
   .button {
-    @apply p-0.5 px-4 rounded-lg duration-300 ease-in-out hover:enabled:brightness-110 active:enabled:brightness-75 disabled:bg-pms-430c;
+    @apply p-0.5 px-4 rounded-md duration-300 ease-in-out hover:enabled:brightness-110 active:enabled:brightness-75 disabled:bg-pms-430c;
   }
 
   .button-primary {
@@ -121,10 +131,22 @@
   }
 
   .card {
-    @apply block p-2 border rounded-lg duration-300 ease-in-out bg-transparent hover:bg-pms-429c/20 active:bg-pms-429c/40;
+    @apply block p-2 border rounded-md duration-300 ease-in-out bg-transparent hover:bg-pms-429c/20 active:bg-pms-429c/40 shadow-lg shadow-pms-430c/30;
   }
 
   .icon-button {
     @apply p-2 rounded-full duration-300 ease-in-out;
+  }
+
+  .hover-underline {
+    background: linear-gradient(currentColor 0 0) bottom left/
+      var(--underline-width, 0%) 0.15em no-repeat;
+    display: inline-block;
+    transition: background-size 0.3s ease-in-out;
+  }
+
+  .hover-underline:hover,
+  .hover-underline-forced {
+    --underline-width: 100%;
   }
 }

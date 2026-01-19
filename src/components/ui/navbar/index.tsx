@@ -20,10 +20,10 @@ const Navbar: FC = () => {
           <span className="3xs:inline hidden text-xl">Pawprints</span>
         </Link>
         <div className="flex-1 font-semibold">
-          <Link href="/about" className="ml-4 hover:underline">
+          <Link href="/about" className="ml-4 hover-underline">
             About
           </Link>
-          <Link href="/create" className="ml-4 hover:underline">
+          <Link href="/create" className="ml-4 hover-underline">
             Create
           </Link>
         </div>

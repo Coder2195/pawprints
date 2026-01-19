@@ -45,12 +45,15 @@ export const pawprints = cockroachTable("pawprints", {
     .default(sql`ARRAY[]::TEXT[]`),
   completed: boolean("completed").notNull().default(false),
   publishedAt: timestamp("published_at", { withTimezone: true }),
+  expiresOn: timestamp("expires_on", { withTimezone: true }).default(
+    sql`NOW() + INTERVAL '7 days'`
+  ),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()
-    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
+    .$onUpdate(() => sql`NOW()`),
 });
 
 export const signatures = cockroachTable(

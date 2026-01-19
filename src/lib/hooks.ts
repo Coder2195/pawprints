@@ -14,7 +14,7 @@ export function useIsMounted() {
 }
 
 export function useClickAway<T extends Element>(
-  callback: (e: MouseEvent | TouchEvent) => void
+  callback: (e: MouseEvent | TouchEvent) => void,
 ) {
   const ref = useRef<T>(null);
   const refCb = useRef(callback);

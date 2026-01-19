@@ -25,12 +25,15 @@ const TransitionLayout: FC<PropsWithChildren> = ({ children }) => {
     pathname.startsWith("/pawprint/") ||
     pathname == "/create";
   return (
-    <>
+    <div className="min-h-dvh">
       <AnimatePresence>
         <motion.div
           key={pathname}
           initial={{ display: "none" }}
-          animate={{ display: "block", transition: { delay: 0.5 } }}
+          animate={{
+            display: "block",
+            transition: { delay: 0.5, duration: 0.5 },
+          }}
         >
           <FrozenRouter>{children}</FrozenRouter>
         </motion.div>
@@ -50,7 +53,7 @@ const TransitionLayout: FC<PropsWithChildren> = ({ children }) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 };
 

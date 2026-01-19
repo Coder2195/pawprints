@@ -45,7 +45,7 @@ const Filters: FC<InputProps> = ({ input, setInput }) => {
           if (ref.current.value == input.search) return;
           setInput({
             ...input,
-            search: ref.current.value,
+            search: ref.current.value || undefined,
           });
         }}
         className="flex gap-2 w-full items-stretch"

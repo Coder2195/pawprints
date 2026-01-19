@@ -1,5 +1,5 @@
 import { os } from "@orpc/server";
-import { signatures } from "../db/schema";
+import { signatures, users } from "../db/schema";
 import { and, eq } from "drizzle-orm";
 import { getServerSession } from "../auth/session";
 import { db } from "../db";
@@ -42,7 +42,7 @@ const sessionOptional = pub.use(
         session,
       },
     });
-  }
+  },
 );
 
 const sessionRequired = sessionOptional.use(
@@ -56,7 +56,7 @@ const sessionRequired = sessionOptional.use(
         session,
       },
     });
-  }
+  },
 );
 
 const ritRequired = sessionRequired.use(
@@ -74,7 +74,7 @@ const ritRequired = sessionRequired.use(
         user,
       },
     });
-  }
+  },
 );
 
 export const getPawprints = pub
@@ -84,7 +84,8 @@ export const getPawprints = pub
       "before?": "Date",
       "after?": "Date",
       "search?": "string",
-    })
+      "flags?": "string[]",
+    }),
   )
   .handler(async ({ input }) => {
     return db.query.pawprints.findMany({
@@ -111,6 +112,11 @@ export const getPawprints = pub
               }
             : {},
         ],
+        ...(input.flags?.includes("EXPIRED")
+          ? {
+              expiresOn: { lt: new Date() },
+            }
+          : {}),
       },
       with: {
         author: {
@@ -130,7 +136,7 @@ export const getPawprint = sessionOptional
   .input(
     type({
       id: "string",
-    })
+    }),
   )
   .handler(async ({ input: { id }, context: { session }, errors }) => {
     const userEmail = session?.user?.email || "";
@@ -172,8 +178,8 @@ export const getPawprint = sessionOptional
             signatures,
             and(
               eq(table.id, signatures.pawprintId),
-              eq(signatures.userEmail, userEmail)
-            )
+              eq(signatures.userEmail, userEmail),
+            ),
           ),
       },
     });
@@ -187,7 +193,7 @@ export const signPawprint = sessionRequired
   .input(
     type({
       id: "string",
-    })
+    }),
   )
   .handler(async ({ input: { id }, context: { session } }) => {
     const userEmail = session.user.email;
@@ -214,7 +220,7 @@ export const getMyPawprints = ritRequired.handler(
         userEmail,
       },
     });
-  }
+  },
 );
 
 export const getDrafts = ritRequired.handler(
@@ -231,5 +237,25 @@ export const getDrafts = ritRequired.handler(
         publishedAt: { isNull: true },
       },
     });
-  }
+  },
 );
+
+export const editProfile = sessionRequired
+  .input(
+    type({
+      "name?": "string",
+      "avatar?": "string",
+    }),
+  )
+  .handler(
+    async ({
+      context: {
+        session: {
+          user: { email },
+        },
+      },
+      input,
+    }) => {
+      await db.update(users).set(input).where(eq(users.email, email));
+    },
+  );

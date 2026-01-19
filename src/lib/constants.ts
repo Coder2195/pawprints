@@ -11,3 +11,11 @@ export const TAGS = {
   TECHNOLOGY: "Technology",
   TRANSPORATION: "Parking & Transportation",
 } as const;
+
+export const FLAGS = {
+  ACTIVE: "Active",
+  THRESHOLD_MET: "Threshold Met",
+  COMPLETED: "Completed",
+  RESPONDED: "Responded",
+  EXPIRED: "Expired",
+} as const;
