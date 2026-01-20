@@ -3,6 +3,7 @@
 import { FC, useEffect, useState } from "react";
 import { ToastData } from "../providers/toast";
 import { motion } from "motion/react";
+import { BiX } from "react-icons/bi";
 
 const Toast: FC<{
   toast: ToastData;
@@ -18,25 +19,39 @@ const Toast: FC<{
     return () => clearTimeout(timeout);
   }, [hover, liveTime, remove]);
 
+  const colorClassName =
+    type == "information" || type == "success"
+      ? "bg-orange"
+      : type == "warning"
+        ? "bg-yellow"
+        : "bg-red";
+
   return (
     <motion.div layout>
       <motion.div
         initial={{
-          x: "100%",
+          x: "110%",
         }}
         animate={{
           x: "0%",
         }}
         exit={{
-          x: "100%",
+          x: "110%",
         }}
-        className="w-36 bg-solid rounded-md border p-2 pointer-events-auto"
+        className="w-72 bg-solid rounded-md border pointer-events-auto overflow-hidden relative"
         onPointerEnter={() => setHover(true)}
         onPointerLeave={() => setHover(false)}
       >
-        <div className="w-full h-2 rounded-full border">
+        <button onClick={remove} className="w-6 h-6 absolute top-0 right-0">
+          <BiX className="w-full h-full" />
+        </button>
+        <div className="flex flex-col items-stretch gap-0.5 p-2">
+          <div className="font-bold">{title}</div>
+          <div className="text-sm">{body}</div>
+        </div>
+        <div className="bg-pms-430c/50 h-1">
           <div
-            className="bg-orange rounded-full h-full"
+            className={colorClassName + " h-full"}
             style={
               hover
                 ? {
@@ -50,7 +65,6 @@ const Toast: FC<{
             }
           ></div>
         </div>
-        <div className="">{title}</div>
       </motion.div>
     </motion.div>
   );

@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
 import "./main.css";
 import localFont from "next/font/local";
+import { Google_Sans_Code } from "next/font/google";
 import Navbar from "../components/ui/navbar";
 import { FC, PropsWithChildren } from "react";
 import Providers from "@/components/providers";
 import "@/lib/rpc/server";
 import TransitionLayout from "@/components/transition";
 import Footer from "@/components/ui/footer";
+
+const monoFont = Google_Sans_Code({
+  subsets: ["latin"],
+  variable: "--font-code",
+  weight: "variable",
+});
 
 const ritFont = localFont({
   src: [
@@ -92,7 +99,7 @@ export const metadata: Metadata = {
 const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${ritFont.className} antialiased`}>
+      <body className={`${ritFont.variable} ${monoFont.variable} antialiased`}>
         <Providers>
           <Navbar />
           <TransitionLayout>{children}</TransitionLayout>

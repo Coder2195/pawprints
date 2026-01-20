@@ -12,6 +12,7 @@
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
   --font-rit: var(--font-rit);
+  --font-code: var(--font-code);
   --color-*: initial;
   --color-white: #ffffff;
   --color-black: #000000;
@@ -46,7 +47,7 @@
   }
 
   :root {
-    @apply text-[14px] 3xs:text-[15px] 2xs:text-[16px] xs:text-[17px] sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[21px] 2xl:text-[22px] dark:bg-black dark:text-white text-black bg-white transition-[border,background,filter] duration-500;
+    @apply text-[13px] 2xs:text-[14px] xs:text-[15px] sm:text-[16px] md:text-[17px] lg:text-[18px] xl:text-[19px] 2xl:text-[20px] dark:bg-black dark:text-white text-black bg-white transition-[border,background,filter] duration-500;
     scrollbar-gutter: stable both-edges;
   }
 
@@ -95,6 +96,12 @@
   input[type="text"] {
     @apply p-0.5 px-2 border rounded-md bg-transparent focus:border-orange outline-none duration-300;
   }
+
+  code {
+    @apply font-code tracking-tighter wrap-break-word break-all block;
+    letter-spacing: -0.06em;
+    line-height: 1em;
+  }
 }
 
 @layer components {
@@ -111,7 +118,15 @@
   }
 
   .button {
-    @apply p-0.5 px-4 rounded-md duration-300 ease-in-out hover:enabled:brightness-110 active:enabled:brightness-75 disabled:bg-pms-430c;
+    @apply p-0.5 px-4 rounded-md duration-300 ease-in-out  disabled:bg-pms-430c;
+  }
+
+  .button:not(button):hover {
+    @apply hover:brightness-110 active:brightness-75;
+  }
+
+  .button:is(button):hover {
+    @apply enabled:hover:brightness-110 enabled:active:brightness-75;
   }
 
   .button-primary {
@@ -126,7 +141,11 @@
     @apply text-white bg-red;
   }
 
-  .button-transparent {
+  .button-transparent:not(button) {
+    @apply bg-transparent hover:bg-pms-429c/20 active:bg-pms-429c/40;
+  }
+
+  .button-transparent:is(button) {
     @apply bg-transparent enabled:hover:bg-pms-429c/20 enabled:active:bg-pms-429c/40;
   }
 

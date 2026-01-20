@@ -1,12 +1,11 @@
 "use client";
-
 import { authClient, signIn } from "@/lib/auth/client";
-import { FreeImageResponse } from "@/lib/types/freeimage";
 import { BProgress } from "@bprogress/core";
 import Image from "next/image";
 import { FC, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import { useToasts } from "../providers/toast";
+import { FreeImageResponse } from "@/lib/types/freeimage";
 
 const EditProfile: FC = () => {
   const { data, isPending, refetch, isRefetching } = authClient.useSession();
@@ -18,12 +17,12 @@ const EditProfile: FC = () => {
   const resolvedImg = image || data?.user.image || "";
 
   return (
-    <div className="border rounded-md w-full p-2 py-6 flex justify-center flex-row">
+    <div className="border rounded-md w-1/2 p-2 py-6 flex justify-center flex-row">
       {isPending ? (
         <b>Loading...</b>
       ) : (
         <>
-          <button className="w-24 h-24 rounded-full overflow-hidden border-4 relative">
+          <button className="w-24 h-24 rounded-full overflow-hidden relative">
             <Image
               src={resolvedImg}
               width={100}
@@ -48,18 +47,45 @@ const EditProfile: FC = () => {
                   const formData = new FormData();
                   formData.append("source", file);
 
-                  const result = await fetch("/api/upload", {
+                  const res = await fetch("/api/upload-image", {
                     method: "POST",
                     body: formData,
-                  }).then((res) => res.json() as Promise<FreeImageResponse>);
+                  });
 
                   elm.disabled = false;
                   BProgress.done();
 
                   elm.value = "";
+
+                  if (res.status == 200) {
+                    const data = (await res.json()) as FreeImageResponse;
+
+                    setImage(data.image.url);
+                  } else {
+                    addToast({
+                      title: "Upload failed",
+                      body: (
+                        <>
+                          Could not upload image, please try again later. <br />
+                          <code>
+                            <b>Error: </b>
+                            {
+                              await (res.headers
+                                .get("content-type")
+                                ?.includes("application/json")
+                                ? res.json()
+                                : res.text())
+                            }
+                          </code>
+                        </>
+                      ),
+                      liveTime: 5000,
+                      type: "error",
+                    });
+                  }
                 }}
               />
-              <FiUpload className="w-1/3 h-1/3" />
+              <FiUpload className="w-1/3 h-1/3 text-white" />
             </div>
           </button>
         </>

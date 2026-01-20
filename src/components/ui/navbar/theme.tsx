@@ -12,16 +12,21 @@ const ThemeButton: FC = () => {
 
   if (!mounted) return null;
 
+  const Icon =
+    resolvedTheme === "dark" ? MdOutlineLightMode : MdOutlineDarkMode;
+
   return (
     <button
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className="icon-button button-transparent"
+      className="icon-button button-transparent w-9 h-9"
     >
-      {resolvedTheme === "dark" ? (
-        <MdOutlineDarkMode aria-label="Switch to light mode" size={28} />
-      ) : (
-        <MdOutlineLightMode aria-label="Switch to dark mode" size={28} />
-      )}
+      {
+        <Icon
+          aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
+          size={24}
+          className="w-full h-full"
+        />
+      }
     </button>
   );
 };

@@ -17,7 +17,13 @@ const Profile: FC = () => {
         <h1 className="mt-16 text-center">Profile</h1>
         <div className="flex gap-2 justify-stretch flex-col md:flex-row">
           <EditProfile />
-          <EditProfile />
+          <div className="flex-1 border">
+            <code>
+              fadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsdds
+              <br />
+              df
+            </code>
+          </div>
         </div>
       </div>
       <ScrollToTop />
