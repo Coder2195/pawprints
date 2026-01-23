@@ -1,34 +1,29 @@
 import type { Metadata } from "next";
 
-import { FC } from "react";
+import type { FC } from "react";
+import EditProfile from "@/components/profile/edit-profile";
+import MyPawprints from "@/components/profile/pawprints";
 import TransitionWrapper from "@/components/transition/wrapper";
 import ScrollToTop from "@/components/ui/scroll-to-top";
-import EditProfile from "@/components/profile/edit-profile";
 
 export const metadata: Metadata = {
-  title: "Pawprints - Title",
-  description: "Manage your profile for the Pawprints app here!",
+	title: "Pawprints - Title",
+	description: "Manage your profile for the Pawprints app here!",
 };
 
 const Profile: FC = () => {
-  return (
-    <TransitionWrapper>
-      <div className="restrict-width p-2">
-        <h1 className="mt-16 text-center">Profile</h1>
-        <div className="flex gap-2 justify-stretch flex-col md:flex-row">
-          <EditProfile />
-          <div className="flex-1 border">
-            <code>
-              fadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsddsfadsdfdfsdds
-              <br />
-              df
-            </code>
-          </div>
-        </div>
-      </div>
-      <ScrollToTop />
-    </TransitionWrapper>
-  );
+	return (
+		<TransitionWrapper>
+			<div className="restrict-width p-2">
+				<h1 className="mt-16 text-center">Profile</h1>
+				<div className="flex gap-2 justify-stretch flex-col md:flex-row">
+					<EditProfile />
+					<MyPawprints />
+				</div>
+			</div>
+			<ScrollToTop />
+		</TransitionWrapper>
+	);
 };
 
 export default Profile;

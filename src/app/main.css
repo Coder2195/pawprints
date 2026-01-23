@@ -47,7 +47,7 @@
   }
 
   :root {
-    @apply text-[13px] 2xs:text-[14px] xs:text-[15px] sm:text-[16px] md:text-[17px] lg:text-[18px] xl:text-[19px] 2xl:text-[20px] dark:bg-black dark:text-white text-black bg-white transition-[border,background,filter] duration-500;
+    @apply text-[16px] 2xs:text-[17px] xs:text-[18px] sm:text-[19px] md:text-[20px] lg:text-[21px] xl:text-[22px] 2xl:text-[23px] dark:bg-black dark:text-white text-black bg-white transition-[border,background,filter] duration-500;
     scrollbar-gutter: stable both-edges;
   }
 
@@ -102,6 +102,10 @@
     letter-spacing: -0.06em;
     line-height: 1em;
   }
+
+  input {
+    @apply max-w-full;
+  }
 }
 
 @layer components {
@@ -122,11 +126,11 @@
   }
 
   .button:not(button):hover {
-    @apply hover:brightness-110 active:brightness-75;
+    @apply hover:brightness-125 active:brightness-75;
   }
 
   .button:is(button):hover {
-    @apply enabled:hover:brightness-110 enabled:active:brightness-75;
+    @apply enabled:hover:brightness-125 enabled:active:brightness-75;
   }
 
   .button-primary {
@@ -142,15 +146,15 @@
   }
 
   .button-transparent:not(button) {
-    @apply bg-transparent hover:bg-pms-429c/20 active:bg-pms-429c/40;
+    @apply bg-transparent hover:bg-pms-430c/20 active:bg-pms-430c/40;
   }
 
   .button-transparent:is(button) {
-    @apply bg-transparent enabled:hover:bg-pms-429c/20 enabled:active:bg-pms-429c/40;
+    @apply bg-transparent enabled:hover:bg-pms-430c/20 enabled:active:bg-pms-430c/40;
   }
 
   .card {
-    @apply block p-2 border rounded-md duration-300 ease-in-out bg-transparent hover:bg-pms-429c/20 active:bg-pms-429c/40 shadow-lg shadow-pms-430c/30;
+    @apply block p-2 border rounded-md duration-300 ease-in-out bg-transparent hover:bg-pms-430c/15 active:bg-pms-430c/30 shadow-lg shadow-pms-430c/15;
   }
 
   .icon-button {
@@ -158,8 +162,9 @@
   }
 
   .hover-underline {
+
     background: linear-gradient(currentColor 0 0) bottom left/
-      var(--underline-width, 0%) 0.15em no-repeat;
+      var(--underline-width, 0%) var(--underline-thickness, 0.15em) no-repeat;
     display: inline-block;
     transition: background-size 0.3s ease-in-out;
   }
