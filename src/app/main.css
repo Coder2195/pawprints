@@ -1,176 +1,185 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-  --breakpoint-3xs: 300px;
-  --breakpoint-2xs: 400px;
-  --breakpoint-xs: 480px;
-  --breakpoint-sm: 640px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1280px;
-  --breakpoint-2xl: 1536px;
-  --font-rit: var(--font-rit);
-  --font-code: var(--font-code);
-  --color-*: initial;
-  --color-white: #ffffff;
-  --color-black: #000000;
-  --color-orange: #f76902;
-  --color-primary: var(--color-orange);
-  --color-pms-427c: #d0d3d4;
-  --color-pms-429c: #a2aaad;
-  --color-pms-430c: #7c878e;
-  --color-pms-gray-1c: #d7d2cb;
-  --color-pms-gray-5c: #aca39a;
-  --color-green: #84bd00;
-  --color-lime: #c4d600;
-  --color-blue: #009cbd;
-  --color-purple: #7d55c7;
-  --color-red: #da291c;
-  --color-yellow: #f6be00;
+	--breakpoint-3xs: 300px;
+	--breakpoint-2xs: 400px;
+	--breakpoint-xs: 480px;
+	--breakpoint-sm: 640px;
+	--breakpoint-md: 768px;
+	--breakpoint-lg: 1024px;
+	--breakpoint-xl: 1280px;
+	--breakpoint-2xl: 1536px;
+	--font-rit: var(--font-rit);
+	--font-code: var(--font-code);
+	--color-*: initial;
+	--color-white: #ffffff;
+	--color-black: #000000;
+	--color-orange: #f76902;
+	--color-primary: var(--color-orange);
+	--color-pms-427c: #d0d3d4;
+	--color-pms-429c: #a2aaad;
+	--color-pms-430c: #7c878e;
+	--color-pms-gray-1c: #d7d2cb;
+	--color-pms-gray-5c: #aca39a;
+	--color-green: #84bd00;
+	--color-lime: #c4d600;
+	--color-blue: #009cbd;
+	--color-purple: #7d55c7;
+	--color-red: #da291c;
+	--color-yellow: #f6be00;
+	--trace-size-1: 0.25rem;
+	--trace-color-orange: var(--color-orange);
+	--trace-color-black: var(--color-black);
 }
 
 @keyframes countdown {
-  0% {
-    width: 100%;
-  }
+	0% {
+		width: 100%;
+	}
 
-  100% {
-    width: 0%;
-  }
+	100% {
+		width: 0%;
+	}
 }
 
 @layer base {
-  * {
-    @apply border-pms-430c/30;
-  }
+	* {
+		@apply border-pms-430c/30;
+	}
 
-  :root {
-    @apply text-[16px] 2xs:text-[17px] xs:text-[18px] sm:text-[19px] md:text-[20px] lg:text-[21px] xl:text-[22px] 2xl:text-[23px] dark:bg-black dark:text-white text-black bg-white transition-[border,background,filter] duration-500;
-    scrollbar-gutter: stable both-edges;
-  }
+	:root {
+		@apply text-[16px] 2xs:text-[17px] xs:text-[18px] sm:text-[19px] md:text-[20px] lg:text-[21px] xl:text-[22px] 2xl:text-[23px] dark:bg-black dark:text-white text-black bg-white transition-[border,background,filter] duration-500;
+		scrollbar-gutter: stable both-edges;
+	}
 
-  body {
-    overflow-x: clip;
-  }
+	body {
+		overflow-x: clip;
+	}
 
-  body:has(dialog[open]) {
-    overflow: hidden;
-  }
+	body:has(dialog[open]) {
+		overflow: hidden;
+	}
 
-  h1 {
-    @apply font-bold text-6xl;
-  }
+	h1 {
+		@apply font-bold text-6xl;
+	}
 
-  h2 {
-    @apply font-bold text-5xl;
-  }
+	h2 {
+		@apply font-bold text-5xl;
+	}
 
-  h3 {
-    @apply font-bold text-4xl;
-  }
+	h3 {
+		@apply font-bold text-4xl;
+	}
 
-  h4 {
-    @apply font-medium text-3xl;
-  }
+	h4 {
+		@apply font-medium text-3xl;
+	}
 
-  h5 {
-    @apply font-medium text-2xl;
-  }
+	h5 {
+		@apply font-medium text-2xl;
+	}
 
-  h6 {
-    @apply font-medium text-xl;
-  }
+	h6 {
+		@apply font-medium text-xl;
+	}
 
-  body {
-    background: var(--background);
-    color: var(--foreground);
-    @apply font-rit;
-  }
+	body {
+		background: var(--background);
+		color: var(--foreground);
+		@apply font-rit;
+	}
 
-  button {
-    @apply enabled:cursor-pointer text-left;
-  }
+	button {
+		@apply enabled:cursor-pointer text-left;
+	}
 
-  input[type="text"] {
-    @apply p-0.5 px-2 border rounded-md bg-transparent focus:border-orange outline-none duration-300;
-  }
+	input[type="text"] {
+		@apply p-0.5 px-2 border rounded-md bg-transparent focus:border-orange outline-none duration-300;
+	}
 
-  code {
-    @apply font-code tracking-tighter wrap-break-word break-all block;
-    letter-spacing: -0.06em;
-    line-height: 1em;
-  }
+	code {
+		@apply font-code tracking-tighter wrap-break-word break-all block;
+		letter-spacing: -0.06em;
+		line-height: 1em;
+	}
 
-  input {
-    @apply max-w-full;
-  }
+	input {
+		@apply max-w-full;
+	}
 }
 
 @layer components {
-  .restrict-width {
-    @apply max-w-5xl mx-auto w-full wrap-break-word;
-  }
+	.restrict-width {
+		@apply max-w-5xl mx-auto w-full wrap-break-word;
+	}
 
-  .banner {
-    @apply w-full min-h-125 pt-18 h-[70dvh] flex-col flex justify-center items-center text-center;
-  }
+	.banner {
+		@apply w-full min-h-125 pt-18 h-[70dvh] flex-col flex justify-center items-center text-center;
+	}
 
-  .bg-solid {
-    @apply bg-white dark:bg-black text-black dark:text-white;
-  }
+	.bg-solid {
+		@apply bg-white dark:bg-black text-black dark:text-white;
+	}
 
-  .button {
-    @apply p-0.5 px-4 rounded-md duration-300 ease-in-out  disabled:bg-pms-430c;
-  }
+	.button {
+		@apply p-0.5 px-4 rounded-md duration-300 ease-in-out disabled:bg-pms-430c;
+	}
 
-  .button:not(button):hover {
-    @apply hover:brightness-125 active:brightness-75;
-  }
+	.button:not(button):hover {
+		@apply hover:brightness-125 active:brightness-75;
+	}
 
-  .button:is(button):hover {
-    @apply enabled:hover:brightness-125 enabled:active:brightness-75;
-  }
+	.button:is(button):hover {
+		@apply enabled:hover:brightness-125 enabled:active:brightness-75;
+	}
 
-  .button-primary {
-    @apply text-white bg-primary;
-  }
+	.button-primary {
+		@apply text-white bg-primary;
+	}
 
-  .button-secondary {
-    @apply text-primary bg-white;
-  }
+	.button-secondary {
+		@apply text-primary bg-white;
+	}
 
-  .button-red {
-    @apply text-white bg-red;
-  }
+	.button-red {
+		@apply text-white bg-red;
+	}
 
-  .button-transparent:not(button) {
-    @apply bg-transparent hover:bg-pms-430c/20 active:bg-pms-430c/40;
-  }
+	.button-transparent:not(button) {
+		@apply bg-transparent hover:bg-pms-430c/20 active:bg-pms-430c/40;
+	}
 
-  .button-transparent:is(button) {
-    @apply bg-transparent enabled:hover:bg-pms-430c/20 enabled:active:bg-pms-430c/40;
-  }
+	.button-transparent:is(button) {
+		@apply bg-transparent enabled:hover:bg-pms-430c/20 enabled:active:bg-pms-430c/40;
+	}
 
-  .card {
-    @apply block p-2 border rounded-md duration-300 ease-in-out bg-transparent hover:bg-pms-430c/15 active:bg-pms-430c/30 shadow-lg shadow-pms-430c/15;
-  }
+	.card {
+		@apply block p-2 border rounded-md duration-300 ease-in-out bg-transparent hover:bg-pms-430c/15 active:bg-pms-430c/30 shadow-lg shadow-pms-430c/15;
+	}
 
-  .icon-button {
-    @apply p-2 rounded-full duration-300 ease-in-out;
-  }
+	.icon-button {
+		@apply p-2 rounded-full duration-300 ease-in-out;
+	}
 
-  .hover-underline {
+	.hover-underline {
+		background:
+			linear-gradient(currentColor 0 0) bottom left / var(--underline-width, 0%)
+			var(--underline-thickness, 0.15em) no-repeat;
+		display: inline-block;
+		transition: background-size 0.3s ease-in-out;
+	}
 
-    background: linear-gradient(currentColor 0 0) bottom left/
-      var(--underline-width, 0%) var(--underline-thickness, 0.15em) no-repeat;
-    display: inline-block;
-    transition: background-size 0.3s ease-in-out;
-  }
+	.hover-underline:hover,
+	.hover-underline-forced {
+		--underline-width: 100%;
+	}
+}
 
-  .hover-underline:hover,
-  .hover-underline-forced {
-    --underline-width: 100%;
-  }
+@utility trace-* {
+	-webkit-text-stroke-width: --value(--trace-size-*);
+
+	-webkit-text-stroke-color: --value(--trace-color-*);
 }

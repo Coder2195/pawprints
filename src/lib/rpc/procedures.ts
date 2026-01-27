@@ -2,6 +2,7 @@ import { os } from "@orpc/server";
 import { type } from "arktype";
 import { and, eq } from "drizzle-orm";
 import { getServerSession } from "../auth/session";
+import { FETCH_SIZE } from "../constants";
 import { db } from "../db";
 import { signatures, users } from "../db/schema";
 
@@ -85,10 +86,15 @@ export const getPawprints = pub
 			"after?": "Date",
 			"search?": "string",
 			"flags?": "string[]",
+			"page?": "number",
 		}),
 	)
 	.handler(async ({ input }) => {
-		return db.query.pawprints.findMany({
+		if (!input.page) input.page = 0;
+
+		const pawprints = (await db.query.pawprints.findMany({
+			offset: input.page * FETCH_SIZE,
+			limit: FETCH_SIZE + 1,
 			where: {
 				publishedAt: { isNotNull: true },
 				...(input.tags?.length ? { tags: { arrayOverlaps: input.tags } } : {}),
@@ -129,7 +135,12 @@ export const getPawprints = pub
 				signatures: (table) =>
 					db.$count(signatures, eq(table.id, signatures.pawprintId)),
 			},
-		});
+		}));
+
+		return {
+			pawprints: pawprints.slice(0, FETCH_SIZE),
+			nextPage: pawprints.length > FETCH_SIZE ? input.page + 1 : undefined,
+		};
 	});
 
 export const getPawprint = sessionOptional
@@ -218,6 +229,16 @@ export const getMyPawprints = ritRequired.handler(
 		return db.query.pawprints.findMany({
 			where: {
 				userEmail,
+			},
+			extras: {
+				signatures: (table) =>
+					db.$count(
+						signatures,
+						and(
+							eq(table.id, signatures.pawprintId),
+							eq(signatures.userEmail, userEmail),
+						),
+					),
 			},
 		});
 	},

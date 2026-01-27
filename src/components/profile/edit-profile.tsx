@@ -13,7 +13,7 @@ const EditProfile: FC = () => {
 	const { data, isPending, refetch, isRefetching } = authClient.useSession();
 	const { addToast } = useToasts();
 
-	if (isPending)
+	if (isPending || isRefetching)
 		return (
 			<div className="border rounded-lg w-1/3 p-2 py-6 flex justify-center items-center">
 				<b>Loading...</b>

@@ -16,7 +16,7 @@ const Profile: FC = () => {
 		<TransitionWrapper>
 			<div className="restrict-width p-2">
 				<h1 className="mt-16 text-center">Profile</h1>
-				<div className="flex gap-2 justify-stretch flex-col md:flex-row">
+				<div className="flex gap-2 justify-stretch items-start flex-col md:flex-row">
 					<EditProfile />
 					<MyPawprints />
 				</div>

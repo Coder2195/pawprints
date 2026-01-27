@@ -19,3 +19,5 @@ export const FLAGS = {
   RESPONDED: "Responded",
   EXPIRED: "Expired",
 } as const;
+
+export const FETCH_SIZE = 12;

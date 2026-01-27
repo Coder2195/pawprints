@@ -8,7 +8,7 @@ const CreatePawprint: FC = () => {
 			href="/create"
 			className="rounded-full button button-primary w-12 h-12 fixed bottom-4 right-4 flex justify-center items-center p-0"
 		>
-			<BiPlus size={40} className="w-10 h-10" />
+			<BiPlus aria-label="Create Pawprint" size={40} className="w-10 h-10" />
 		</Link>
 	);
 };
