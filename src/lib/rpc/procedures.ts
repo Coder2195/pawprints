@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { getServerSession } from "../auth/session";
 import { FETCH_SIZE } from "../constants";
 import { db } from "../db";
-import { signatures, users } from "../db/schema";
+import { responses, signatures, users } from "../db/schema";
 
 const pub = os
 	.errors({
@@ -17,10 +17,6 @@ const pub = os
 		SIGNING_EXPIRED: {
 			message: "The signing period for this pawprint has expired.",
 			status: 403,
-		},
-		PAWPRINT_ALREADY_SIGNED: {
-			message: "You have already signed this pawprint.",
-			status: 409,
 		},
 		DOES_NOT_EXIST: {
 			message: "The requested pawprint does not exist.",
@@ -134,7 +130,9 @@ export const getPawprints = pub
 			extras: {
 				signatures: (table) =>
 					db.$count(signatures, eq(table.id, signatures.pawprintId)),
+        responses: (table) => db.$count(responses, eq(table.id, responses.pawprintId)),
 			},
+
 		}));
 
 		return {
@@ -206,8 +204,19 @@ export const signPawprint = sessionRequired
 			id: "string",
 		}),
 	)
-	.handler(async ({ input: { id }, context: { session } }) => {
+	.handler(async ({ input: { id }, context: { session }, errors }) => {
 		const userEmail = session.user.email;
+
+    const pawprint = await db.query.pawprints.findFirst({
+      where: { id },
+      columns: {
+        expiresOn: true,
+        completed: true,
+      }
+    })
+
+    if (!pawprint) throw errors.DOES_NOT_EXIST();
+    if (pawprint.completed || pawprint.expiresOn && pawprint.expiresOn < new Date()) throw errors.SIGNING_EXPIRED();
 
 		await db
 			.insert(signatures)
@@ -239,6 +248,7 @@ export const getMyPawprints = ritRequired.handler(
 							eq(signatures.userEmail, userEmail),
 						),
 					),
+        responses: (table) => db.$count(responses, eq(table.id, responses.pawprintId)),
 			},
 		});
 	},
