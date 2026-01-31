@@ -1,34 +1,35 @@
 "use client";
-import { useIsMounted as useMounted } from "@/lib/hooks";
 import { useTheme } from "next-themes";
-import { FC } from "react";
+import type { FC } from "react";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
+import { useIsMounted as useMounted } from "@/lib/hooks";
 
 const ThemeButton: FC = () => {
-  const theme = useTheme();
+	const theme = useTheme();
 
-  const { resolvedTheme, setTheme } = theme;
-  const mounted = useMounted();
+	const { resolvedTheme, setTheme } = theme;
+	const mounted = useMounted();
 
-  if (!mounted) return null;
+	if (!mounted) return null;
 
-  const Icon =
-    resolvedTheme === "dark" ? MdOutlineLightMode : MdOutlineDarkMode;
+	const Icon =
+		resolvedTheme === "dark" ? MdOutlineLightMode : MdOutlineDarkMode;
 
-  return (
-    <button
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className="icon-button button-transparent w-9 h-9"
-    >
-      {
-        <Icon
-          aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
-          size={24}
-          className="w-full h-full"
-        />
-      }
-    </button>
-  );
+	return (
+		<button
+			type="button"
+			onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+			className="icon-button button-transparent w-8 h-8"
+		>
+			{
+				<Icon
+					aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
+					size={36}
+					className="-m-1 w-6 h-6"
+				/>
+			}
+		</button>
+	);
 };
 
 export default ThemeButton;

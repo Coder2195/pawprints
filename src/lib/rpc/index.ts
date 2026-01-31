@@ -26,9 +26,8 @@ export const client: RouterClient<Router> =
 
 export const orpc = createTanstackQueryUtils(client);
 
-// typescript uses any so i'm going to
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Result<T extends (...args: any) => Promise<any>> = Awaited<ReturnType<T>>;
+// biome-ignore lint/suspicious/noExplicitAny: typescript uses any so i'm going to use any
+type Result<T extends (...args: any[]) => Promise<any>> = Awaited<ReturnType<T>>;
 
 export type GetPawprintResult = Result<typeof client.getPawprint>;
 

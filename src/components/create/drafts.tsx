@@ -1,13 +1,13 @@
 "use client";
 
-import { orpc } from "@/lib/rpc";
-import { FC } from "react";
 import { useQuery } from "@tanstack/react-query";
+import type { FC } from "react";
+import { orpc } from "@/lib/rpc";
 
 const Drafts: FC = () => {
-  const query = useQuery(orpc.getDrafts.queryOptions());
+	const query = useQuery(orpc.getDrafts.queryOptions());
 
-  return <></>;
+	return <></>;
 };
 
 export default Drafts;

@@ -6,8 +6,8 @@ import { users } from "../db/schema";
 export const auth = betterAuth({
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     },
   },
   onAPIError: {
@@ -16,7 +16,7 @@ export const auth = betterAuth({
   },
   plugins: [
     customSession(async ({ user, session }) => {
-      if (user.email == null)
+      if (user.email === null)
         throw new APIError("UNAUTHORIZED", {
           message: "User email is required",
         });
