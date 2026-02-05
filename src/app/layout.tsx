@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./main.css";
 import { Google_Sans_Code } from "next/font/google";
 import localFont from "next/font/local";
@@ -91,6 +91,10 @@ const ritFont = localFont({
 	],
 	variable: "--font-rit",
 });
+
+export const viewport: Viewport = {
+	themeColor: "#F76902",
+};
 
 export const metadata: Metadata = {
 	title: "Pawprints",
