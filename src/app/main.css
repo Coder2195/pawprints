@@ -46,7 +46,7 @@
 
 @layer base {
 	* {
-		@apply border-pms-430c/30;
+		@apply border-pms-429c/30;
 	}
 
 	:root {
@@ -96,8 +96,9 @@
 		@apply enabled:cursor-pointer text-left;
 	}
 
-	input[type="text"] {
-		@apply p-0.5 px-2 border rounded-md bg-transparent focus:border-orange outline-none duration-300;
+	input[type="text"],
+	textarea {
+		@apply p-0.5 px-2 border rounded-md bg-transparent focus:border-orange focus:outline-none duration-300;
 	}
 
 	code {

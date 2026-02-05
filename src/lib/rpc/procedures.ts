@@ -1,10 +1,13 @@
+import "@/lib/arktype";
+
 import { os } from "@orpc/server";
+import { createId } from "@paralleldrive/cuid2";
 import { type } from "arktype";
 import { and, eq } from "drizzle-orm";
 import { getServerSession } from "../auth/session";
 import { FETCH_SIZE } from "../constants";
 import { db } from "../db";
-import { responses, signatures, users } from "../db/schema";
+import { pawprints, responses, signatures, users } from "../db/schema";
 
 const pub = os
 	.errors({
@@ -88,7 +91,7 @@ export const getPawprints = pub
 	.handler(async ({ input }) => {
 		if (!input.page) input.page = 0;
 
-		const pawprints = (await db.query.pawprints.findMany({
+		const pawprints = await db.query.pawprints.findMany({
 			offset: input.page * FETCH_SIZE,
 			limit: FETCH_SIZE + 1,
 			where: {
@@ -130,10 +133,10 @@ export const getPawprints = pub
 			extras: {
 				signatures: (table) =>
 					db.$count(signatures, eq(table.id, signatures.pawprintId)),
-        responses: (table) => db.$count(responses, eq(table.id, responses.pawprintId)),
+				responses: (table) =>
+					db.$count(responses, eq(table.id, responses.pawprintId)),
 			},
-
-		}));
+		});
 
 		return {
 			pawprints: pawprints.slice(0, FETCH_SIZE),
@@ -207,16 +210,20 @@ export const signPawprint = sessionRequired
 	.handler(async ({ input: { id }, context: { session }, errors }) => {
 		const userEmail = session.user.email;
 
-    const pawprint = await db.query.pawprints.findFirst({
-      where: { id },
-      columns: {
-        expiresOn: true,
-        completed: true,
-      }
-    })
+		const pawprint = await db.query.pawprints.findFirst({
+			where: { id },
+			columns: {
+				expiresOn: true,
+				completed: true,
+			},
+		});
 
-    if (!pawprint) throw errors.DOES_NOT_EXIST();
-    if (pawprint.completed || pawprint.expiresOn && pawprint.expiresOn < new Date()) throw errors.SIGNING_EXPIRED();
+		if (!pawprint) throw errors.DOES_NOT_EXIST();
+		if (
+			pawprint.completed ||
+			(pawprint.expiresOn && pawprint.expiresOn < new Date())
+		)
+			throw errors.SIGNING_EXPIRED();
 
 		await db
 			.insert(signatures)
@@ -248,7 +255,8 @@ export const getMyPawprints = ritRequired.handler(
 							eq(signatures.userEmail, userEmail),
 						),
 					),
-        responses: (table) => db.$count(responses, eq(table.id, responses.pawprintId)),
+				responses: (table) =>
+					db.$count(responses, eq(table.id, responses.pawprintId)),
 			},
 		});
 	},
@@ -270,6 +278,36 @@ export const getDrafts = ritRequired.handler(
 		});
 	},
 );
+
+export const saveDraftPawprint = ritRequired
+	.input(
+		type({
+			title: "string",
+			description: "string",
+			tags: "string[]",
+			"id?": "string",
+		}),
+	)
+	.handler(
+		async ({
+			input,
+			context: {
+				user: { email: userEmail },
+			},
+		}) => {
+			if (!input.id) input.id = createId();
+			await db
+				.insert(pawprints)
+				.values({
+					...input,
+					userEmail,
+				})
+				.onConflictDoUpdate({
+					target: pawprints.id,
+					set: input,
+				});
+		},
+	);
 
 export const editProfile = sessionRequired
 	.input(

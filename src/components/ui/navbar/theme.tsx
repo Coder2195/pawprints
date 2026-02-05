@@ -19,13 +19,13 @@ const ThemeButton: FC = () => {
 		<button
 			type="button"
 			onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-			className="icon-button button-transparent w-8 h-8"
+			className="icon-button button-transparent  h-8 w-8"
 		>
 			{
 				<Icon
 					aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
 					size={36}
-					className="-m-1 w-6 h-6"
+					className="w-6 h-6 -m-1"
 				/>
 			}
 		</button>

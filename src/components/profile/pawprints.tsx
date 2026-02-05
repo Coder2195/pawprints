@@ -11,7 +11,7 @@ const MyPawprints: FC = () => {
 	const { isLoading, data } = useQuery(orpc.getMyPawprints.queryOptions({}));
 
 	return (
-		<div className="border rounded-lg flex-1 p-2 flex flex-col gap-2 min-h-32">
+		<div className="border rounded-lg w-full md:flex-1 p-2 flex flex-col gap-2 min-h-32">
 			<h3>My Pawprints</h3>
 			{isLoading || isPending ? (
 				<b>Loading...</b>

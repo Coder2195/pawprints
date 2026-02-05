@@ -1,4 +1,5 @@
 "use client";
+
 import { BProgress } from "@bprogress/core";
 import { Field, Form, Formik } from "formik";
 import Image from "next/image";
@@ -12,10 +13,12 @@ import { useToasts } from "../providers/toast";
 const EditProfile: FC = () => {
 	const { data, isPending, refetch, isRefetching } = authClient.useSession();
 	const { addToast } = useToasts();
+	const className =
+		"border rounded-lg w-full md:w-1/3 p-2 py-6 flex justify-center items-center flex-col gap-2";
 
 	if (isPending || isRefetching)
 		return (
-			<div className="border rounded-lg w-1/3 p-2 py-6 flex justify-center items-center">
+			<div className={className}>
 				<b>Loading...</b>
 			</div>
 		);
@@ -47,7 +50,7 @@ const EditProfile: FC = () => {
 					values.avatar !== initialValues.avatar ||
 					values.name !== initialValues.name;
 				return (
-					<Form className="border rounded-lg w-1/3 p-2 py-6 flex justify-center flex-col items-center gap-2">
+					<Form className={className}>
 						{isPending ? (
 							<b>Loading...</b>
 						) : (
@@ -122,7 +125,7 @@ const EditProfile: FC = () => {
 								</div>
 							</button>
 						)}
-						<Field type="text" name="name" />
+						<Field type="text" name="name" placeholder="Name" />
 						<button
 							type="submit"
 							className="button button-primary"

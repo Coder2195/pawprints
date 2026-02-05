@@ -1,24 +1,32 @@
+import type { PawprintContent } from "./types";
+
 export const SIGNATURE_THRESHOLD = 200;
 export const TAGS = {
-  ACADEMICS: "Academics",
-  DINING: "Dining",
-  CAMPUS_LIFE: "Campus Life",
-  EVENTS: "Events",
-  FACILITIES: "Facilities",
-  HOUSING: "Housing",
-  PUBLIC_SAFETY: "Public Safety",
-  SUSTAINABILITY: "Sustainability",
-  TECHNOLOGY: "Technology",
-  TRANSPORATION: "Parking & Transportation",
+	ACADEMICS: "Academics",
+	DINING: "Dining",
+	CAMPUS_LIFE: "Campus Life",
+	EVENTS: "Events",
+	FACILITIES: "Facilities",
+	HOUSING: "Housing",
+	PUBLIC_SAFETY: "Public Safety",
+	SUSTAINABILITY: "Sustainability",
+	TECHNOLOGY: "Technology",
+	TRANSPORATION: "Parking & Transportation",
 } as const;
 
 export const PAWPRINT_STATUS = {
-  ACTIVE: "Active",
-  THRESHOLD_MET: "Threshold Met",
-  COMPLETED: "Completed",
-  RESPONDED: "Responded",
-  EXPIRED: "Expired",
+	ACTIVE: "Active",
+	THRESHOLD_MET: "Threshold Met",
+	COMPLETED: "Completed",
+	RESPONDED: "Responded",
+	EXPIRED: "Expired",
 } as const;
+
+export const EMPTY_PAWPRINT: PawprintContent = {
+	title: "",
+	tags: [],
+	description: "",
+};
 
 export type PawprintStatus = keyof typeof PAWPRINT_STATUS;
 

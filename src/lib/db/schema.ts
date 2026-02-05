@@ -1,13 +1,13 @@
 import { createId } from "@paralleldrive/cuid2";
 import { defineRelations, sql } from "drizzle-orm";
 import {
-  boolean,
-  cockroachEnum,
-  cockroachTable,
-  primaryKey,
-  text,
-  timestamp,
-  varchar,
+	boolean,
+	cockroachEnum,
+	cockroachTable,
+	primaryKey,
+	text,
+	timestamp,
+	varchar,
 } from "drizzle-orm/cockroach-core";
 
 export const accountTypes = cockroachEnum("account_type", [
@@ -36,7 +36,9 @@ const defaultId = () => createId();
 export const pawprints = cockroachTable("pawprints", {
 	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(defaultId),
 
-	userEmail: varchar("user_email", { length: 254 }).notNull(),
+	userEmail: varchar("user_email", { length: 254 })
+		.notNull()
+		.references(() => users.email),
 	title: varchar("title", { length: 256 }).notNull(),
 	description: varchar("description", { length: 10000 }).notNull(),
 	tags: text("tags").array().notNull().default(sql`ARRAY[]::TEXT[]`),
@@ -49,14 +51,20 @@ export const pawprints = cockroachTable("pawprints", {
 		.notNull()
 		.defaultNow(),
 	updatedAt: timestamp("updated_at", { withTimezone: true })
-		.defaultNow().notNull()
+		.defaultNow()
+		.notNull()
 		.$onUpdate(() => sql`NOW()`),
 });
 
 export const signatures = cockroachTable(
 	"signatures",
 	{
-		userEmail: varchar("user_email", { length: 254 }).notNull(),
+		userEmail: varchar("user_email", { length: 254 })
+			.notNull()
+			.references(() => users.email, {
+				onDelete: "cascade",
+				onUpdate: "cascade",
+			}),
 		pawprintId: varchar("pawprint_id", { length: 25 }).notNull(),
 		createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 	},
@@ -66,15 +74,26 @@ export const signatures = cockroachTable(
 export const responses = cockroachTable("responses", {
 	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(defaultId),
 
-	userEmail: varchar("user_email", { length: 254 }).notNull(),
+	userEmail: varchar("user_email", { length: 254 })
+		.notNull()
+		.references(() => users.email, {
+			onDelete: "cascade",
+			onUpdate: "cascade",
+		}),
 	content: varchar("description", { length: 5000 }).notNull(),
-	pawprintId: varchar("pawprint_id", { length: 25 }).notNull(),
+	pawprintId: varchar("pawprint_id", { length: 25 })
+		.notNull()
+		.references(() => pawprints.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade",
+		}),
 	createdAt: timestamp("created_at", { withTimezone: true })
 		.defaultNow()
 		.notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true })
 		.defaultNow()
-		.$onUpdate(() => sql`CURRENT_TIMESTAMP`).notNull(),
+		.$onUpdate(() => sql`CURRENT_TIMESTAMP`)
+		.notNull(),
 });
 
 export const relations = defineRelations(
