@@ -95,6 +95,16 @@ const ritFont = localFont({
 export const metadata: Metadata = {
 	title: "Pawprints",
 	description: "Make your mark on RIT with Pawprints.",
+	openGraph: {
+		images: [
+			{
+				url: "/logo.png",
+			},
+		],
+	},
+	twitter: {
+		card: "summary",
+	},
 };
 
 const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
