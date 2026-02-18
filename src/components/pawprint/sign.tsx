@@ -2,11 +2,14 @@
 import { BProgress } from "@bprogress/core";
 import { useMutation } from "@tanstack/react-query";
 import type { FC } from "react";
+import { BiCheckCircle } from "react-icons/bi";
+import { FaCalendarTimes } from "react-icons/fa";
 import { authClient, signIn } from "@/lib/auth/client";
+import { SIGNATURE_THRESHOLD } from "@/lib/constants";
 import { type GetPawprintResult, orpc } from "@/lib/rpc";
 import { useToasts } from "../providers/toast";
 
-const SignButton: FC<{
+const SignSection: FC<{
 	pawprint: GetPawprintResult;
 	setPawprint: (pawprint: GetPawprintResult) => void;
 }> = ({ pawprint, setPawprint }) => {
@@ -45,50 +48,73 @@ const SignButton: FC<{
 		}),
 	);
 
+	if (pawprint.completedOn)
+		return (
+			<div className="bg-green rounded-lg border-lime border p-2 m-2 dark:text-black font-bold flex gap-1 items-center">
+				<BiCheckCircle className="inline h-6" size={48} /> This pawprint has
+				been marked as complete on{" "}
+				{new Date(pawprint.completedOn).toLocaleString(undefined, {
+					dateStyle: "long",
+					timeStyle: "short",
+				})}
+				.
+			</div>
+		);
+
+	if (pawprint.expiresOn && pawprint.expiresOn < new Date())
+		return (
+			<div className="bg-red rounded-lg fon border-b-orange border p-2 m-2 text-white font-bold flex gap-1 items-center">
+				<FaCalendarTimes className="inline h-6" size={48} /> This pawprint has
+				expired on{" "}
+				{new Date(pawprint.expiresOn).toLocaleString(undefined, {
+					dateStyle: "long",
+					timeStyle: "short",
+				})}
+				.
+			</div>
+		);
+
 	const signing = mutation.isPending;
 
 	const signedIn = !!data?.user?.email;
 	const signed = pawprint.signs > 0;
 
-	const expired = Boolean(
-		pawprint.expiresOn && pawprint.expiresOn < new Date(),
-	);
-
-	const disabled = Boolean(
-		signedIn && (signed || signing || pawprint.completedOn || expired),
-	);
+	const disabled = signedIn && (signed || signing);
 
 	return (
-		<button
-			disabled={disabled}
-			className="button button-primary text-lg font-bold"
-			type="button"
-			onClick={async () => {
-				if (!signedIn) {
-					signIn();
-					return;
-				}
+		<div className="p-2 border-t flex w-full justify-between items-center">
+			<button
+				disabled={disabled}
+				className="button button-primary text-lg font-bold"
+				type="button"
+				onClick={async () => {
+					if (!signedIn) {
+						signIn();
+						return;
+					}
 
-				if (disabled) return;
+					if (disabled) return;
 
-				mutation.mutate({ id: pawprint.id });
-			}}
-		>
-			{isPending
-				? "Loading..."
-				: !signedIn
-					? "Login to sign pawprints"
-					: expired
-						? "Pawprint Expired"
-						: pawprint.completedOn
-							? "Pawprint Completed"
-							: signing
-								? "Signing..."
-								: signed
-									? "Signed"
-									: "Not Signed"}
-		</button>
+					mutation.mutate({ id: pawprint.id });
+				}}
+			>
+				{isPending
+					? "Loading..."
+					: !signedIn
+						? "Login to sign pawprints"
+						: signing
+							? "Signing..."
+							: signed
+								? "Signed"
+								: "Not Signed"}
+			</button>
+			<span className="font-bold text-orange">
+				{pawprint.signs > 0
+					? ` ${pawprint.signs}/${SIGNATURE_THRESHOLD} signatures`
+					: "No Signatures yet"}
+			</span>
+		</div>
 	);
 };
 
-export default SignButton;
+export default SignSection;
