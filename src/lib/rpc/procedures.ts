@@ -8,6 +8,7 @@ import { getServerSession } from "../auth/session";
 import { FETCH_SIZE } from "../constants";
 import { db } from "../db";
 import { pawprints, responses, signatures, users } from "../db/schema";
+import { publishValidation } from "../utils";
 
 const pub = os
 	.errors({
@@ -95,7 +96,7 @@ export const getPawprints = pub
 			offset: input.page * FETCH_SIZE,
 			limit: FETCH_SIZE + 1,
 			where: {
-				publishedAt: { isNotNull: true },
+				publishedOn: { isNotNull: true },
 				...(input.tags?.length ? { tags: { arrayOverlaps: input.tags } } : {}),
 				...(input.before || input.after
 					? {
@@ -214,13 +215,13 @@ export const signPawprint = sessionRequired
 			where: { id },
 			columns: {
 				expiresOn: true,
-				completed: true,
+				completedOn: true,
 			},
 		});
 
 		if (!pawprint) throw errors.DOES_NOT_EXIST();
 		if (
-			pawprint.completed ||
+			pawprint.completedOn ||
 			(pawprint.expiresOn && pawprint.expiresOn < new Date())
 		)
 			throw errors.SIGNING_EXPIRED();
@@ -273,7 +274,7 @@ export const getDrafts = ritRequired.handler(
 		return db.query.pawprints.findMany({
 			where: {
 				userEmail,
-				publishedAt: { isNull: true },
+				publishedOn: { isNull: true },
 			},
 		});
 	},
@@ -355,8 +356,28 @@ export const deleteDraftPawprint = ritRequired
 					and(
 						eq(pawprints.id, id),
 						eq(pawprints.userEmail, email),
-						isNull(pawprints.publishedAt),
+						isNull(pawprints.publishedOn),
 					),
 				);
 		},
 	);
+
+export const publishPawprint = ritRequired
+	.input(publishValidation)
+	.handler(async ({ input, context: { session } }) => {
+		const pawprint = await db
+			.insert(pawprints)
+			.values({
+				...input,
+				publishedOn: new Date(),
+				userEmail: session.user.email,
+			})
+			.onConflictDoUpdate({
+				target: pawprints.id,
+				set: {
+					...input,
+					publishedOn: new Date(),
+				},
+			})
+			.returning();
+	});

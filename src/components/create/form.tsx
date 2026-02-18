@@ -38,7 +38,7 @@ const PawprintForm: FC<{ initialData: PawprintContent }> = ({
 					</div>
 					<div>
 						<label htmlFor="form-description" className="font-bold text-xl">
-							Form Description
+							Description
 						</label>
 						<Field
 							as="textarea"

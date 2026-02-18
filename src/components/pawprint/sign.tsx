@@ -54,8 +54,9 @@ const SignButton: FC<{
 		pawprint.expiresOn && pawprint.expiresOn < new Date(),
 	);
 
-	const disabled =
-		signedIn && (signed || signing || pawprint.completed || expired);
+	const disabled = Boolean(
+		signedIn && (signed || signing || pawprint.completedOn || expired),
+	);
 
 	return (
 		<button
@@ -79,7 +80,7 @@ const SignButton: FC<{
 					? "Login to sign pawprints"
 					: expired
 						? "Pawprint Expired"
-						: pawprint.completed
+						: pawprint.completedOn
 							? "Pawprint Completed"
 							: signing
 								? "Signing..."

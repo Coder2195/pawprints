@@ -1,7 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { defineRelations, sql } from "drizzle-orm";
 import {
-	boolean,
 	cockroachEnum,
 	cockroachTable,
 	primaryKey,
@@ -31,10 +30,8 @@ export const users = cockroachTable("users", {
 		.$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
-const defaultId = () => createId();
-
 export const pawprints = cockroachTable("pawprints", {
-	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(defaultId),
+	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
 
 	userEmail: varchar("user_email", { length: 254 })
 		.notNull()
@@ -42,10 +39,10 @@ export const pawprints = cockroachTable("pawprints", {
 	title: varchar("title", { length: 256 }).notNull(),
 	description: varchar("description", { length: 10000 }).notNull(),
 	tags: text("tags").array().notNull().default(sql`ARRAY[]::TEXT[]`),
-	completed: boolean("completed").notNull().default(false),
-	publishedAt: timestamp("published_at", { withTimezone: true }),
+	completedOn: timestamp("completed_on"),
+	publishedOn: timestamp("published_on", { withTimezone: true }),
 	expiresOn: timestamp("expires_on", { withTimezone: true }).default(
-		sql`NOW() + INTERVAL '7 days'`,
+		sql`NOW() + INTERVAL '3 months'`,
 	),
 	createdAt: timestamp("created_at", { withTimezone: true })
 		.notNull()
@@ -77,7 +74,7 @@ export const signatures = cockroachTable(
 );
 
 export const responses = cockroachTable("responses", {
-	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(defaultId),
+	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
 
 	userEmail: varchar("user_email", { length: 254 })
 		.notNull()

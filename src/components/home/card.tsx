@@ -14,7 +14,7 @@ const PawprintCard: FC<{ pawprint: GetPawprintsResultItem }> = ({
 }) => {
 	const percent = (pawprint.signatures / SIGNATURE_THRESHOLD) * 100;
 
-	const status: PawprintStatus = pawprint.completed
+	const status: PawprintStatus = pawprint.completedOn
 		? "COMPLETED"
 		: pawprint.responses > 0
 			? "RESPONDED"
