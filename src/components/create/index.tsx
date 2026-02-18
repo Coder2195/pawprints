@@ -2,9 +2,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { type FC, useState } from "react";
+import { BiTrash } from "react-icons/bi";
 import { authClient, signIn } from "@/lib/auth/client";
 import { EMPTY_PAWPRINT } from "@/lib/constants";
-import { orpc } from "@/lib/rpc";
+import { client, orpc } from "@/lib/rpc";
 import type { PawprintContent } from "@/lib/types";
 import OverlayPopup from "../ui/popup";
 import PawprintForm from "./form";
@@ -68,16 +69,43 @@ const CreatePawprintClient: FC = () => {
 										: drafts.status === "error"
 											? "An error occured while trying to retrieve your drafts"
 											: drafts.data.map((draft) => (
-													<button
+													<div
 														key={draft.id}
-														type="button"
-														className="button button-transparent border"
-														onClick={() => {
-															setInitialData(draft);
-														}}
+														className="flex items-stretch gap-1"
 													>
-														{draft.title || "Untitled Pawprint"}
-													</button>
+														<button
+															type="button"
+															className="button button-transparent border flex-1 "
+															onClick={() => {
+																setInitialData(draft);
+															}}
+														>
+															<span className="flex-1">
+																{draft.title || "Untitled Pawprint"}
+															</span>
+														</button>
+														<button
+															className="button button-red px-2 "
+															type="button"
+															onClick={async (e) => {
+																e.stopPropagation();
+																if (
+																	!confirm(
+																		"Are you sure you want to delete this draft? This action cannot be undone.",
+																	)
+																)
+																	return;
+
+																await client.deleteDraftPawprint({
+																	id: draft.id,
+																});
+
+																drafts.refetch();
+															}}
+														>
+															<BiTrash aria-label="Delete Draft" />
+														</button>
+													</div>
 												))}
 								</div>
 								<div className="flex h-8 gap-2 flex-wrap items-center justify-center">

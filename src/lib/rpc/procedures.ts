@@ -3,7 +3,7 @@ import "@/lib/arktype";
 import { os } from "@orpc/server";
 import { createId } from "@paralleldrive/cuid2";
 import { type } from "arktype";
-import { and, eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { getServerSession } from "../auth/session";
 import { FETCH_SIZE } from "../constants";
 import { db } from "../db";
@@ -296,16 +296,19 @@ export const saveDraftPawprint = ritRequired
 			},
 		}) => {
 			if (!input.id) input.id = createId();
-			await db
-				.insert(pawprints)
-				.values({
-					...input,
-					userEmail,
-				})
-				.onConflictDoUpdate({
-					target: pawprints.id,
-					set: input,
-				});
+			return (
+				await db
+					.insert(pawprints)
+					.values({
+						...input,
+						userEmail,
+					})
+					.onConflictDoUpdate({
+						target: pawprints.id,
+						set: input,
+					})
+					.returning()
+			)[0];
 		},
 	);
 
@@ -320,11 +323,40 @@ export const editProfile = sessionRequired
 		async ({
 			context: {
 				session: {
-					user: { email },
+					user: { email, name },
 				},
 			},
 			input,
 		}) => {
+			if (!input.name) input.name = name;
 			await db.update(users).set(input).where(eq(users.email, email));
+		},
+	);
+
+export const deleteDraftPawprint = ritRequired
+	.input(
+		type({
+			id: "string",
+		}),
+	)
+	.handler(
+		async ({
+			input: { id },
+			context: {
+				session: {
+					user: { email },
+				},
+			},
+			errors,
+		}) => {
+			await db
+				.delete(pawprints)
+				.where(
+					and(
+						eq(pawprints.id, id),
+						eq(pawprints.userEmail, email),
+						isNull(pawprints.publishedAt),
+					),
+				);
 		},
 	);

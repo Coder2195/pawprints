@@ -65,7 +65,12 @@ export const signatures = cockroachTable(
 				onDelete: "cascade",
 				onUpdate: "cascade",
 			}),
-		pawprintId: varchar("pawprint_id", { length: 25 }).notNull(),
+		pawprintId: varchar("pawprint_id", { length: 25 })
+			.notNull()
+			.references(() => pawprints.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade",
+			}),
 		createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 	},
 	(table) => [primaryKey({ columns: [table.userEmail, table.pawprintId] })],

@@ -4,6 +4,7 @@ import { createRouterClient, onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { headers } from "next/headers";
 import {
+	deleteDraftPawprint,
 	editProfile,
 	getDrafts,
 	getMyPawprints,
@@ -21,6 +22,7 @@ export const router = {
 	getMyPawprints,
 	editProfile,
 	saveDraftPawprint,
+	deleteDraftPawprint,
 };
 
 export const handler = new RPCHandler(router, {

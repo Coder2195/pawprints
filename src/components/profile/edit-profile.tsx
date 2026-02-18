@@ -1,12 +1,12 @@
 "use client";
-
 import { BProgress } from "@bprogress/core";
+import { useMutation } from "@tanstack/react-query";
 import { Field, Form, Formik } from "formik";
 import Image from "next/image";
 import type { FC } from "react";
 import { FiUpload } from "react-icons/fi";
 import { authClient, signIn } from "@/lib/auth/client";
-import { client } from "@/lib/rpc";
+import { client, orpc } from "@/lib/rpc";
 import type { FreeImageResponse } from "@/lib/types/freeimage";
 import { useToasts } from "../providers/toast";
 
@@ -15,6 +15,42 @@ const EditProfile: FC = () => {
 	const { addToast } = useToasts();
 	const className =
 		"border rounded-lg w-full md:w-1/3 p-2 py-6 flex justify-center items-center flex-col gap-2";
+
+	const edit = useMutation(
+		orpc.editProfile.mutationOptions({
+			onError: (err) => {
+				addToast({
+					title: "Error Updating Profile",
+					body: (
+						<>
+							We encountered an error while updating your profile.
+							<br />
+							<code>
+								<b>Error: </b>
+								{err instanceof Error ? err.message : String(err)}
+							</code>
+						</>
+					),
+					liveTime: 5000,
+					type: "error",
+				});
+			},
+
+			onSettled: async () => {
+				await refetch();
+				BProgress.done();
+			},
+
+			onSuccess: async () => {
+				addToast({
+					title: "Profile Updated",
+					body: "Your profile has been successfully updated.",
+					liveTime: 3000,
+					type: "success",
+				});
+			},
+		}),
+	);
 
 	if (isPending || isRefetching)
 		return (
@@ -33,10 +69,31 @@ const EditProfile: FC = () => {
 			onSubmit={async (data) => {
 				BProgress.start();
 
-				await client.editProfile(data);
-				await refetch();
+				edit.mutate(data);
 
-				BProgress.done();
+				await client
+					.editProfile(data)
+					.catch((err) => {
+						addToast({
+							title: "Error Updating Profile",
+							body: (
+								<>
+									We encountered an error while updating your profile.
+									<br />
+									<code>
+										<b>Error: </b>
+										{err instanceof Error ? err.message : String(err)}
+									</code>
+								</>
+							),
+							liveTime: 5000,
+							type: "error",
+						});
+					})
+					.then(async () => {
+						await refetch();
+						BProgress.done();
+					});
 			}}
 		>
 			{({

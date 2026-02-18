@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { FC } from "react";
 import { BiLogoGithub } from "react-icons/bi";
+import { SiKofi } from "react-icons/si";
 
 const Footer: FC = () => {
 	return (
@@ -23,6 +24,10 @@ const Footer: FC = () => {
 							className="w-8 h-8 inline"
 							aria-label="Github"
 						/>
+					</Link>
+
+					<Link href="https://ko-fi.com/coder2195" target="_blank">
+						<SiKofi size={48} className="w-8 h-8 inline" aria-label="Ko-fi" />
 					</Link>
 				</div>
 			</div>
