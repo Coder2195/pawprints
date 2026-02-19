@@ -10,6 +10,7 @@ import {
 	getMyPawprints,
 	getPawprint,
 	getPawprints,
+	publishPawprint,
 	saveDraftPawprint,
 	signPawprint,
 } from "./procedures";
@@ -23,6 +24,7 @@ export const router = {
 	editProfile,
 	saveDraftPawprint,
 	deleteDraftPawprint,
+	publishPawprint,
 };
 
 export const handler = new RPCHandler(router, {

@@ -1,112 +1,164 @@
 "use client";
-
 import { useMutation } from "@tanstack/react-query";
-import { Field, Form, Formik } from "formik";
-import type { FC } from "react";
+import { type } from "arktype";
+import { Field, Form, Formik, type FormikProps } from "formik";
+import { useRouter } from "next/navigation";
+import { type FC, useEffect } from "react";
 import { MdOutlineCheck } from "react-icons/md";
 import { TAGS } from "@/lib/constants";
 import { orpc } from "@/lib/rpc";
 import type { PawprintContent } from "@/lib/types";
+import { publishValidation } from "@/lib/utils";
 import { useToasts } from "../providers/toast";
+import ErrorDiv from "../ui/error";
 
-const PawprintForm: FC<{ initialData: PawprintContent }> = ({
-	initialData,
+const FormContent: FC<FormikProps<PawprintContent>> = ({
+	setFieldValue,
+	values,
+	setValues,
+	resetForm,
+	initialValues,
+	errors,
+	touched,
+	setFieldError,
 }) => {
 	const saveDraft = useMutation(orpc.saveDraftPawprint.mutationOptions());
 	const { addToast } = useToasts();
 
+	useEffect(() => {
+		setValues(initialValues);
+	}, [initialValues, setValues]);
+	return (
+		<Form className="py-4 p-2 flex flex-col gap-4">
+			<div>
+				<label htmlFor="form-title" className="font-bold text-xl">
+					Title
+				</label>
+				<Field
+					type="text"
+					name="title"
+					id="form-title"
+					className="w-full"
+					placeholder="Untitled Pawprint"
+					onFocus={() => setFieldError("title", undefined)}
+				/>
+				<ErrorDiv>{touched.title && errors.title}</ErrorDiv>
+			</div>
+
+			<div>
+				<label htmlFor="form-description" className="font-bold text-xl">
+					Description
+				</label>
+				<Field
+					as="textarea"
+					name="description"
+					id="form-description"
+					placeholder="Describe what changes you want..."
+					className="w-full h-56"
+					onFocus={() => setFieldError("description", undefined)}
+				/>
+				<ErrorDiv>{touched.description && errors.description}</ErrorDiv>
+			</div>
+
+			<div>
+				<label htmlFor="form-tags" className="font-bold text-xl">
+					Tags
+				</label>
+				<div className="flex flex-wrap gap-2" id="form-tags">
+					{Object.entries(TAGS).map(([key, value]) => {
+						const selected = values.tags.includes(key);
+						return (
+							<button
+								type="button"
+								key={key}
+								onClick={() => {
+									setFieldError("tags", undefined);
+									setFieldValue(
+										"tags",
+										selected
+											? values.tags.filter((t) => t !== key)
+											: [...values.tags, key],
+									);
+								}}
+								className={`button flex gap-1 items-center border ${
+									selected ? "button-primary" : "button-transparent "
+								}`}
+							>
+								{selected && <MdOutlineCheck aria-label="Enabled" />} {value}
+							</button>
+						);
+					})}
+				</div>
+				<ErrorDiv>{touched.tags && errors.tags}</ErrorDiv>
+			</div>
+			<div className="flex justify-around p-2">
+				<button
+					type="button"
+					onClick={async () => {
+						saveDraft.mutate(values, {
+							onSuccess: (data) => {
+								addToast({
+									title: `${data.title || "Untitled Pawprint"} saved as draft!`,
+									body: "Your draft has been saved successfully.",
+									type: "success",
+									liveTime: 3000,
+								});
+								resetForm();
+							},
+						});
+
+						resetForm();
+					}}
+					className="button button-transparent text-orange border"
+				>
+					Save As Draft
+				</button>
+				<button type="submit" className="button button-primary">
+					Submit
+				</button>
+			</div>
+		</Form>
+	);
+};
+
+const PawprintForm: FC<{ initialData: PawprintContent }> = ({
+	initialData,
+}) => {
+	const { addToast } = useToasts();
+	const router = useRouter();
+
+	const publish = useMutation(orpc.publishPawprint.mutationOptions());
+
 	return (
 		<Formik
 			initialValues={initialData}
-			onSubmit={(values) => {
-				alert("stub submit handler, still WIP");
+			validateOnChange={false}
+			onSubmit={async (values, { setFieldError }) => {
+				const result = publishValidation(values);
+
+				if (result instanceof type.errors) {
+					const map = result.flatByPath;
+
+					for (const key in map) {
+						setFieldError(key, map[key][0].description || "Invalid value");
+					}
+					return;
+				}
+
+				publish.mutate(values, {
+					onSuccess(data) {
+						addToast({
+							type: "success",
+							title: "Pawprint Published",
+							body: "Your pawprint has been published successfully.",
+							liveTime: 4000,
+						});
+						router.push(`/pawprint/${data.id}`);
+					},
+				});
 			}}
 		>
-			{({ setFieldValue, values, setErrors, resetForm }) => (
-				<Form className="py-4 p-2 flex flex-col gap-4">
-					<div>
-						<label htmlFor="form-title" className="font-bold text-xl">
-							Title
-						</label>
-						<Field
-							type="text"
-							name="title"
-							id="form-title"
-							className="w-full"
-							placeholder="Untitled Pawprint"
-						/>
-					</div>
-					<div>
-						<label htmlFor="form-description" className="font-bold text-xl">
-							Description
-						</label>
-						<Field
-							as="textarea"
-							name="description"
-							id="form-description"
-							placeholder="Describe what changes you want..."
-							className="w-full h-56"
-						/>
-					</div>
-
-					<div>
-						<label htmlFor="form-tags" className="font-bold text-xl">
-							Tags
-						</label>
-						<div className="flex flex-wrap gap-2" id="form-tags">
-							{Object.entries(TAGS).map(([key, value]) => {
-								const selected = values.tags.includes(key);
-								return (
-									<button
-										type="button"
-										key={key}
-										onClick={() => {
-											setFieldValue(
-												"tags",
-												selected
-													? values.tags.filter((t) => t !== key)
-													: [...values.tags, key],
-											);
-										}}
-										className={`button flex gap-1 items-center ${
-											selected ? "button-primary" : "button-transparent border"
-										}`}
-									>
-										{selected && <MdOutlineCheck aria-label="Enabled" />}{" "}
-										{value}
-									</button>
-								);
-							})}
-						</div>
-					</div>
-					<div className="flex justify-around p-2">
-						<button
-							type="button"
-							onClick={async () => {
-								saveDraft.mutate(values, {
-									onSuccess: (data) => {
-										addToast({
-											title: `${data.title || "Untitled Pawprint"} saved as draft!`,
-											body: "Your draft has been saved successfully.",
-											type: "success",
-											liveTime: 3000,
-										});
-										resetForm();
-									},
-								});
-
-								resetForm();
-							}}
-							className="button button-transparent text-orange border"
-						>
-							Save As Draft
-						</button>
-						<button type="button" className="button button-primary">
-							Submit
-						</button>
-					</div>
-				</Form>
-			)}
+			{(props) => <FormContent {...props} initialValues={initialData} />}
 		</Formik>
 	);
 };

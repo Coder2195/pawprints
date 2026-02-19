@@ -3,7 +3,7 @@ import "@/lib/arktype";
 import { os } from "@orpc/server";
 import { createId } from "@paralleldrive/cuid2";
 import { type } from "arktype";
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 import { getServerSession } from "../auth/session";
 import { FETCH_SIZE } from "../constants";
 import { db } from "../db";
@@ -377,7 +377,10 @@ export const publishPawprint = ritRequired
 				set: {
 					...input,
 					publishedOn: new Date(),
+					expiresOn: sql`NOW() + INTERVAL '3 months'`,
 				},
 			})
 			.returning();
+
+		return pawprint[0];
 	});

@@ -16,6 +16,9 @@ export async function generateMetadata({
 	const pawprint = await client.getPawprint({ id });
 	return {
 		title: `${pawprint.title}`,
+		metadataBase: new URL(
+			process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+		),
 		description:
 			pawprint.description.length > 160
 				? `${pawprint.description.slice(0, 157)}...`

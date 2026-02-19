@@ -14,6 +14,8 @@ export const TAGS = {
 	TRANSPORATION: "Parking & Transportation",
 } as const;
 
+export const TAGS_LIST = Object.keys(TAGS);
+
 export const PAWPRINT_STATUS = {
 	ACTIVE: "Active",
 	THRESHOLD_MET: "Threshold Met",

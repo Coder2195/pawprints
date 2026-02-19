@@ -125,10 +125,7 @@ const CreatePawprintClient: FC = () => {
 						</div>
 					</div>
 
-					<PawprintForm
-						key={JSON.stringify(initialData)}
-						initialData={initialData}
-					/>
+					<PawprintForm initialData={initialData} />
 				</>
 			) : (
 				<div className="h-full w-full flex justify-center items-center text-center flex-col gap-4">
