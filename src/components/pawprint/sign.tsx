@@ -106,7 +106,7 @@ const SignSection: FC<{
 							? "Signing..."
 							: signed
 								? "Signed"
-								: "Not Signed"}
+								: "Sign"}
 			</button>
 			<span className="font-bold text-orange">
 				{pawprint.signs > 0
