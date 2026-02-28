@@ -6,7 +6,6 @@ const ErrorDiv: FC<
 		name?: string;
 	}
 > = ({ children, ...props }) => {
-	console.log(children);
 	if (
 		!children ||
 		typeof children === "number" ||

@@ -68,45 +68,47 @@ const CreatePawprintClient: FC = () => {
 										? "Loading..."
 										: drafts.status === "error"
 											? "An error occured while trying to retrieve your drafts"
-											: drafts.data.map((draft) => (
-													<div
-														key={draft.id}
-														className="flex items-stretch gap-1"
-													>
-														<button
-															type="button"
-															className="button button-transparent border flex-1 "
-															onClick={() => {
-																setInitialData(draft);
-															}}
+											: drafts.data.length === 0
+												? "You have no drafts."
+												: drafts.data.map((draft) => (
+														<div
+															key={draft.id}
+															className="flex items-stretch gap-1"
 														>
-															<span className="flex-1">
-																{draft.title || "Untitled Pawprint"}
-															</span>
-														</button>
-														<button
-															className="button button-red px-2 "
-															type="button"
-															onClick={async (e) => {
-																e.stopPropagation();
-																if (
-																	!confirm(
-																		"Are you sure you want to delete this draft? This action cannot be undone.",
+															<button
+																type="button"
+																className="button button-transparent border flex-1 "
+																onClick={() => {
+																	setInitialData(draft);
+																}}
+															>
+																<span className="flex-1">
+																	{draft.title || "Untitled Pawprint"}
+																</span>
+															</button>
+															<button
+																className="button button-red px-2 "
+																type="button"
+																onClick={async (e) => {
+																	e.stopPropagation();
+																	if (
+																		!confirm(
+																			"Are you sure you want to delete this draft? This action cannot be undone.",
+																		)
 																	)
-																)
-																	return;
+																		return;
 
-																await client.deleteDraftPawprint({
-																	id: draft.id,
-																});
+																	await client.deleteDraftPawprint({
+																		id: draft.id,
+																	});
 
-																drafts.refetch();
-															}}
-														>
-															<BiTrash aria-label="Delete Draft" />
-														</button>
-													</div>
-												))}
+																	drafts.refetch();
+																}}
+															>
+																<BiTrash aria-label="Delete Draft" />
+															</button>
+														</div>
+													))}
 								</div>
 								<div className="flex h-8 gap-2 flex-wrap items-center justify-center">
 									<button
