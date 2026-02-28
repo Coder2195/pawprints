@@ -87,6 +87,10 @@ export const getPawprints = pub
 			"search?": "string",
 			"flags?": "string[]",
 			"page?": "number",
+			"orderBy?": type({
+				field: "string",
+				direction: "'asc' | 'desc'",
+			}),
 		}),
 	)
 	.handler(async ({ input }) => {
@@ -100,7 +104,7 @@ export const getPawprints = pub
 				...(input.tags?.length ? { tags: { arrayOverlaps: input.tags } } : {}),
 				...(input.before || input.after
 					? {
-							createdAt: {
+							createdOn: {
 								...(input.before ? { lt: input.before } : {}),
 								...(input.after ? { gt: input.after } : {}),
 							},
@@ -137,6 +141,9 @@ export const getPawprints = pub
 				responses: (table) =>
 					db.$count(responses, eq(table.id, responses.pawprintId)),
 			},
+			orderBy: {
+				publishedOn: "desc",
+			},
 		});
 
 		return {
@@ -167,13 +174,13 @@ export const getPawprint = sessionOptional
 				},
 				responses: {
 					columns: {
-						createdAt: true,
-						updatedAt: true,
+						createdOn: true,
+						updatedOn: true,
 						content: true,
 						id: true,
 					},
 					orderBy: {
-						createdAt: "desc",
+						createdOn: "desc",
 					},
 					with: {
 						author: {

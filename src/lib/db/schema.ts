@@ -24,8 +24,8 @@ export const users = cockroachTable("users", {
 	accountType: accountTypes("account_type").notNull().default("GUEST"),
 	avatar: varchar("avatar", { length: 256 }),
 
-	createdAt: timestamp("created_at", { withTimezone: true }),
-	updatedAt: timestamp("updated_at", { withTimezone: true })
+	createdOn: timestamp("created_on", { withTimezone: true }),
+	updatedOn: timestamp("updated_on", { withTimezone: true })
 		.defaultNow()
 		.$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
@@ -44,10 +44,10 @@ export const pawprints = cockroachTable("pawprints", {
 	expiresOn: timestamp("expires_on", { withTimezone: true }).default(
 		sql`NOW() + INTERVAL '3 months'`,
 	),
-	createdAt: timestamp("created_at", { withTimezone: true })
+	createdOn: timestamp("created_on", { withTimezone: true })
 		.notNull()
 		.defaultNow(),
-	updatedAt: timestamp("updated_at", { withTimezone: true })
+	updatedOn: timestamp("updated_on", { withTimezone: true })
 		.defaultNow()
 		.notNull()
 		.$onUpdate(() => sql`NOW()`),
@@ -68,7 +68,7 @@ export const signatures = cockroachTable(
 				onDelete: "cascade",
 				onUpdate: "cascade",
 			}),
-		createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+		createdOn: timestamp("created_on", { withTimezone: true }).defaultNow(),
 	},
 	(table) => [primaryKey({ columns: [table.userEmail, table.pawprintId] })],
 );
@@ -89,10 +89,10 @@ export const responses = cockroachTable("responses", {
 			onDelete: "cascade",
 			onUpdate: "cascade",
 		}),
-	createdAt: timestamp("created_at", { withTimezone: true })
+	createdOn: timestamp("created_on", { withTimezone: true })
 		.defaultNow()
 		.notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true })
+	updatedOn: timestamp("updated_on", { withTimezone: true })
 		.defaultNow()
 		.$onUpdate(() => sql`CURRENT_TIMESTAMP`)
 		.notNull(),

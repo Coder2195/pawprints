@@ -45,13 +45,13 @@ export const auth = betterAuth({
 			return {
 				user: {
 					...user,
-					createdAt: dbUser.createdAt,
+					createdOn: dbUser.createdOn,
 					emailVerified: true,
 					accountType: dbUser.accountType,
 					image: dbUser.avatar || user.image,
 					id: user.email,
 					name: dbUser.name || user.name,
-					updatedAt: dbUser.updatedAt,
+					updatedOn: dbUser.updatedOn,
 				},
 				session,
 			};

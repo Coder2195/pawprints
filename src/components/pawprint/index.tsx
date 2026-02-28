@@ -24,8 +24,8 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
 				<Dialogue
 					name={pawprint.author?.name}
 					avatar={pawprint.author?.avatar || undefined}
-					createdAt={pawprint.createdAt}
-					updatedAt={pawprint.updatedAt}
+					createdOn={pawprint.createdOn}
+					updatedOn={pawprint.updatedOn}
 				>
 					<p>{pawprint.description}</p>
 				</Dialogue>
@@ -39,8 +39,8 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
 								ping={index === 0}
 								avatar={response.author?.avatar || undefined}
 								key={response.id}
-								createdAt={response.createdAt}
-								updatedAt={response.updatedAt}
+								createdOn={response.createdOn}
+								updatedOn={response.updatedOn}
 							>
 								<p>{response.content}</p>
 							</Dialogue>

@@ -3,8 +3,8 @@ import type { FC, PropsWithChildren } from "react";
 
 type DialogueProps = {
 	name?: string;
-	updatedAt?: Date;
-	createdAt?: Date;
+	updatedOn?: Date;
+	createdOn?: Date;
 	ping?: boolean;
 	avatar?: string;
 } & PropsWithChildren;
@@ -12,9 +12,9 @@ const Dialogue: FC<DialogueProps> = ({
 	name,
 	avatar,
 	children,
-	updatedAt,
+	updatedOn,
 	ping,
-	createdAt,
+	createdOn,
 }) => {
 	return (
 		<div className="flex flex-row justify-start gap-2 items-start">
@@ -38,10 +38,10 @@ const Dialogue: FC<DialogueProps> = ({
 				{children}
 
 				<span className="text-xs text-pms-429c">
-					{createdAt?.getTime() !== updatedAt?.getTime() && (
-						<>Updated: {updatedAt?.toLocaleString()} - </>
+					{createdOn?.getTime() !== updatedOn?.getTime() && (
+						<>Updated: {updatedOn?.toLocaleString()} - </>
 					)}
-					Created: {createdAt?.toLocaleString()}
+					Created: {createdOn?.toLocaleString()}
 				</span>
 			</div>
 		</div>
