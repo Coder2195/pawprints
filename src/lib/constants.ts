@@ -30,6 +30,15 @@ export const EMPTY_PAWPRINT: PawprintContent = {
 	description: "",
 };
 
+export const SORTABLE_FIELDS = {
+	published_on: "Publish Date",
+	signatures: "Signatures",
+} as const;
+
+export const SORTABLE_FIELDS_LIST = Object.keys(
+	SORTABLE_FIELDS,
+) as (keyof typeof SORTABLE_FIELDS)[];
+
 export type PawprintStatus = keyof typeof PAWPRINT_STATUS;
 
 export const FETCH_SIZE = 12;

@@ -5,7 +5,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { type } from "arktype";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { getServerSession } from "../auth/session";
-import { FETCH_SIZE } from "../constants";
+import { FETCH_SIZE, SORTABLE_FIELDS_LIST } from "../constants";
 import { db } from "../db";
 import { pawprints, responses, signatures, users } from "../db/schema";
 import { publishValidation } from "../utils";
@@ -87,8 +87,8 @@ export const getPawprints = pub
 			"search?": "string",
 			"flags?": "string[]",
 			"page?": "number",
-			"orderBy?": type({
-				field: "string",
+			orderBy: type({
+				field: type.enumerated(...SORTABLE_FIELDS_LIST),
 				direction: "'asc' | 'desc'",
 			}),
 		}),
@@ -96,9 +96,7 @@ export const getPawprints = pub
 	.handler(async ({ input }) => {
 		if (!input.page) input.page = 0;
 
-		const pawprints = await db.query.pawprints.findMany({
-			offset: input.page * FETCH_SIZE,
-			limit: FETCH_SIZE + 1,
+		const query = db.query.pawprints.findMany({
 			where: {
 				publishedOn: { isNotNull: true },
 				...(input.tags?.length ? { tags: { arrayOverlaps: input.tags } } : {}),
@@ -135,16 +133,22 @@ export const getPawprints = pub
 					},
 				},
 			},
+
 			extras: {
 				signatures: (table) =>
 					db.$count(signatures, eq(table.id, signatures.pawprintId)),
 				responses: (table) =>
 					db.$count(responses, eq(table.id, responses.pawprintId)),
 			},
-			orderBy: {
-				publishedOn: "desc",
-			},
+			orderBy: (t) =>
+				sql.raw(`${input.orderBy.field} ${input.orderBy.direction}, id desc`),
+			offset: input.page * FETCH_SIZE,
+			limit: FETCH_SIZE + 1,
 		});
+
+		// console.log(query.toSQL());
+
+		const pawprints = await query;
 
 		return {
 			pawprints: pawprints.slice(0, FETCH_SIZE),
@@ -194,13 +198,7 @@ export const getPawprint = sessionOptional
 			},
 			extras: {
 				signs: (table) =>
-					db.$count(
-						signatures,
-						and(
-							eq(table.id, signatures.pawprintId),
-							eq(signatures.userEmail, userEmail),
-						),
-					),
+					db.$count(signatures, and(eq(table.id, signatures.pawprintId))),
 			},
 		});
 

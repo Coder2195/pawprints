@@ -2,8 +2,9 @@
 import { type FC, useRef } from "react";
 import { BiSearch } from "react-icons/bi";
 import { MdOutlineCheck } from "react-icons/md";
-import { TAGS } from "@/lib/constants";
+import { SORTABLE_FIELDS, SORTABLE_FIELDS_LIST, TAGS } from "@/lib/constants";
 import type { GetPawprintsInput } from "@/lib/rpc";
+import type { SortableFields } from "@/lib/types";
 
 type InputProps = {
 	input: GetPawprintsInput;
@@ -72,6 +73,43 @@ const Filters: FC<InputProps> = ({ input, setInput }) => {
 				{Object.keys(TAGS).map((key) => (
 					<Tag input={input} setInput={setInput} key={key} id={key} />
 				))}
+			</div>
+			<div className="flex gap-1 items-center">
+				<b>Sort by: </b>
+				<select
+					className="button border button-transparent"
+					onChange={(e) => {
+						setInput({
+							...input,
+							orderBy: {
+								...input.orderBy,
+								field:
+									(e.currentTarget.value as SortableFields) || "published_on",
+							},
+						});
+					}}
+				>
+					{SORTABLE_FIELDS_LIST.map((field) => (
+						<option key={field} value={field}>
+							{SORTABLE_FIELDS[field]}
+						</option>
+					))}
+				</select>
+				<button
+					type="button"
+					className="button button-transparent border"
+					onClick={() => {
+						setInput({
+							...input,
+							orderBy: {
+								...input.orderBy,
+								direction: input.orderBy?.direction === "asc" ? "desc" : "asc",
+							},
+						});
+					}}
+				>
+					{input.orderBy?.direction === "asc" ? "Ascending" : "Descending"}
+				</button>
 			</div>
 		</div>
 	);

@@ -32,3 +32,10 @@ export const publishValidation = type({
 			return Array.from(set);
 		}),
 });
+
+export function dateHourMinute(date: Date) {
+	return date.toLocaleString(undefined, {
+		dateStyle: "long",
+		timeStyle: "short",
+	});
+}

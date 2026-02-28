@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { FC, PropsWithChildren } from "react";
+import { dateHourMinute } from "@/lib/utils";
 
 type DialogueProps = {
 	name?: string;
@@ -36,13 +37,14 @@ const Dialogue: FC<DialogueProps> = ({
 					)}
 				</span>
 				{children}
-
-				<span className="text-xs text-pms-429c">
-					{createdOn?.getTime() !== updatedOn?.getTime() && (
-						<>Updated: {updatedOn?.toLocaleString()} - </>
-					)}
-					Created: {createdOn?.toLocaleString()}
-				</span>
+				{createdOn && (
+					<span className="text-xs text-pms-429c">
+						{updatedOn && createdOn?.getTime() !== updatedOn?.getTime() && (
+							<>Updated {dateHourMinute(updatedOn)}, </>
+						)}
+						Created: {dateHourMinute(createdOn)}
+					</span>
+				)}
 			</div>
 		</div>
 	);

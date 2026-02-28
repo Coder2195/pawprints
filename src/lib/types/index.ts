@@ -4,3 +4,6 @@ export interface PawprintContent {
 	tags: string[];
 	id?: string;
 }
+
+export type SortableFields =
+	keyof typeof import("../constants").SORTABLE_FIELDS;

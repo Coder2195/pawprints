@@ -10,7 +10,9 @@ import CreatePawprint from "./create";
 import Filters from "./filters";
 
 const HomePage: FC = () => {
-	const [input, setInput] = useState<GetPawprintsInput>({});
+	const [input, setInput] = useState<GetPawprintsInput>({
+		orderBy: { field: "published_on", direction: "desc" },
+	});
 	const {
 		data,
 		isPlaceholderData,
@@ -29,7 +31,7 @@ const HomePage: FC = () => {
 					page,
 				};
 			},
-			queryKey: ["getPawprints", input],
+			queryKey: [input],
 			initialData: undefined,
 			placeholderData: (prev) => {
 				return prev;

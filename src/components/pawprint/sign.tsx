@@ -7,6 +7,7 @@ import { FaCalendarTimes } from "react-icons/fa";
 import { authClient, signIn } from "@/lib/auth/client";
 import { SIGNATURE_THRESHOLD } from "@/lib/constants";
 import { type GetPawprintResult, orpc } from "@/lib/rpc";
+import { dateHourMinute } from "@/lib/utils";
 import { useToasts } from "../providers/toast";
 
 const SignSection: FC<{
@@ -50,27 +51,22 @@ const SignSection: FC<{
 
 	if (pawprint.completedOn)
 		return (
-			<div className="bg-green rounded-lg border-lime border p-2 m-2 dark:text-black font-bold flex gap-1 items-center">
-				<BiCheckCircle className="inline h-6" size={48} /> This pawprint has
-				been marked as complete on{" "}
-				{new Date(pawprint.completedOn).toLocaleString(undefined, {
-					dateStyle: "long",
-					timeStyle: "short",
-				})}
-				.
+			<div className="bg-green rounded-lg border-lime border p-2 m-2 dark:text-black font-bold flex gap-4 items-center">
+				<BiCheckCircle className="inline w-6" size={48} />
+				<div className="flex-1">
+					This pawprint has been marked as complete on{" "}
+					{dateHourMinute(pawprint.completedOn)}.
+				</div>
 			</div>
 		);
 
 	if (pawprint.expiresOn && pawprint.expiresOn < new Date())
 		return (
-			<div className="bg-red rounded-lg fon border-b-orange border p-2 m-2 text-white font-bold flex gap-1 items-center">
-				<FaCalendarTimes className="inline h-6" size={48} /> This pawprint has
-				expired on{" "}
-				{new Date(pawprint.expiresOn).toLocaleString(undefined, {
-					dateStyle: "long",
-					timeStyle: "short",
-				})}
-				.
+			<div className="bg-red rounded-lg fon border-b-orange border p-2 m-2 text-white font-bold flex gap-4 items-center">
+				<FaCalendarTimes className="inline w-6" size={48} />
+				<div className="flex-1">
+					This pawprint has expired on {dateHourMinute(pawprint.expiresOn)}.
+				</div>
 			</div>
 		);
 

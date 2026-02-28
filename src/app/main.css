@@ -149,11 +149,11 @@
 		@apply text-white bg-red;
 	}
 
-	.button-transparent:not(button) {
+	.button-transparent:not(button, select) {
 		@apply bg-transparent hover:bg-pms-430c/20 active:bg-pms-430c/40;
 	}
 
-	.button-transparent:is(button) {
+	.button-transparent:is(button, select) {
 		@apply bg-transparent enabled:hover:bg-pms-430c/20 enabled:active:bg-pms-430c/40;
 	}
 
