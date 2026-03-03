@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import type { FC } from "react";
 import { BiCheckCircle } from "react-icons/bi";
 import { FaCalendarTimes } from "react-icons/fa";
+import { MdFlag } from "react-icons/md";
 import { authClient, signIn } from "@/lib/auth/client";
 import { SIGNATURE_THRESHOLD } from "@/lib/constants";
 import { type GetPawprintResult, orpc } from "@/lib/rpc";
@@ -78,7 +79,7 @@ const SignSection: FC<{
 	const disabled = signedIn && (signed || signing);
 
 	return (
-		<div className="p-2 border-t flex w-full justify-between items-center">
+		<div className="p-2 border-t flex w-full justify-between items-center flex-wrap gap-2">
 			<button
 				disabled={disabled}
 				className="button button-primary text-lg font-bold"
@@ -109,6 +110,12 @@ const SignSection: FC<{
 					? ` ${pawprint.signs}/${SIGNATURE_THRESHOLD} signatures`
 					: "No Signatures yet"}
 			</span>
+			<button
+				className="button button-red font-bold flex gap-1 items-center"
+				type="button"
+			>
+				<MdFlag size={48} className="w-7 h-7" /> Report
+			</button>
 		</div>
 	);
 };

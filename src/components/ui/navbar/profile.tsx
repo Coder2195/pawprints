@@ -5,7 +5,7 @@ import Link from "next/link";
 import { type FC, type Ref, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { ImSpinner8 } from "react-icons/im";
-import { MdLogout } from "react-icons/md";
+import { MdAdminPanelSettings, MdLogout } from "react-icons/md";
 import { authClient, signIn } from "@/lib/auth/client";
 import { useClickAway } from "@/lib/hooks";
 
@@ -57,7 +57,7 @@ const Profile: FC = () => {
 					show ? "scale-y-100" : "scale-y-0"
 				} origin-top-right w-max rounded-lg -right-2 top-[calc(100%+0.75rem)] transition-all duration-300 ease-in-out text-sm overflow-hidden text-pms-427c border`}
 			>
-				<span className="rounded-lg bg-solid flex flex-col justify-stretch overflow-hidden gap-1 p-1 max-w-[calc(100dvw-2rem)]">
+				<span className="rounded-lg bg-solid flex flex-col justify-stretch overflow-hidden gap-1 p-1 max-w-[calc(100dvw-1.1rem)]">
 					<div className="p-1 px-4">
 						Welcome back, {session.user.name.split(" ")[0]}!
 					</div>
@@ -69,6 +69,16 @@ const Profile: FC = () => {
 						<CgProfile size={20} aria-label="(Edit Icon)" />
 						View Profile
 					</Link>
+					{session.user.accountType === "ADMIN" && (
+						<Link
+							href="/admin"
+							scroll={false}
+							className="button button-primary font-bold flex items-center gap-2 justify-center"
+						>
+							<MdAdminPanelSettings size={20} aria-label="(Edit Icon)" />
+							Admin Panel
+						</Link>
+					)}
 					<button
 						type="button"
 						onClick={() => authClient.signOut()}

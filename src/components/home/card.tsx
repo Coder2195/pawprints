@@ -33,7 +33,7 @@ const PawprintCard: FC<{ pawprint: GetPawprintsResultItem }> = ({
 			transition={{ duration: 0.3, ease: "easeInOut" }}
 		>
 			<Link href={`/pawprint/${pawprint.id}`} className="card" prefetch={false}>
-				<div className="w-full h-2 rounded-full border  bg-pms-429c/30 overflow-hidden">
+				<div className="w-full h-1.5 mb-1 rounded-full border  bg-pms-429c/20 overflow-hidden">
 					<div
 						className="bg-orange h-full rounded-full"
 						style={{ width: `${percent}%` }}

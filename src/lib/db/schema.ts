@@ -98,8 +98,35 @@ export const responses = cockroachTable("responses", {
 		.notNull(),
 });
 
+export const reports = cockroachTable("reports", {
+	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
+
+	userEmail: varchar("user_email", { length: 254 })
+		.notNull()
+		.references(() => users.email, {
+			onDelete: "cascade",
+			onUpdate: "cascade",
+		}),
+	pawprintId: varchar("pawprint_id", { length: 25 })
+		.notNull()
+		.references(() => pawprints.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade",
+		}),
+	reason: varchar("reason", { length: 1000 }).notNull(),
+
+	createdOn: timestamp("created_on", { withTimezone: true })
+		.defaultNow()
+		.notNull(),
+	updatedOn: timestamp("updated_on", { withTimezone: true })
+		.defaultNow()
+		.$onUpdate(() => sql`CURRENT_TIMESTAMP`)
+		.notNull(),
+	resolvedOn: timestamp("resolved_on", { withTimezone: true }),
+});
+
 export const relations = defineRelations(
-	{ pawprints, users, signatures, responses },
+	{ pawprints, users, signatures, responses, reports },
 	(r) => ({
 		users: {
 			pawprints: r.many.pawprints({
@@ -128,6 +155,11 @@ export const relations = defineRelations(
 				from: r.pawprints.id,
 				to: r.responses.pawprintId,
 			}),
+
+			reports: r.many.reports({
+				from: r.pawprints.id,
+				to: r.reports.pawprintId,
+			}),
 		},
 		signatures: {
 			pawprint: r.one.pawprints({
@@ -146,6 +178,17 @@ export const relations = defineRelations(
 			}),
 			author: r.one.users({
 				from: r.responses.userEmail,
+				to: r.users.email,
+			}),
+		},
+
+		reports: {
+			pawprint: r.one.pawprints({
+				from: r.reports.pawprintId,
+				to: r.pawprints.id,
+			}),
+			reporter: r.one.users({
+				from: r.reports.userEmail,
 				to: r.users.email,
 			}),
 		},
