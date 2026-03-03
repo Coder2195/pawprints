@@ -57,21 +57,24 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						name="description"
 						id="form-description"
 						placeholder="Describe what changes you want..."
-						className="h-56 lg:resize resize-y"
+						className="min-h-36 lg:min-w-48 lg:w-1/2 max-w-full lg:resize resize-y"
 						onFocus={() => setFieldError("description", undefined)}
 					/>
 
-					<div className="flex-1 markdown border p-2 rounded-lg wrap-break-word overflow-scroll min-w-36 min-h-36 lg:min-h-auto contain-size ">
+					<div className="flex-1 markdown border p-2 rounded-lg wrap-break-word overflow-scroll min-h-36 lg:min-w-48 lg:min-h-auto contain-size">
 						{values.description ? (
 							<Markdown>{values.description}</Markdown>
 						) : (
-							<div className="text-pms-430c">
-								Begin typing in markdown to see a live preview...
+							<div className="text-pms-430c text-base/4 select-none">
+								Begin typing to see a live preview...
 							</div>
 						)}
 						<span className="right-2 bottom-1 text-xs absolute bg-solid px-1">
 							need the{" "}
-							<Link href="https://www.markdownguide.org/cheat-sheet/">
+							<Link
+								className="text-orange hover-underline font-bold"
+								href="https://www.markdownguide.org/cheat-sheet/"
+							>
 								markdown guide?
 							</Link>
 						</span>
