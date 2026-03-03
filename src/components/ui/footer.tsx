@@ -8,10 +8,10 @@ const Footer: FC = () => {
 		<footer className="bg-black border-t text-white w-full text-xs">
 			<div className="restrict-width text-center p-2">
 				<div>
-					<span className="text-orange">Pawprints</span> - Designed with love by{" "}
+					<span className="font-bold">Pawprints</span> - Designed with love by{" "}
 					<Link
 						href="https://coder2195.dev"
-						className="hover-underline [--underline-thickness:0.1em]"
+						className="hover-underline [--underline-thickness:0.1em] text-orange"
 						target="_blank"
 					>
 						Amber

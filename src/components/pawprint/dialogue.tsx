@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { FC, PropsWithChildren } from "react";
-import Markdown from "react-markdown";
 import { dateHourMinute } from "@/lib/utils";
+import Markdown from "../ui/markdown";
 
 type DialogueProps = {
 	name?: string;
@@ -37,7 +37,7 @@ const Dialogue: FC<DialogueProps> = ({
 						</span>
 					)}
 				</span>
-				<div className="markdown my-1">
+				<div className="markdown my-2">
 					{typeof children === "string" ? (
 						<Markdown>{children}</Markdown>
 					) : (

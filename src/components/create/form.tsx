@@ -6,13 +6,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FC, useEffect } from "react";
 import { MdOutlineCheck } from "react-icons/md";
-import Markdown from "react-markdown";
 import { TAGS } from "@/lib/constants";
 import { orpc } from "@/lib/rpc";
 import type { PawprintContent } from "@/lib/types";
 import { publishValidation } from "@/lib/utils";
 import { useToasts } from "../providers/toast";
 import ErrorDiv from "../ui/error";
+import Markdown from "../ui/markdown";
 
 const FormContent: FC<FormikProps<PawprintContent>> = ({
 	setFieldValue,
@@ -57,7 +57,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						name="description"
 						id="form-description"
 						placeholder="Describe what changes you want..."
-						className="h-56 "
+						className="h-56 lg:resize resize-y"
 						onFocus={() => setFieldError("description", undefined)}
 					/>
 

@@ -27,7 +27,7 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
 					createdOn={pawprint.createdOn}
 					updatedOn={pawprint.updatedOn}
 				>
-					<p>{pawprint.description}</p>
+					{pawprint.description}
 				</Dialogue>
 				{pawprint.responses.length > 0 && (
 					<>
@@ -42,7 +42,7 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
 								createdOn={response.createdOn}
 								updatedOn={response.updatedOn}
 							>
-								<p>{response.content}</p>
+								{response.content}
 							</Dialogue>
 						))}
 					</>
