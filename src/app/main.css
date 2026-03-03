@@ -115,8 +115,28 @@
 		@apply font-medium text-[1rem];
 	}
 
+	.markdown ul {
+		@apply list-disc pl-2;
+	}
+
+	.markdown ol {
+		@apply list-decimal pl-2;
+	}
+
+	.markdown blockquote {
+		@apply border-l-4 border-pms-430c/50 pl-2 py-1;
+	}
+
 	.markdown {
 		@apply text-sm;
+	}
+
+	.markdown hr {
+		@apply my-2;
+	}
+
+	.markdown code {
+		@apply p-1 border rounded-md my-1 text-xs;
 	}
 
 	body {
