@@ -220,7 +220,7 @@ export const getPawprintSignStatus = sessionOptional
 			},
 		});
 
-		return sign;
+		return sign || null;
 	});
 
 export const signPawprint = sessionRequired

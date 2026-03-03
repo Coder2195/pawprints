@@ -21,7 +21,7 @@ const SignSection: FC<{
 	const { data: signData, isPending: signPending } = useQuery(
 		orpc.getPawprintSignStatus.queryOptions({
 			input: { id: pawprint.id },
-			queryKey: ["pawprintSign", pawprint.id],
+			initialData: null,
 		}),
 	);
 
@@ -56,7 +56,12 @@ const SignSection: FC<{
 					liveTime: 4000,
 				});
 
-				queryClient.setQueryData(["pawprintSign", pawprint.id], e);
+				queryClient.setQueryData(
+					orpc.getPawprintSignStatus.queryKey({
+						input: { id: pawprint.id },
+					}),
+					e,
+				);
 			},
 		}),
 	);
