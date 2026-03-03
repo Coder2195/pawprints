@@ -9,6 +9,7 @@ import {
 	getDrafts,
 	getMyPawprints,
 	getPawprint,
+	getPawprintSignStatus,
 	getPawprints,
 	publishPawprint,
 	saveDraftPawprint,
@@ -25,6 +26,7 @@ export const router = {
 	saveDraftPawprint,
 	deleteDraftPawprint,
 	publishPawprint,
+	getPawprintSignStatus,
 };
 
 export const handler = new RPCHandler(router, {

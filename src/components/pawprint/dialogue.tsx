@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { FC, PropsWithChildren } from "react";
+import Markdown from "react-markdown";
 import { dateHourMinute } from "@/lib/utils";
 
 type DialogueProps = {
@@ -36,7 +37,13 @@ const Dialogue: FC<DialogueProps> = ({
 						</span>
 					)}
 				</span>
-				{children}
+				<div className="markdown my-1">
+					{typeof children === "string" ? (
+						<Markdown>{children}</Markdown>
+					) : (
+						children
+					)}
+				</div>
 				{createdOn && (
 					<span className="text-xs text-pms-429c">
 						{updatedOn && createdOn?.getTime() !== updatedOn?.getTime() && (

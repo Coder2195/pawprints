@@ -1,6 +1,6 @@
 "use client";
 import { BProgress } from "@bprogress/core";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type { FC } from "react";
 import { BiCheckCircle } from "react-icons/bi";
 import { FaCalendarTimes } from "react-icons/fa";
@@ -8,15 +8,24 @@ import { MdFlag } from "react-icons/md";
 import { authClient, signIn } from "@/lib/auth/client";
 import { SIGNATURE_THRESHOLD } from "@/lib/constants";
 import { type GetPawprintResult, orpc } from "@/lib/rpc";
-import { dateHourMinute } from "@/lib/utils";
+import { dateHourMinute, queryClient } from "@/lib/utils";
 import { useToasts } from "../providers/toast";
 
 const SignSection: FC<{
 	pawprint: GetPawprintResult;
 	setPawprint: (pawprint: GetPawprintResult) => void;
 }> = ({ pawprint, setPawprint }) => {
-	const { data, isPending } = authClient.useSession();
+	const { data, isPending: sessionPending } = authClient.useSession();
 	const { addToast } = useToasts();
+
+	const { data: signData, isPending: signPending } = useQuery(
+		orpc.getPawprintSignStatus.queryOptions({
+			input: { id: pawprint.id },
+			queryKey: ["pawprintSign", pawprint.id],
+		}),
+	);
+
+	const isPending = sessionPending || signPending;
 
 	const mutation = useMutation(
 		orpc.signPawprint.mutationOptions({
@@ -34,7 +43,7 @@ const SignSection: FC<{
 					liveTime: 6000,
 				});
 			},
-			onSuccess: () => {
+			onSuccess: (e) => {
 				setPawprint({
 					...pawprint,
 					signs: pawprint.signs + 1,
@@ -46,6 +55,8 @@ const SignSection: FC<{
 					body: "You have successfully signed the pawprint.",
 					liveTime: 4000,
 				});
+
+				queryClient.setQueryData(["pawprintSign", pawprint.id], e);
 			},
 		}),
 	);
@@ -74,9 +85,8 @@ const SignSection: FC<{
 	const signing = mutation.isPending;
 
 	const signedIn = !!data?.user?.email;
-	const signed = pawprint.signs > 0;
 
-	const disabled = signedIn && (signed || signing);
+	const disabled = Boolean(signedIn && (signData || signing));
 
 	return (
 		<div className="p-2 border-t flex w-full justify-between items-center flex-wrap gap-2">
@@ -101,7 +111,7 @@ const SignSection: FC<{
 						? "Login to sign pawprints"
 						: signing
 							? "Signing..."
-							: signed
+							: signData
 								? "Signed"
 								: "Sign"}
 			</button>

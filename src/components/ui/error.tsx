@@ -5,7 +5,7 @@ const ErrorDiv: FC<
 	HTMLProps<HTMLDivElement> & {
 		name?: string;
 	}
-> = ({ children, ...props }) => {
+> = ({ children, className, ...props }) => {
 	if (
 		!children ||
 		typeof children === "number" ||
@@ -13,7 +13,10 @@ const ErrorDiv: FC<
 	)
 		return null;
 	return (
-		<div className="bg-red text-white p-1 rounded-md mt-2 text-sm" {...props}>
+		<div
+			className={`bg-red text-white p-1 rounded-md mt-2 text-sm ${className}`}
+			{...props}
+		>
 			<BiError className="inline mr-1" />
 
 			{children}

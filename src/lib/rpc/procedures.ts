@@ -207,6 +207,22 @@ export const getPawprint = sessionOptional
 		return pawprint;
 	});
 
+export const getPawprintSignStatus = sessionOptional
+	.input(type({ id: "string" }))
+	.handler(async ({ input: { id }, context: { session }, errors }) => {
+		const userEmail = session?.user?.email;
+		if (!userEmail) return null;
+
+		const sign = await db.query.signatures.findFirst({
+			where: {
+				pawprintId: id,
+				userEmail,
+			},
+		});
+
+		return sign;
+	});
+
 export const signPawprint = sessionRequired
 	.input(
 		type({
@@ -231,13 +247,16 @@ export const signPawprint = sessionRequired
 		)
 			throw errors.SIGNING_EXPIRED();
 
-		await db
-			.insert(signatures)
-			.values({
-				pawprintId: id,
-				userEmail,
-			})
-			.onConflictDoNothing();
+		return (
+			await db
+				.insert(signatures)
+				.values({
+					pawprintId: id,
+					userEmail,
+				})
+				.onConflictDoNothing()
+				.returning()
+		)[0];
 	});
 
 export const getMyPawprints = ritRequired.handler(

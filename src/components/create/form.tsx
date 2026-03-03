@@ -2,9 +2,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { type } from "arktype";
 import { Field, Form, Formik, type FormikProps } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FC, useEffect } from "react";
 import { MdOutlineCheck } from "react-icons/md";
+import Markdown from "react-markdown";
 import { TAGS } from "@/lib/constants";
 import { orpc } from "@/lib/rpc";
 import type { PawprintContent } from "@/lib/types";
@@ -46,17 +48,35 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 			</div>
 
 			<div>
-				<label htmlFor="form-description" className="font-bold text-xl">
+				<label htmlFor="form-description" className="font-bold text-xl ">
 					Description
 				</label>
-				<Field
-					as="textarea"
-					name="description"
-					id="form-description"
-					placeholder="Describe what changes you want..."
-					className="w-full h-56"
-					onFocus={() => setFieldError("description", undefined)}
-				/>
+				<div className="flex lg:flex-row flex-col gap-2 relative">
+					<Field
+						as="textarea"
+						name="description"
+						id="form-description"
+						placeholder="Describe what changes you want..."
+						className="h-56 "
+						onFocus={() => setFieldError("description", undefined)}
+					/>
+
+					<div className="flex-1 markdown border p-2 rounded-lg wrap-break-word overflow-scroll min-w-36 min-h-36 lg:min-h-auto contain-size ">
+						{values.description ? (
+							<Markdown>{values.description}</Markdown>
+						) : (
+							<div className="text-pms-430c">
+								Begin typing in markdown to see a live preview...
+							</div>
+						)}
+						<span className="right-2 bottom-1 text-xs absolute bg-solid px-1">
+							need the{" "}
+							<Link href="https://www.markdownguide.org/cheat-sheet/">
+								markdown guide?
+							</Link>
+						</span>
+					</div>
+				</div>
 				<ErrorDiv>{touched.description && errors.description}</ErrorDiv>
 			</div>
 
