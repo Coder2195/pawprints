@@ -9,7 +9,7 @@ import { MdOutlineCheck } from "react-icons/md";
 import { TAGS } from "@/lib/constants";
 import { orpc } from "@/lib/rpc";
 import type { PawprintContent } from "@/lib/types";
-import { publishValidation } from "@/lib/utils";
+import { publishValidation, queryClient } from "@/lib/utils";
 import { useToasts } from "../providers/toast";
 import ErrorDiv from "../ui/error";
 import Markdown from "../ui/markdown";
@@ -128,6 +128,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 									liveTime: 3000,
 								});
 								resetForm();
+								queryClient.fetchQuery(orpc.getDrafts.queryOptions({}));
 							},
 						});
 
