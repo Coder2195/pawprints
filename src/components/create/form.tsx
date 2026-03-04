@@ -74,6 +74,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 							<Link
 								className="text-orange hover-underline font-bold"
 								href="https://www.markdownguide.org/cheat-sheet/"
+								target="_blank"
 							>
 								markdown guide?
 							</Link>
