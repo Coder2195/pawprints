@@ -57,7 +57,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						name="description"
 						id="form-description"
 						placeholder="Describe what changes you want..."
-						className="min-h-36 lg:min-w-48 lg:w-1/2 max-w-full lg:resize resize-y"
+						className="min-h-36 lg:min-w-48 lg:w-1/2 min-w-full max-w-full lg:resize resize-y"
 						onFocus={() => setFieldError("description", undefined)}
 					/>
 
