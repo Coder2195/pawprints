@@ -49,7 +49,7 @@ export const auth = betterAuth({
 					emailVerified: true,
 					accountType: dbUser.accountType,
 					image: dbUser.avatar || user.image,
-					id: user.email,
+					id: dbUser.id,
 					name: dbUser.name || user.name,
 					updatedOn: dbUser.updatedOn,
 				},
