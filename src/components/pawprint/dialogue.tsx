@@ -46,9 +46,10 @@ const Dialogue: FC<DialogueProps> = ({
 				</div>
 				{createdOn && (
 					<span className="text-xs text-pms-429c">
-						{updatedOn && createdOn?.getTime() !== updatedOn?.getTime() && (
-							<>Updated {dateHourMinute(updatedOn)}, </>
-						)}
+						{updatedOn &&
+							createdOn?.getTime() - updatedOn?.getTime() > 1000 && (
+								<>Updated {dateHourMinute(updatedOn)}, </>
+							)}
 						Created: {dateHourMinute(createdOn)}
 					</span>
 				)}

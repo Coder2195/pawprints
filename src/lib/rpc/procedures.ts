@@ -78,6 +78,8 @@ const ritRequired = sessionRequired.use(
 	},
 );
 
+export const getPubSubToken = sessionRequired.handler(async () => {});
+
 export const getPawprints = pub
 	.input(
 		type({
@@ -210,13 +212,13 @@ export const getPawprint = sessionOptional
 export const getPawprintSignStatus = sessionOptional
 	.input(type({ id: "string" }))
 	.handler(async ({ input: { id }, context: { session }, errors }) => {
-		const userEmail = session?.user?.email;
-		if (!userEmail) return null;
+		const userId = session?.user?.id;
+		if (!userId) return null;
 
 		const sign = await db.query.signatures.findFirst({
 			where: {
 				pawprintId: id,
-				userEmail,
+				userId,
 			},
 		});
 
@@ -230,7 +232,7 @@ export const signPawprint = sessionRequired
 		}),
 	)
 	.handler(async ({ input: { id }, context: { session }, errors }) => {
-		const userEmail = session.user.email;
+		const userId = session.user.id;
 
 		const pawprint = await db.query.pawprints.findFirst({
 			where: { id },
@@ -252,7 +254,7 @@ export const signPawprint = sessionRequired
 				.insert(signatures)
 				.values({
 					pawprintId: id,
-					userEmail,
+					userId,
 				})
 				.onConflictDoNothing()
 				.returning()
@@ -263,13 +265,13 @@ export const getMyPawprints = ritRequired.handler(
 	async ({
 		context: {
 			session: {
-				user: { email: userEmail },
+				user: { id: userId },
 			},
 		},
 	}) => {
 		return db.query.pawprints.findMany({
 			where: {
-				userEmail,
+				userId,
 			},
 			extras: {
 				signatures: (table) =>
@@ -277,7 +279,7 @@ export const getMyPawprints = ritRequired.handler(
 						signatures,
 						and(
 							eq(table.id, signatures.pawprintId),
-							eq(signatures.userEmail, userEmail),
+							eq(signatures.userId, userId),
 						),
 					),
 				responses: (table) =>
@@ -291,13 +293,13 @@ export const getDrafts = ritRequired.handler(
 	async ({
 		context: {
 			session: {
-				user: { email: userEmail },
+				user: { id: userId },
 			},
 		},
 	}) => {
 		return db.query.pawprints.findMany({
 			where: {
-				userEmail,
+				userId,
 				publishedOn: { isNull: true },
 			},
 		});
@@ -317,7 +319,7 @@ export const saveDraftPawprint = ritRequired
 		async ({
 			input,
 			context: {
-				user: { email: userEmail },
+				user: { id: userId },
 			},
 		}) => {
 			if (!input.id) input.id = createId();
@@ -326,7 +328,7 @@ export const saveDraftPawprint = ritRequired
 					.insert(pawprints)
 					.values({
 						...input,
-						userEmail,
+						userId,
 					})
 					.onConflictDoUpdate({
 						target: pawprints.id,
@@ -369,7 +371,7 @@ export const deleteDraftPawprint = ritRequired
 			input: { id },
 			context: {
 				session: {
-					user: { email },
+					user: { id: userId },
 				},
 			},
 			errors,
@@ -379,22 +381,28 @@ export const deleteDraftPawprint = ritRequired
 				.where(
 					and(
 						eq(pawprints.id, id),
-						eq(pawprints.userEmail, email),
+						eq(pawprints.userId, userId),
 						isNull(pawprints.publishedOn),
 					),
 				);
 		},
 	);
 
-export const publishPawprint = ritRequired
-	.input(publishValidation)
-	.handler(async ({ input, context: { session } }) => {
+export const publishPawprint = ritRequired.input(publishValidation).handler(
+	async ({
+		input,
+		context: {
+			session: {
+				user: { id: userId },
+			},
+		},
+	}) => {
 		const pawprint = await db
 			.insert(pawprints)
 			.values({
 				...input,
 				publishedOn: new Date(),
-				userEmail: session.user.email,
+				userId: userId,
 			})
 			.onConflictDoUpdate({
 				target: pawprints.id,
@@ -407,4 +415,5 @@ export const publishPawprint = ritRequired
 			.returning();
 
 		return pawprint[0];
-	});
+	},
+);

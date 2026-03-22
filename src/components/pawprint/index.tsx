@@ -4,6 +4,7 @@ import { type FC, useState } from "react";
 import type { GetPawprintResult } from "@/lib/rpc";
 import OverlayPopup from "../ui/popup";
 import Dialogue from "./dialogue";
+import PawprintResponseForm from "./response-form";
 import SignSection from "./sign";
 
 const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
@@ -47,6 +48,7 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
 						))}
 					</>
 				)}
+				<PawprintResponseForm />
 			</div>
 
 			<SignSection pawprint={pawprint} setPawprint={setPawprint} />

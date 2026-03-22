@@ -45,8 +45,8 @@ const OverlayPopup: FC<
 					},
 				}}
 			>
-				<div className="flex flex-row items-start h-14 flex-none border-b">
-					<h3 className="whitespace-nowrap flex-1 overflow-auto p-2 px-3 ">
+				<div className="flex flex-row items-start h-15 flex-none border-b">
+					<h3 className="whitespace-nowrap flex-1 overflow-x-auto overflow-y-hidden px-3 pt-2 h-full">
 						{title}
 					</h3>
 					<button

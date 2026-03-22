@@ -4,7 +4,7 @@ import { type } from "arktype";
 import { Field, Form, Formik, type FormikProps } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FC, useEffect } from "react";
+import { type FC, useEffect, useRef } from "react";
 import { MdOutlineCheck } from "react-icons/md";
 import { TAGS } from "@/lib/constants";
 import { orpc } from "@/lib/rpc";
@@ -26,6 +26,8 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 }) => {
 	const saveDraft = useMutation(orpc.saveDraftPawprint.mutationOptions());
 	const { addToast } = useToasts();
+
+	const previewRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		setValues(initialValues);
@@ -57,11 +59,11 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						name="description"
 						id="form-description"
 						placeholder="Describe what changes you want..."
-						className="min-h-36 lg:min-w-48 lg:w-1/2 min-w-full max-w-full lg:resize resize-y"
+						className="min-h-36 lg:min-w-48 lg:w-1/2 min-w-full max-w-full lg:resize resize-y "
 						onFocus={() => setFieldError("description", undefined)}
 					/>
 
-					<div className="flex-1 markdown border p-2 rounded-lg wrap-break-word overflow-scroll min-h-36 lg:min-w-48 lg:min-h-auto contain-size">
+					<div className="flex-1 markdown border p-2 rounded-lg wrap-break-word overflow-auto min-h-36 lg:min-w-48 lg:min-h-auto contain-size">
 						{values.description ? (
 							<Markdown>{values.description}</Markdown>
 						) : (
@@ -69,7 +71,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 								Begin typing to see a live preview...
 							</div>
 						)}
-						<span className="right-2 bottom-1 text-xs absolute bg-solid px-1">
+						<span className="right-2 bottom-1 text-xs absolute bg-solid px-2 p-1 rounded-md">
 							need the{" "}
 							<Link
 								className="text-orange hover-underline font-bold"

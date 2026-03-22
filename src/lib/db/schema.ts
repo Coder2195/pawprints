@@ -19,7 +19,8 @@ export const accountTypes = cockroachEnum("account_type", [
 export type AccountType = (typeof accountTypes.enumValues)[number];
 
 export const users = cockroachTable("users", {
-	email: varchar("email", { length: 254 }).primaryKey(),
+	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
+	email: varchar("email", { length: 254 }).unique().notNull(),
 	name: varchar("name", { length: 256 }).notNull(),
 	accountType: accountTypes("account_type").notNull().default("GUEST"),
 	avatar: varchar("avatar", { length: 256 }),
@@ -33,9 +34,13 @@ export const users = cockroachTable("users", {
 export const pawprints = cockroachTable("pawprints", {
 	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
 
-	userEmail: varchar("user_email", { length: 254 })
+	userId: varchar("user_id", { length: 25 })
 		.notNull()
-		.references(() => users.email),
+		.references(() => users.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade",
+		}),
+
 	title: varchar("title", { length: 256 }).notNull(),
 	description: varchar("description", { length: 10000 }).notNull(),
 	tags: text("tags").array().notNull().default(sql`ARRAY[]::TEXT[]`),
@@ -56,12 +61,13 @@ export const pawprints = cockroachTable("pawprints", {
 export const signatures = cockroachTable(
 	"signatures",
 	{
-		userEmail: varchar("user_email", { length: 254 })
+		userId: varchar("user_id", { length: 25 })
 			.notNull()
-			.references(() => users.email, {
+			.references(() => users.id, {
 				onDelete: "cascade",
 				onUpdate: "cascade",
 			}),
+
 		pawprintId: varchar("pawprint_id", { length: 25 })
 			.notNull()
 			.references(() => pawprints.id, {
@@ -70,19 +76,20 @@ export const signatures = cockroachTable(
 			}),
 		createdOn: timestamp("created_on", { withTimezone: true }).defaultNow(),
 	},
-	(table) => [primaryKey({ columns: [table.userEmail, table.pawprintId] })],
+	(table) => [primaryKey({ columns: [table.userId, table.pawprintId] })],
 );
 
 export const responses = cockroachTable("responses", {
 	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
 
-	userEmail: varchar("user_email", { length: 254 })
+	userId: varchar("user_id", { length: 25 })
 		.notNull()
-		.references(() => users.email, {
+		.references(() => users.id, {
 			onDelete: "cascade",
 			onUpdate: "cascade",
 		}),
-	content: varchar("description", { length: 5000 }).notNull(),
+
+	content: varchar("content", { length: 5000 }).notNull(),
 	pawprintId: varchar("pawprint_id", { length: 25 })
 		.notNull()
 		.references(() => pawprints.id, {
@@ -101,12 +108,13 @@ export const responses = cockroachTable("responses", {
 export const reports = cockroachTable("reports", {
 	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
 
-	userEmail: varchar("user_email", { length: 254 })
+	userId: varchar("user_id", { length: 25 })
 		.notNull()
-		.references(() => users.email, {
+		.references(() => users.id, {
 			onDelete: "cascade",
 			onUpdate: "cascade",
 		}),
+
 	pawprintId: varchar("pawprint_id", { length: 25 })
 		.notNull()
 		.references(() => pawprints.id, {
@@ -130,16 +138,16 @@ export const relations = defineRelations(
 	(r) => ({
 		users: {
 			pawprints: r.many.pawprints({
-				from: r.users.email,
-				to: r.pawprints.userEmail,
+				from: r.users.id,
+				to: r.pawprints.userId,
 			}),
 			signatures: r.many.signatures({
-				from: r.users.email,
-				to: r.signatures.userEmail,
+				from: r.users.id,
+				to: r.signatures.userId,
 			}),
 			responses: r.many.responses({
-				from: r.users.email,
-				to: r.responses.userEmail,
+				from: r.users.id,
+				to: r.responses.userId,
 			}),
 		},
 		pawprints: {
@@ -148,8 +156,8 @@ export const relations = defineRelations(
 				to: r.signatures.pawprintId,
 			}),
 			author: r.one.users({
-				from: r.pawprints.userEmail,
-				to: r.users.email,
+				from: r.pawprints.userId,
+				to: r.users.id,
 			}),
 			responses: r.many.responses({
 				from: r.pawprints.id,
@@ -167,8 +175,8 @@ export const relations = defineRelations(
 				to: r.pawprints.id,
 			}),
 			signer: r.one.users({
-				from: r.signatures.userEmail,
-				to: r.users.email,
+				from: r.signatures.userId,
+				to: r.users.id,
 			}),
 		},
 		responses: {
@@ -177,8 +185,8 @@ export const relations = defineRelations(
 				to: r.pawprints.id,
 			}),
 			author: r.one.users({
-				from: r.responses.userEmail,
-				to: r.users.email,
+				from: r.responses.userId,
+				to: r.users.id,
 			}),
 		},
 
@@ -188,7 +196,7 @@ export const relations = defineRelations(
 				to: r.pawprints.id,
 			}),
 			reporter: r.one.users({
-				from: r.reports.userEmail,
+				from: r.reports.userId,
 				to: r.users.email,
 			}),
 		},
