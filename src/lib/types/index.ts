@@ -6,7 +6,7 @@ export interface PawprintContent {
 }
 
 export interface PawprintResponseContent {
-	response: string;
+	content: string;
 	id?: string;
 }
 

@@ -4,6 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useChannel } from "ably/react";
 import { AnimatePresence } from "motion/react";
 import { type FC, useEffect, useState } from "react";
+import type { AblySignPawprint } from "@/lib/ably/types";
 import { type GetPawprintsInput, orpc } from "@/lib/rpc";
 import { queryClient } from "@/lib/utils";
 import Banner from "./banner";
@@ -42,7 +43,7 @@ const HomePage: FC = () => {
 	} = useInfiniteQuery(infiniteOptions);
 
 	useChannel("signatures", (message) => {
-		const id = message.data as string;
+		const { id } = message.data as AblySignPawprint;
 		console.log("Received signature update for pawprint", id);
 
 		if (!data) return;

@@ -5,11 +5,12 @@ import { createId } from "@paralleldrive/cuid2";
 import Ably from "ably";
 import { type } from "arktype";
 import { and, eq, isNull, sql } from "drizzle-orm";
+import { sendAblyEvent } from "../ably";
 import { getServerSession } from "../auth/session";
 import { FETCH_SIZE, SORTABLE_FIELDS_LIST } from "../constants";
 import { db } from "../db";
 import { pawprints, responses, signatures, users } from "../db/schema";
-import { publishValidation, respondValidation, sendAblyEvent } from "../utils";
+import { publishValidation, respondValidation } from "../utils";
 
 const pub = os
 	.errors({
@@ -264,41 +265,47 @@ export const signPawprint = sessionRequired
 	.input(
 		type({
 			id: "string",
+			creationId: "string",
 		}),
 	)
-	.handler(async ({ input: { id }, context: { session }, errors }) => {
-		const userId = session.user.id;
+	.handler(
+		async ({ input: { id, creationId }, context: { session }, errors }) => {
+			const userId = session.user.id;
 
-		const pawprint = await db.query.pawprints.findFirst({
-			where: { id },
-			columns: {
-				expiresOn: true,
-				completedOn: true,
-			},
-		});
+			const pawprint = await db.query.pawprints.findFirst({
+				where: { id },
+				columns: {
+					expiresOn: true,
+					completedOn: true,
+				},
+			});
 
-		if (!pawprint) throw errors.DOES_NOT_EXIST();
-		if (
-			pawprint.completedOn ||
-			(pawprint.expiresOn && pawprint.expiresOn < new Date())
-		)
-			throw errors.SIGNING_EXPIRED();
+			if (!pawprint) throw errors.DOES_NOT_EXIST();
+			if (
+				pawprint.completedOn ||
+				(pawprint.expiresOn && pawprint.expiresOn < new Date())
+			)
+				throw errors.SIGNING_EXPIRED();
 
-		const signature = (
-			await db
-				.insert(signatures)
-				.values({
-					pawprintId: id,
-					userId,
-				})
-				.onConflictDoNothing()
-				.returning()
-		)[0];
+			const signature = (
+				await db
+					.insert(signatures)
+					.values({
+						pawprintId: id,
+						userId,
+					})
+					.onConflictDoNothing()
+					.returning()
+			)[0];
 
-		await sendAblyEvent("signatures", "new-signature", id);
+			await sendAblyEvent("signatures", "new-signature", {
+				id,
+				creationId,
+			});
 
-		return signature;
-	});
+			return signature;
+		},
+	);
 
 export const getMyPawprints = ritRequired.handler(
 	async ({

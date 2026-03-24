@@ -1,10 +1,13 @@
 "use client";
 import { BProgress } from "@bprogress/core";
+import { createId } from "@paralleldrive/cuid2";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import type { FC } from "react";
+import { useChannel } from "ably/react";
+import { type FC, useState } from "react";
 import { BiCheckCircle } from "react-icons/bi";
 import { FaCalendarTimes } from "react-icons/fa";
 import { MdFlag } from "react-icons/md";
+import type { AblySignPawprint } from "@/lib/ably/types";
 import { authClient, signIn } from "@/lib/auth/client";
 import { SIGNATURE_THRESHOLD } from "@/lib/constants";
 import { type GetPawprintResult, orpc } from "@/lib/rpc";
@@ -18,12 +21,15 @@ const SignSection: FC<{
 	const { data, isPending: sessionPending } = authClient.useSession();
 	const { addToast } = useToasts();
 
-	const { data: signData, isPending: signPending } = useQuery(
-		orpc.getPawprintSignStatus.queryOptions({
-			input: { id: pawprint.id },
-			initialData: null,
-		}),
-	);
+	const [creationId, setCreationId] = useState<string>();
+
+	const signStatusOptions = orpc.getPawprintSignStatus.queryOptions({
+		input: { id: pawprint.id },
+		initialData: null,
+	});
+
+	const { data: signData, isPending: signPending } =
+		useQuery(signStatusOptions);
 
 	const isPending = sessionPending || signPending;
 
@@ -66,6 +72,18 @@ const SignSection: FC<{
 		}),
 	);
 
+	useChannel("signatures", (message) => {
+		const { id, creationId: messageCreationId } =
+			message.data as AblySignPawprint;
+
+		if (id === pawprint.id && messageCreationId !== creationId) {
+			setPawprint({
+				...pawprint,
+				signs: pawprint.signs + 1,
+			});
+		}
+	});
+
 	if (pawprint.completedOn)
 		return (
 			<div className="bg-green rounded-lg border-lime border p-2 m-2 dark:text-black font-bold flex gap-4 items-center">
@@ -106,8 +124,19 @@ const SignSection: FC<{
 					}
 
 					if (disabled) return;
-
-					mutation.mutate({ id: pawprint.id });
+					const temp = createId();
+					if (!creationId) setCreationId(temp);
+					mutation.mutate(
+						{ id: pawprint.id, creationId: temp },
+						{
+							onSuccess: () => {
+								setPawprint({
+									...pawprint,
+									signs: pawprint.signs + 1,
+								});
+							},
+						},
+					);
 				}}
 			>
 				{isPending

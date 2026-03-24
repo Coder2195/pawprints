@@ -9,24 +9,32 @@ const AppAblyProvider: FC<PropsWithChildren> = ({ children }) => {
 		new Ably.Realtime({
 			clientId: "fake-client-id",
 			token: "fake-token",
-			authUrl: "api/rpc/getAblySubscribeToken",
+			authCallback: () => {},
 		}),
 	);
 
 	useEffect(() => {
 		client
 			.getAblySubscribeToken()
+
 			.then((token) => {
 				ablyClient.connection.close();
 				setAblyClient(
 					new Ably.Realtime({
 						clientId: token.clientId,
 						token: token.token,
-						authUrl: "api/rpc/getAblySubscribeToken",
+						authCallback: async (tokenParams, callback) => {
+							try {
+								const token = await client.getAblySubscribeToken();
+								callback(null, token);
+							} catch (error) {
+								callback(String(error), null);
+							}
+						},
 					}),
 				);
 			})
-			.catch(() => console.log("no token given."));
+			.catch(() => console.log("user isn't logged in, no token given."));
 
 		return () => ablyClient.connection.close();
 	}, [ablyClient.connection.close]);

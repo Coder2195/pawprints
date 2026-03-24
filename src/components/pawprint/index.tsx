@@ -48,7 +48,11 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
 						))}
 					</>
 				)}
-				<PawprintResponseForm />
+				<PawprintResponseForm
+					response={{
+						content: "",
+					}}
+				/>
 			</div>
 
 			<SignSection pawprint={pawprint} setPawprint={setPawprint} />
