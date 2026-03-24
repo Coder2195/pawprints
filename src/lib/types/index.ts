@@ -5,5 +5,10 @@ export interface PawprintContent {
 	id?: string;
 }
 
+export interface PawprintResponseContent {
+	response: string;
+	id?: string;
+}
+
 export type SortableFields =
 	keyof typeof import("../constants").SORTABLE_FIELDS;

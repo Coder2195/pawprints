@@ -23,7 +23,7 @@ const OverlayPopup: FC<
 		>
 			<motion.dialog
 				open
-				className="min-h-3/4 min-w-3/4 h-[min(calc(600px),calc(100%-1rem))] w-[min(calc(600px),calc(100%-1rem))] bg-solid border rounded-xl flex flex-col justify-stretch justify-self-center"
+				className="min-h-5/6 min-w-4/5 h-[min(calc(600px),calc(100%-1rem))] w-[min(calc(600px),calc(100%-1rem))] bg-solid border rounded-xl flex flex-col justify-stretch justify-self-center"
 				initial={{
 					translateY: "20%",
 					opacity: 0,

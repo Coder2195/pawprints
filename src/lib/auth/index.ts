@@ -12,7 +12,7 @@ export const auth = betterAuth({
 	},
 	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 	onAPIError: {
-		throw: true,
+		throw: false,
 		errorURL: "/api/auth/error",
 	},
 	plugins: [

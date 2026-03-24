@@ -1,9 +1,11 @@
 "use client";
 import { BProgress } from "@bprogress/core";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useChannel } from "ably/react";
 import { AnimatePresence } from "motion/react";
 import { type FC, useEffect, useState } from "react";
 import { type GetPawprintsInput, orpc } from "@/lib/rpc";
+import { queryClient } from "@/lib/utils";
 import Banner from "./banner";
 import PawprintCard from "./card";
 import CreatePawprint from "./create";
@@ -13,6 +15,23 @@ const HomePage: FC = () => {
 	const [input, setInput] = useState<GetPawprintsInput>({
 		orderBy: { field: "published_on", direction: "desc" },
 	});
+	const infiniteOptions = orpc.getPawprints.infiniteOptions({
+		getNextPageParam: (d) => {
+			return d.nextPage;
+		},
+		input(page) {
+			return {
+				...input,
+				page,
+			};
+		},
+		queryKey: [input],
+		initialData: undefined,
+		placeholderData: (prev) => {
+			return prev;
+		},
+		initialPageParam: 0,
+	});
 	const {
 		data,
 		isPlaceholderData,
@@ -20,25 +39,28 @@ const HomePage: FC = () => {
 		isFetching,
 		fetchNextPage,
 		isFetchingNextPage,
-	} = useInfiniteQuery(
-		orpc.getPawprints.infiniteOptions({
-			getNextPageParam: (d) => {
-				return d.nextPage;
-			},
-			input(page) {
-				return {
-					...input,
-					page,
-				};
-			},
-			queryKey: [input],
-			initialData: undefined,
-			placeholderData: (prev) => {
-				return prev;
-			},
-			initialPageParam: 0,
-		}),
-	);
+	} = useInfiniteQuery(infiniteOptions);
+
+	useChannel("signatures", (message) => {
+		const id = message.data as string;
+		console.log("Received signature update for pawprint", id);
+
+		if (!data) return;
+
+		const newData = {
+			...data,
+			pages: data.pages.map((page) => ({
+				...page,
+				pawprints: page.pawprints.map((pawprint) => ({
+					...pawprint,
+					signatures:
+						pawprint.id === id ? pawprint.signatures + 1 : pawprint.signatures,
+				})),
+			})),
+		};
+
+		queryClient.setQueryData(infiniteOptions.queryKey, newData);
+	});
 
 	useEffect(() => {
 		if (isFetchingNextPage) {

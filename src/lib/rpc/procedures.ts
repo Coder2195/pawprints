@@ -2,13 +2,14 @@ import "@/lib/arktype";
 
 import { os } from "@orpc/server";
 import { createId } from "@paralleldrive/cuid2";
+import Ably from "ably";
 import { type } from "arktype";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { getServerSession } from "../auth/session";
 import { FETCH_SIZE, SORTABLE_FIELDS_LIST } from "../constants";
 import { db } from "../db";
 import { pawprints, responses, signatures, users } from "../db/schema";
-import { publishValidation } from "../utils";
+import { publishValidation, respondValidation, sendAblyEvent } from "../utils";
 
 const pub = os
 	.errors({
@@ -28,6 +29,10 @@ const pub = os
 		},
 		GUEST_NOT_ALLOWED: {
 			message: "You must be a member of RIT to perform this action.",
+			status: 401,
+		},
+		ONLY_ADMIN_ALLOWED: {
+			message: "You must be an admin to perform this action.",
 			status: 401,
 		},
 	})
@@ -78,7 +83,37 @@ const ritRequired = sessionRequired.use(
 	},
 );
 
-export const getPubSubToken = sessionRequired.handler(async () => {});
+const adminRequired = sessionRequired.use(
+	async ({
+		context: {
+			session: { user },
+		},
+		errors,
+		next,
+	}) => {
+		if (user.accountType !== "ADMIN") throw errors.ONLY_ADMIN_ALLOWED();
+
+		return next({
+			context: {
+				user,
+			},
+		});
+	},
+);
+
+export const getAblySubscribeToken = sessionRequired.handler(
+	async ({
+		context: {
+			session: {
+				user: { id },
+			},
+		},
+	}) => {
+		const ably = new Ably.Rest({ key: process.env.ABLY_SUBSCRIBE_KEY });
+
+		return await ably.auth.requestToken({ clientId: id });
+	},
+);
 
 export const getPawprints = pub
 	.input(
@@ -249,7 +284,7 @@ export const signPawprint = sessionRequired
 		)
 			throw errors.SIGNING_EXPIRED();
 
-		return (
+		const signature = (
 			await db
 				.insert(signatures)
 				.values({
@@ -259,6 +294,10 @@ export const signPawprint = sessionRequired
 				.onConflictDoNothing()
 				.returning()
 		)[0];
+
+		await sendAblyEvent("signatures", "new-signature", id);
+
+		return signature;
 	});
 
 export const getMyPawprints = ritRequired.handler(
@@ -415,5 +454,26 @@ export const publishPawprint = ritRequired.input(publishValidation).handler(
 			.returning();
 
 		return pawprint[0];
+	},
+);
+
+export const publishResponse = adminRequired.input(respondValidation).handler(
+	async ({
+		input,
+		context: {
+			session: {
+				user: { id: userId },
+			},
+		},
+	}) => {
+		const response = await db
+			.insert(responses)
+			.values({
+				...input,
+				userId,
+			})
+			.returning();
+
+		return response[0];
 	},
 );

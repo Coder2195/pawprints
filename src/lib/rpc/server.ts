@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import {
 	deleteDraftPawprint,
 	editProfile,
+	getAblySubscribeToken,
 	getDrafts,
 	getMyPawprints,
 	getPawprint,
@@ -27,6 +28,7 @@ export const router = {
 	deleteDraftPawprint,
 	publishPawprint,
 	getPawprintSignStatus,
+	getAblySubscribeToken,
 };
 
 export const handler = new RPCHandler(router, {

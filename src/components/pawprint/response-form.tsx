@@ -1,9 +1,14 @@
 "use client";
+import { Formik } from "formik";
 import Image from "next/image";
 import type { FC } from "react";
 import { authClient } from "@/lib/auth/client";
+import { client } from "@/lib/rpc";
+import type { PawprintResponseContent } from "@/lib/types";
 
-const PawprintResponseForm: FC = () => {
+const PawprintResponseForm: FC<{ response: PawprintResponseContent }> = ({
+	response,
+}) => {
 	const { data } = authClient.useSession();
 	if (!data) return null;
 
@@ -22,19 +27,30 @@ const PawprintResponseForm: FC = () => {
 				height={50}
 				className="rounded-full mb-2 border-4 w-12 h-12 hidden sm:block"
 			/>
-			<div className="flex-1 flex flex-col overflow-auto bg-pms-427c/10 p-2 border  rounded-lg">
-				<span className="font-medium relative">
-					{name || "Anonymous User"} (Responding)
-				</span>
-				<div className="markdown mt-2">
-					<textarea
-						name="response"
-						id="response"
-						placeholder="Write your response..."
-						className="bg-transparent border w-full"
-					></textarea>
+			<Formik initialValues={response} onSubmit={() => {}}>
+				<div className="flex-1 flex flex-col overflow-auto bg-pms-427c/10 p-2 border  rounded-lg">
+					<span className="font-medium relative">
+						{name || "Anonymous User"} (Responding)
+					</span>
+					<div className="markdown mt-2">
+						<textarea
+							name="response"
+							id="response"
+							placeholder="Write your response..."
+							className="bg-transparent border w-full"
+						></textarea>
+
+						<button
+							type="button"
+							onClick={() => {
+								client.getAblySubscribeToken().then(console.log);
+							}}
+						>
+							check
+						</button>
+					</div>
 				</div>
-			</div>
+			</Formik>
 		</div>
 	);
 };
