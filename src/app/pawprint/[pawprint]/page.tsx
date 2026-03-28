@@ -1,6 +1,8 @@
 import OverlayPawprint from "@/components/pawprint";
 import "@/lib/rpc/server";
+import { isDefinedError } from "@orpc/client";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import type { FC } from "react";
 import { client } from "@/lib/rpc";
 
@@ -39,7 +41,14 @@ const Pawprint: FC<{ params: Promise<{ pawprint: string }> }> = async ({
 }) => {
 	const { pawprint: id } = await params;
 
-	const pawprint = await client.getPawprint({ id });
+	const pawprint = await client.getPawprint({ id }).catch((e) => {
+		if (isDefinedError(e)) {
+			redirect("/");
+			return null;
+		}
+	});
+
+	if (!pawprint) return;
 
 	return <OverlayPawprint pawprint={pawprint} />;
 };

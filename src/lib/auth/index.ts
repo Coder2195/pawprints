@@ -48,7 +48,7 @@ export const auth = betterAuth({
 					createdOn: dbUser.createdOn,
 					emailVerified: true,
 					accountType: dbUser.accountType,
-					image: dbUser.avatar || user.image,
+					image: dbUser.avatar || user.image || null,
 					id: dbUser.id,
 					name: dbUser.name || user.name,
 					updatedOn: dbUser.updatedOn,

@@ -1,7 +1,7 @@
 "use client";
 import { Formik } from "formik";
 import Image from "next/image";
-import type { FC } from "react";
+import { type FC } from "react";
 import { authClient } from "@/lib/auth/client";
 import { client } from "@/lib/rpc";
 import type { PawprintResponseContent } from "@/lib/types";

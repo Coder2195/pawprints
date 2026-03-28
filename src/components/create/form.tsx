@@ -2,14 +2,17 @@
 import { useMutation } from "@tanstack/react-query";
 import { type } from "arktype";
 import { Field, Form, Formik, type FormikProps } from "formik";
+import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FC, useEffect, useRef } from "react";
+import { type FC, useEffect, useRef, useState } from "react";
 import { MdOutlineCheck } from "react-icons/md";
+import { authClient } from "@/lib/auth/client";
 import { TAGS } from "@/lib/constants";
 import { orpc } from "@/lib/rpc";
 import type { PawprintContent } from "@/lib/types";
 import { publishValidation, queryClient } from "@/lib/utils";
+import OverlayPawprint from "../pawprint";
 import { useToasts } from "../providers/toast";
 import ErrorDiv from "../ui/error";
 import Markdown from "../ui/markdown";
@@ -27,7 +30,11 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 	const saveDraft = useMutation(orpc.saveDraftPawprint.mutationOptions());
 	const { addToast } = useToasts();
 
+	const [previewOpen, setPreviewOpen] = useState(false);
+
 	const previewRef = useRef<HTMLDivElement>(null);
+	const { data } = authClient.useSession();
+	const previewEnabled = data !== null;
 
 	useEffect(() => {
 		setValues(initialValues);
@@ -140,9 +147,48 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 				>
 					Save As Draft
 				</button>
+				<button
+					type="button"
+					className="button button-transparent text-orange disabled:text-pms-427c border"
+					disabled={!previewEnabled}
+					onClick={() => {
+						setPreviewOpen(!previewOpen);
+					}}
+				>
+					Preview
+				</button>
 				<button type="submit" className="button button-primary">
 					Submit
 				</button>
+
+				<AnimatePresence>
+					{previewOpen && previewEnabled && (
+						<OverlayPawprint
+							onClose={() => {
+								setPreviewOpen(false);
+							}}
+							pawprint={{
+								...values,
+								id: "",
+								title: values.title || "Untitled Pawprint",
+								description: values.description || "[No description]",
+								createdOn: new Date(),
+								completedOn: new Date(),
+								updatedOn: new Date(),
+								publishedOn: null,
+								userId: data.user.id,
+								author: {
+									...data.user,
+									avatar: data.user.image,
+									id: data.user.id,
+								},
+								expiresOn: new Date(),
+								signs: 0,
+								responses: [],
+							}}
+						/>
+					)}
+				</AnimatePresence>
 			</div>
 		</Form>
 	);

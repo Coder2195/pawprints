@@ -202,6 +202,7 @@ export const getPawprint = sessionOptional
 	)
 	.handler(async ({ input: { id }, context: { session }, errors }) => {
 		const userEmail = session?.user?.email || "";
+		const userID = session?.user.id;
 
 		const pawprint = await db.query.pawprints.findFirst({
 			where: {
@@ -212,6 +213,7 @@ export const getPawprint = sessionOptional
 					columns: {
 						name: true,
 						avatar: true,
+						id: true,
 					},
 				},
 				responses: {
@@ -240,7 +242,12 @@ export const getPawprint = sessionOptional
 			},
 		});
 
-		if (!pawprint) throw errors.DOES_NOT_EXIST();
+		if (
+			!pawprint ||
+			(pawprint.publishedOn == null &&
+				(userID == null || pawprint.author?.id !== userID))
+		)
+			throw errors.DOES_NOT_EXIST();
 
 		return pawprint;
 	});
@@ -277,10 +284,11 @@ export const signPawprint = sessionRequired
 				columns: {
 					expiresOn: true,
 					completedOn: true,
+					publishedOn: true,
 				},
 			});
 
-			if (!pawprint) throw errors.DOES_NOT_EXIST();
+			if (!pawprint || !pawprint.publishedOn) throw errors.DOES_NOT_EXIST();
 			if (
 				pawprint.completedOn ||
 				(pawprint.expiresOn && pawprint.expiresOn < new Date())

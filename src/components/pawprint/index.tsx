@@ -7,18 +7,21 @@ import Dialogue from "./dialogue";
 import PawprintResponseForm from "./response-form";
 import SignSection from "./sign";
 
-const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
-	pawprint: initial,
-}) => {
+const OverlayPawprint: FC<{
+	pawprint: NonNullable<GetPawprintResult>;
+	onClose?: () => void;
+}> = ({ pawprint: initial, onClose }) => {
 	const [pawprint, setPawprint] = useState(initial);
-
 	const router = useRouter();
 
 	return (
 		<OverlayPopup
-			onClose={() => {
-				router.push("/");
-			}}
+			onClose={
+				onClose ||
+				(() => {
+					router.push("/");
+				})
+			}
 			title={pawprint.title}
 		>
 			<div className="flex-1 flex flex-col gap-2 p-2 overflow-auto">
@@ -30,32 +33,38 @@ const OverlayPawprint: FC<{ pawprint: NonNullable<GetPawprintResult> }> = ({
 				>
 					{pawprint.description}
 				</Dialogue>
-				{pawprint.responses.length > 0 && (
+				{pawprint.publishedOn && (
 					<>
-						<hr className="-mx-2" />
-						<h5 className="sm:ml-14">Updates</h5>
-						{pawprint.responses.map((response, index) => (
-							<Dialogue
-								name={response.author?.name}
-								ping={index === 0}
-								avatar={response.author?.avatar || undefined}
-								key={response.id}
-								createdOn={response.createdOn}
-								updatedOn={response.updatedOn}
-							>
-								{response.content}
-							</Dialogue>
-						))}
+						{pawprint.responses.length > 0 && (
+							<>
+								<hr className="-mx-2" />
+								<h5 className="sm:ml-14">Updates</h5>
+								{pawprint.responses.map((response, index) => (
+									<Dialogue
+										name={response.author?.name}
+										ping={index === 0}
+										avatar={response.author?.avatar || undefined}
+										key={response.id}
+										createdOn={response.createdOn}
+										updatedOn={response.updatedOn}
+									>
+										{response.content}
+									</Dialogue>
+								))}
+							</>
+						)}
+						<PawprintResponseForm
+							response={{
+								content: "",
+							}}
+						/>
 					</>
 				)}
-				<PawprintResponseForm
-					response={{
-						content: "",
-					}}
-				/>
 			</div>
 
-			<SignSection pawprint={pawprint} setPawprint={setPawprint} />
+			{pawprint.publishedOn && (
+				<SignSection pawprint={pawprint} setPawprint={setPawprint} />
+			)}
 		</OverlayPopup>
 	);
 };
