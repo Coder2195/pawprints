@@ -41,7 +41,9 @@ const AppAblyProvider: FC<PropsWithChildren> = ({ children }) => {
 
 	return (
 		<AblyProvider client={ablyClient}>
-			<ChannelProvider channelName="signatures">{children}</ChannelProvider>
+			<ChannelProvider channelName="signatures">
+				<ChannelProvider channelName="pawprints">{children}</ChannelProvider>
+			</ChannelProvider>
 		</AblyProvider>
 	);
 };

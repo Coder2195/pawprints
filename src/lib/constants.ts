@@ -41,4 +41,4 @@ export const SORTABLE_FIELDS_LIST = Object.keys(
 
 export type PawprintStatus = keyof typeof PAWPRINT_STATUS;
 
-export const FETCH_SIZE = 12;
+export const PAGE_SIZE = 12;

@@ -5,12 +5,46 @@ import { useChannel } from "ably/react";
 import { AnimatePresence } from "motion/react";
 import { type FC, useEffect, useState } from "react";
 import type { AblySignPawprint } from "@/lib/ably/types";
-import { type GetPawprintsInput, orpc } from "@/lib/rpc";
+import { PAGE_SIZE } from "@/lib/constants";
+import {
+	type GetPawprintsInput,
+	type GetPawprintsResultItem,
+	orpc,
+} from "@/lib/rpc";
 import { queryClient } from "@/lib/utils";
 import Banner from "./banner";
 import PawprintCard from "./card";
 import CreatePawprint from "./create";
 import Filters from "./filters";
+
+function insertByInput(
+	pawprints: GetPawprintsResultItem[],
+	input: GetPawprintsInput,
+	newPawprint: GetPawprintsResultItem,
+): boolean {
+	const isDesc = input.orderBy.direction === "desc";
+	const targetField =
+		input.orderBy.field === "published_on" ? "publishedOn" : "signatures";
+	for (let i = 0; i < pawprints.length; i++) {
+		// pawprints always ordered by id alphabet when ambigous
+		const pawprint = pawprints[i];
+
+		if (
+			(isDesc
+				? // biome-ignore lint/style/noNonNullAssertion: all new pawprints have a publishing date
+					newPawprint[targetField]! > pawprint[targetField]!
+				: // biome-ignore lint/style/noNonNullAssertion: all new pawprints have a publishing date
+					newPawprint[targetField]! < pawprint[targetField]!) ||
+			(pawprint[targetField] === newPawprint[targetField] &&
+				newPawprint.id < pawprint.id)
+		) {
+			pawprints.splice(i, 0, newPawprint);
+			return true;
+		}
+	}
+
+	return false;
+}
 
 const HomePage: FC = () => {
 	const [input, setInput] = useState<GetPawprintsInput>({
@@ -72,6 +106,42 @@ const HomePage: FC = () => {
 	}, [isFetchingNextPage]);
 
 	const list = data?.pages.flatMap((p) => p.pawprints || []);
+
+	useChannel("pawprints", (message) => {
+		if (!data) return;
+		const newPawprint = message.data as GetPawprintsResultItem;
+		newPawprint.completedOn =
+			newPawprint.completedOn && new Date(newPawprint.completedOn);
+		newPawprint.createdOn = new Date(newPawprint.createdOn);
+		newPawprint.expiresOn =
+			newPawprint.expiresOn && new Date(newPawprint.expiresOn);
+		newPawprint.publishedOn =
+			newPawprint.publishedOn && new Date(newPawprint.publishedOn);
+
+		const listCopy = [...data.pages.flatMap((p) => p.pawprints || [])];
+
+		if (input.tags && !input.tags.some((tag) => newPawprint.tags.includes(tag)))
+			return;
+
+		const publishedOn = newPawprint.publishedOn || new Date();
+
+		if (input.before && input.before < publishedOn) return;
+
+		if (input.after && input.after > publishedOn) return;
+
+		insertByInput(listCopy, input, newPawprint);
+
+		const newData = {
+			...data,
+			pages: data.pages.map((page, i) => ({
+				...page,
+				pawprints: listCopy.slice(i * PAGE_SIZE, (i + 1) * PAGE_SIZE),
+			})),
+		};
+
+		queryClient.setQueryData(infiniteOptions.queryKey, newData);
+	});
+
 	const hasNext = data?.pages[data.pages.length - 1]?.nextPage !== undefined;
 
 	const loading = isFetching || isFetchingNextPage;

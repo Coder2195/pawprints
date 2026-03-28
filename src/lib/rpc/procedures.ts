@@ -7,7 +7,7 @@ import { type } from "arktype";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { sendAblyEvent } from "../ably";
 import { getServerSession } from "../auth/session";
-import { FETCH_SIZE, SORTABLE_FIELDS_LIST } from "../constants";
+import { PAGE_SIZE, SORTABLE_FIELDS_LIST } from "../constants";
 import { db } from "../db";
 import { pawprints, responses, signatures, users } from "../db/schema";
 import { publishValidation, respondValidation } from "../utils";
@@ -180,8 +180,8 @@ export const getPawprints = pub
 			},
 			orderBy: (t) =>
 				sql.raw(`${input.orderBy.field} ${input.orderBy.direction}, id desc`),
-			offset: input.page * FETCH_SIZE,
-			limit: FETCH_SIZE + 1,
+			offset: input.page * PAGE_SIZE,
+			limit: PAGE_SIZE + 1,
 		});
 
 		// console.log(query.toSQL());
@@ -189,8 +189,8 @@ export const getPawprints = pub
 		const pawprints = await query;
 
 		return {
-			pawprints: pawprints.slice(0, FETCH_SIZE),
-			nextPage: pawprints.length > FETCH_SIZE ? input.page + 1 : undefined,
+			pawprints: pawprints.slice(0, PAGE_SIZE),
+			nextPage: pawprints.length > PAGE_SIZE ? input.page + 1 : undefined,
 		};
 	});
 
@@ -298,7 +298,7 @@ export const signPawprint = sessionRequired
 					.returning()
 			)[0];
 
-			await sendAblyEvent("signatures", "new-signature", {
+			await sendAblyEvent("signatures", "create", {
 				id,
 				creationId,
 			});
@@ -443,24 +443,31 @@ export const publishPawprint = ritRequired.input(publishValidation).handler(
 			},
 		},
 	}) => {
-		const pawprint = await db
-			.insert(pawprints)
-			.values({
-				...input,
-				publishedOn: new Date(),
-				userId: userId,
-			})
-			.onConflictDoUpdate({
-				target: pawprints.id,
-				set: {
-					...input,
-					publishedOn: new Date(),
-					expiresOn: sql`NOW() + INTERVAL '3 months'`,
-				},
-			})
-			.returning();
+		const pawprint = {
+			...(
+				await db
+					.insert(pawprints)
+					.values({
+						...input,
+						publishedOn: new Date(),
+						userId: userId,
+					})
+					.onConflictDoUpdate({
+						target: pawprints.id,
+						set: {
+							...input,
+							publishedOn: new Date(),
+							expiresOn: sql`NOW() + INTERVAL '3 months'`,
+						},
+					})
+					.returning()
+			)[0],
+			signatures: 0,
+		};
 
-		return pawprint[0];
+		await sendAblyEvent("pawprints", "publish", pawprint);
+
+		return pawprint;
 	},
 );
 
