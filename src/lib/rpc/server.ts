@@ -5,15 +5,19 @@ import { RPCHandler } from "@orpc/server/fetch";
 import { headers } from "next/headers";
 import {
 	deleteDraftPawprint,
+	deleteResponse,
 	editProfile,
 	getAblySubscribeToken,
-	getDrafts,
+	getDraftPawprints,
+	getDraftResponses,
 	getMyPawprints,
 	getPawprint,
 	getPawprintSignStatus,
 	getPawprints,
 	publishPawprint,
+	publishResponse,
 	saveDraftPawprint,
+	saveDraftResponse,
 	signPawprint,
 } from "./procedures";
 
@@ -21,7 +25,7 @@ export const router = {
 	getPawprints,
 	getPawprint,
 	signPawprint,
-	getDrafts,
+	getDraftPawprints,
 	getMyPawprints,
 	editProfile,
 	saveDraftPawprint,
@@ -29,6 +33,10 @@ export const router = {
 	publishPawprint,
 	getPawprintSignStatus,
 	getAblySubscribeToken,
+	getDraftResponses,
+	saveDraftResponse,
+	publishResponse,
+	deleteResponse,
 };
 
 export const handler = new RPCHandler(router, {

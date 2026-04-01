@@ -38,7 +38,8 @@ export type GetPawprintsInput = Parameters<typeof client.getPawprints>[0];
 
 export type GetPawprintsResultItem = GetPawprintsResult["pawprints"][number];
 
-export type GetDraftsResults = Result<typeof client.getDrafts>;
-export type GetDraftsResultItem = GetDraftsResults[number];
+export type GetDraftPawprintsResults = Result<typeof client.getDraftPawprints>;
+export type GetDraftPawprintsResultItem = GetDraftPawprintsResults[number];
 
 export type GetMyPawprintsResult = Result<typeof client.getMyPawprints>;
+export type GetPawprintResultResponses = GetPawprintResult["responses"];

@@ -1,6 +1,4 @@
 import { QueryClient } from "@tanstack/react-query";
-import { type } from "arktype";
-import { TAGS_LIST } from "./constants";
 import "@/lib/arktype";
 
 export async function wait(ms: number) {
@@ -8,38 +6,6 @@ export async function wait(ms: number) {
 }
 
 export const queryClient = new QueryClient();
-
-export const publishValidation = type({
-	id: "string?",
-	title: type("10 <= string <= 50").configure({
-		problem: (ctx) => ctx.expected,
-	}),
-	description: type("string >= 50").describe(
-		"Description must be at least 50 characters long.",
-	),
-	tags: type.string
-		.array()
-		.moreThanLength(0)
-		.describe("At least one tag is required", {
-			kind: "minLength",
-		})
-		.narrow((tags, ctx) => {
-			for (const t of tags) if (TAGS_LIST.includes(t)) return true;
-			throw ctx.reject("No valid tags provided");
-		})
-		.pipe((tags) => {
-			const set = new Set(tags).intersection(new Set(TAGS_LIST));
-			return Array.from(set);
-		}),
-});
-
-export const respondValidation = type({
-	pawprintId: "string",
-	id: "string?",
-	content: type("string >= 20").describe(
-		"Response must be at least 20 characters long.",
-	),
-});
 
 export function dateHourMinute(date: Date) {
 	return date.toLocaleString(undefined, {

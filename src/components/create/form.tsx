@@ -7,14 +7,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FC, useEffect, useRef, useState } from "react";
 import { MdOutlineCheck } from "react-icons/md";
+import { pawprintPublishValidation } from "@/lib/arktype";
 import { authClient } from "@/lib/auth/client";
 import { TAGS } from "@/lib/constants";
 import { orpc } from "@/lib/rpc";
 import type { PawprintContent } from "@/lib/types";
-import { publishValidation, queryClient } from "@/lib/utils";
+import { queryClient } from "@/lib/utils";
 import OverlayPawprint from "../pawprint";
 import { useToasts } from "../providers/toast";
-import ErrorDiv from "../ui/error";
+import { FieldError } from "../ui/error";
 import Markdown from "../ui/markdown";
 
 const FormContent: FC<FormikProps<PawprintContent>> = ({
@@ -39,21 +40,28 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 	useEffect(() => {
 		setValues(initialValues);
 	}, [initialValues, setValues]);
+
 	return (
-		<Form className="py-4 p-2 flex flex-col gap-4">
+		<Form className="pt-0 p-4 flex flex-col gap-4">
 			<div>
 				<label htmlFor="form-title" className="font-bold text-xl">
 					Title
 				</label>
-				<Field
-					type="text"
-					name="title"
-					id="form-title"
-					className="w-full"
-					placeholder="Untitled Pawprint"
-					onFocus={() => setFieldError("title", undefined)}
-				/>
-				<ErrorDiv>{touched.title && errors.title}</ErrorDiv>
+				<div className="relative">
+					<Field
+						type="text"
+						name="title"
+						id="form-title"
+						className="w-full pr-16f"
+						placeholder="Untitled Pawprint"
+						maxLength={256}
+						onFocus={() => setFieldError("title", undefined)}
+					/>
+					<span className="absolute left-1 bottom-0 translate-y-1/2 backdrop-blur-3xl text-pms-430c text-xs/3 p-1 rounded-sm z-30">
+						{values.title.length}/256
+					</span>
+				</div>
+				<FieldError name="title" />
 			</div>
 
 			<div>
@@ -65,10 +73,14 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						as="textarea"
 						name="description"
 						id="form-description"
+						maxLength={10000}
 						placeholder="Describe what changes you want..."
 						className="min-h-36 lg:min-w-48 lg:w-1/2 min-w-full max-w-full lg:resize resize-y "
 						onFocus={() => setFieldError("description", undefined)}
 					/>
+					<span className="absolute left-1 bottom-0 translate-y-1/2 backdrop-blur-3xl px-1 text-pms-430c text-xs  z-30">
+						{values.description.length}/10000
+					</span>
 
 					<div className="flex-1 markdown border p-2 rounded-lg wrap-break-word overflow-auto min-h-36 lg:min-w-48 lg:min-h-auto contain-size">
 						{values.description ? (
@@ -78,7 +90,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 								Begin typing to see a live preview...
 							</div>
 						)}
-						<span className="right-2 bottom-1 text-xs absolute bg-solid px-2 p-1 rounded-md">
+						<span className="right-1 bottom-0.5 text-xs absolute bg-solid px-2 p-0.5 rounded-md">
 							need the{" "}
 							<Link
 								className="text-orange hover-underline font-bold"
@@ -90,7 +102,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						</span>
 					</div>
 				</div>
-				<ErrorDiv>{touched.description && errors.description}</ErrorDiv>
+				<FieldError name="description" />
 			</div>
 
 			<div>
@@ -122,7 +134,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						);
 					})}
 				</div>
-				<ErrorDiv>{touched.tags && errors.tags}</ErrorDiv>
+				<FieldError name="tags" />
 			</div>
 			<div className="flex justify-around p-2">
 				<button
@@ -137,7 +149,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 									liveTime: 3000,
 								});
 								resetForm();
-								queryClient.fetchQuery(orpc.getDrafts.queryOptions({}));
+								queryClient.fetchQuery(orpc.getDraftPawprints.queryOptions({}));
 							},
 						});
 
@@ -205,15 +217,15 @@ const PawprintForm: FC<{ initialData: PawprintContent }> = ({
 	return (
 		<Formik
 			initialValues={initialData}
-			validateOnChange={false}
+			validateOnChange={true}
 			onSubmit={async (values, { setFieldError }) => {
-				const result = publishValidation(values);
+				const result = pawprintPublishValidation(values);
 
 				if (result instanceof type.errors) {
 					const map = result.flatByPath;
 
 					for (const key in map) {
-						setFieldError(key, map[key][0].description || "Invalid value");
+						setFieldError(key, map[key][0].problem || "Invalid value");
 					}
 					return;
 				}
@@ -231,7 +243,9 @@ const PawprintForm: FC<{ initialData: PawprintContent }> = ({
 				});
 			}}
 		>
-			{(props) => <FormContent {...props} initialValues={initialData} />}
+			{(props) => {
+				return <FormContent {...props} initialValues={initialData} />;
+			}}
 		</Formik>
 	);
 };

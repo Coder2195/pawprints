@@ -21,7 +21,7 @@ const CreatePawprintClient: FC = () => {
 		useState<PawprintContent>(EMPTY_PAWPRINT);
 	const [editMode, setEditMode] = useState(false);
 
-	const drafts = useQuery(orpc.getDrafts.queryOptions({}));
+	const drafts = useQuery(orpc.getDraftPawprints.queryOptions({}));
 
 	if (needsLogin) signIn();
 
@@ -44,7 +44,7 @@ const CreatePawprintClient: FC = () => {
 		>
 			{canCreate ? (
 				<>
-					<div className="p-2">
+					<div className="p-4">
 						<button
 							type="button"
 							className="button button-primary w-full text-center"

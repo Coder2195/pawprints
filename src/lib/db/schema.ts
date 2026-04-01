@@ -103,6 +103,7 @@ export const responses = cockroachTable("responses", {
 		.defaultNow()
 		.$onUpdate(() => sql`CURRENT_TIMESTAMP`)
 		.notNull(),
+	publishedOn: timestamp("published_on", { withTimezone: true }),
 });
 
 export const reports = cockroachTable("reports", {

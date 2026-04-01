@@ -1,16 +1,18 @@
-import "@/lib/arktype";
-
 import { os } from "@orpc/server";
-import { createId } from "@paralleldrive/cuid2";
 import Ably from "ably";
 import { type } from "arktype";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { sendAblyEvent } from "../ably";
+import {
+	pawprintDraftValidation,
+	pawprintPublishValidation,
+	responseDraftValidation,
+	responsePublishValidation,
+} from "../arktype";
 import { getServerSession } from "../auth/session";
 import { PAGE_SIZE, SORTABLE_FIELDS_LIST } from "../constants";
 import { db } from "../db";
 import { pawprints, responses, signatures, users } from "../db/schema";
-import { publishValidation, respondValidation } from "../utils";
 
 const pub = os
 	.errors({
@@ -217,14 +219,13 @@ export const getPawprint = sessionOptional
 					},
 				},
 				responses: {
-					columns: {
-						createdOn: true,
-						updatedOn: true,
-						content: true,
-						id: true,
+					where: {
+						publishedOn: {
+							isNotNull: true,
+						},
 					},
 					orderBy: {
-						createdOn: "desc",
+						publishedOn: "desc",
 					},
 					with: {
 						author: {
@@ -343,7 +344,7 @@ export const getMyPawprints = ritRequired.handler(
 	},
 );
 
-export const getDrafts = ritRequired.handler(
+export const getDraftPawprints = ritRequired.handler(
 	async ({
 		context: {
 			session: {
@@ -361,14 +362,7 @@ export const getDrafts = ritRequired.handler(
 );
 
 export const saveDraftPawprint = ritRequired
-	.input(
-		type({
-			title: "string",
-			description: "string",
-			tags: "string[]",
-			"id?": "string",
-		}),
-	)
+	.input(pawprintDraftValidation)
 	.handler(
 		async ({
 			input,
@@ -376,7 +370,6 @@ export const saveDraftPawprint = ritRequired
 				user: { id: userId },
 			},
 		}) => {
-			if (!input.id) input.id = createId();
 			return (
 				await db
 					.insert(pawprints)
@@ -442,60 +435,160 @@ export const deleteDraftPawprint = ritRequired
 		},
 	);
 
-export const publishPawprint = ritRequired.input(publishValidation).handler(
-	async ({
-		input,
-		context: {
-			session: {
-				user: { id: userId },
+export const publishPawprint = ritRequired
+	.input(pawprintPublishValidation)
+	.handler(
+		async ({
+			input,
+			context: {
+				session: {
+					user: { id: userId },
+				},
 			},
-		},
-	}) => {
-		const pawprint = {
-			...(
-				await db
-					.insert(pawprints)
-					.values({
-						...input,
-						publishedOn: new Date(),
-						userId: userId,
-					})
-					.onConflictDoUpdate({
-						target: pawprints.id,
-						set: {
+		}) => {
+			const pawprint = {
+				...(
+					await db
+						.insert(pawprints)
+						.values({
 							...input,
 							publishedOn: new Date(),
-							expiresOn: sql`NOW() + INTERVAL '3 months'`,
-						},
-					})
-					.returning()
-			)[0],
-			signatures: 0,
-		};
+							userId: userId,
+						})
+						.onConflictDoUpdate({
+							target: pawprints.id,
+							set: {
+								...input,
+								publishedOn: new Date(),
+								expiresOn: sql`NOW() + INTERVAL '3 months'`,
+							},
+						})
+						.returning()
+				)[0],
+				signatures: 0,
+			};
 
-		await sendAblyEvent("pawprints", "publish", pawprint);
+			return pawprint;
+		},
+	);
 
-		return pawprint;
-	},
-);
+export const publishResponse = adminRequired
+	.input(responsePublishValidation)
+	.handler(
+		async ({
+			input: rawInput,
+			context: {
+				session: {
+					user: { id: userId },
+				},
+			},
+		}) => {
+			const input = {
+				...rawInput,
+				publishedOn: new Date(),
+			};
+			const response = {
+				...(
+					await db
+						.insert(responses)
+						.values({
+							...input,
+							userId: userId,
+						})
+						.onConflictDoUpdate({
+							target: responses.id,
+							set: input,
+						})
+						.returning()
+				)[0],
+				signatures: 0,
+			};
 
-export const publishResponse = adminRequired.input(respondValidation).handler(
-	async ({
-		input,
-		context: {
-			session: {
+			return response;
+		},
+	);
+
+export const saveDraftResponse = ritRequired
+	.input(responseDraftValidation)
+	.handler(
+		async ({
+			input,
+			context: {
 				user: { id: userId },
 			},
-		},
-	}) => {
-		const response = await db
-			.insert(responses)
-			.values({
-				...input,
-				userId,
-			})
-			.returning();
+		}) => {
+			const response = (
+				await db
+					.insert(responses)
+					.values({
+						...input,
+						userId,
+					})
+					.onConflictDoUpdate({
+						target: responses.id,
+						set: input,
+					})
+					.returning()
+			)[0];
 
-		return response[0];
-	},
-);
+			return response;
+		},
+	);
+
+export const getDraftResponses = adminRequired
+	.input(
+		type({
+			pawprintId: "string",
+		}),
+	)
+	.handler(async ({ input: { pawprintId } }) => {
+		return db.query.responses.findMany({
+			where: {
+				publishedOn: { isNull: true },
+				pawprintId,
+			},
+			with: {
+				author: {
+					columns: {
+						avatar: true,
+						name: true,
+					},
+				},
+			},
+			orderBy: {
+				createdOn: "desc",
+			},
+		});
+	});
+
+export const deleteResponse = adminRequired
+	.input(
+		type({
+			id: "string",
+		}),
+	)
+	.handler(async ({ input: { id } }) => {
+		await db.delete(responses).where(eq(responses.id, id));
+	});
+
+// export const reportPawprint = ritRequired.input(type({
+//   id: "string",
+// })).handler(
+// 	async ({
+// 		context: {
+// 			session: { user: {
+//         id: userId
+//       } },
+// 		},
+//     input: {
+//       id: pawprintId
+//     }
+// 	}) => {
+
+//     return db.insert(reports).values({
+//       pawprintId,
+//       userId,
+
+//     })
+//   },
+// );
