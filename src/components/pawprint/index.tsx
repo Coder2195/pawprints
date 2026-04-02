@@ -57,28 +57,32 @@ const OverlayPawprint: FC<{
 				</Dialogue>
 				{(showResponses || showDrafts) && <hr className="-mx-2" />}
 				<div className="flex gap-2 flex-col">
-					<PawprintResponseForm
-						setResponses={setResponses}
-						response={{
-							content: "",
-						}}
-						pawprintId={pawprint.id}
-					/>
 					{showDrafts &&
 						(drafts.isLoading ? (
 							<div className="p-4">Loading responses...</div>
-						) : drafts.data !== undefined ? (
-							drafts.data.map((draft) => (
+						) : (
+							<>
 								<PawprintResponseForm
 									setResponses={setResponses}
-									key={draft.id}
-									response={draft}
-									profile={draft.author || undefined}
+									response={{
+										content: "",
+									}}
 									pawprintId={pawprint.id}
 								/>
-							))
-						) : (
-							<div>Error</div>
+								{drafts.data !== undefined ? (
+									drafts.data.map((draft) => (
+										<PawprintResponseForm
+											setResponses={setResponses}
+											key={draft.id}
+											response={draft}
+											profile={draft.author || undefined}
+											pawprintId={pawprint.id}
+										/>
+									))
+								) : (
+									<div>Error</div>
+								)}
+							</>
 						))}
 				</div>
 				{showResponses && (
