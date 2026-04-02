@@ -109,6 +109,8 @@ const HomePage: FC = () => {
 
 	useChannel("pawprints", (message) => {
 		if (!data) return;
+
+		console.log("Received pawprint creation", message);
 		const newPawprint = message.data as GetPawprintsResultItem;
 		newPawprint.completedOn =
 			newPawprint.completedOn && new Date(newPawprint.completedOn);

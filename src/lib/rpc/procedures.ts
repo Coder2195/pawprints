@@ -442,7 +442,7 @@ export const publishPawprint = ritRequired
 			input,
 			context: {
 				session: {
-					user: { id: userId },
+					user: { id: userId, image, name },
 				},
 			},
 		}) => {
@@ -467,6 +467,13 @@ export const publishPawprint = ritRequired
 				)[0],
 				signatures: 0,
 			};
+
+			await sendAblyEvent("pawprints", "create", {
+				...pawprint,
+				author: {
+					name,
+				},
+			});
 
 			return pawprint;
 		},

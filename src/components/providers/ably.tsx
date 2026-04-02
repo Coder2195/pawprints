@@ -9,6 +9,7 @@ const AppAblyProvider: FC<PropsWithChildren> = ({ children }) => {
 		new Ably.Realtime({
 			clientId: "fake-client-id",
 			token: "fake-token",
+
 			authCallback: () => {},
 		}),
 	);

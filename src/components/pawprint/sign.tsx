@@ -21,7 +21,7 @@ const SignSection: FC<{
 	const { data, isPending: sessionPending } = authClient.useSession();
 	const { addToast } = useToasts();
 
-	const [creationId, setCreationId] = useState<string>();
+	const [creationId, setCreationId] = useState<string>(createId);
 
 	const signStatusOptions = orpc.getPawprintSignStatus.queryOptions({
 		input: { id: pawprint.id },
@@ -124,10 +124,8 @@ const SignSection: FC<{
 					}
 
 					if (disabled) return;
-					const temp = createId();
-					if (!creationId) setCreationId(temp);
 					mutation.mutate(
-						{ id: pawprint.id, creationId: temp },
+						{ id: pawprint.id, creationId },
 						{
 							onSuccess: () => {
 								setPawprint({
