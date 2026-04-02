@@ -131,6 +131,16 @@ const HomePage: FC = () => {
 
 		if (input.after && input.after > publishedOn) return;
 
+		let search = input.search?.toLocaleLowerCase();
+		if (search === "") search = undefined;
+
+		if (
+			search &&
+			!newPawprint.title.toLocaleLowerCase().includes(search) &&
+			!newPawprint.description.toLocaleLowerCase().includes(search)
+		)
+			return;
+
 		insertByInput(listCopy, input, newPawprint);
 
 		const newData = {
