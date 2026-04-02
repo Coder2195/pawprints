@@ -13,6 +13,7 @@ const OverlayPopup: FC<
 	return (
 		<motion.div
 			initial={{ opacity: 0 }}
+			tabIndex={0}
 			animate={{ opacity: 1, transition: { duration: 0.3, delay: 0.5 } }}
 			exit={{ opacity: 0, transition: { duration: 0.3, delay: 0.5 } }}
 			className="w-dvw h-dvh bg-pms-430c/20 backdrop-blur-xs z-50 fixed top-0 left-0 flex items-center"
@@ -20,8 +21,15 @@ const OverlayPopup: FC<
 				if (e.target !== e.currentTarget) return;
 				onClose();
 			}}
+			onKeyDown={(e) => {
+				if (e.key === "Escape") onClose();
+			}}
+			onKeyUp={() => {}}
+			role="application"
 		>
 			<motion.dialog
+				aria-label={`A popup dialogue for ${title}`}
+				tabIndex={-1}
 				open
 				className="min-h-5/6 min-w-4/5 h-[min(calc(600px),calc(100%-1rem))] w-[min(calc(600px),calc(100%-1rem))] bg-solid border rounded-xl flex flex-col justify-stretch justify-self-center"
 				initial={{
@@ -54,7 +62,11 @@ const OverlayPopup: FC<
 						className="icon-button button-transparent rounded-full w-9 h-9 m-1 p-1 flex items-center justify-center"
 						onClick={onClose}
 					>
-						<BiX size={28} className="w-full h-full" />
+						<BiX
+							size={28}
+							className="w-full h-full"
+							aria-label="Close Dialog"
+						/>
 					</button>
 				</div>
 

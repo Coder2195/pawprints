@@ -57,7 +57,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						maxLength={256}
 						onFocus={() => setFieldError("title", undefined)}
 					/>
-					<span className="absolute left-1 bottom-0 translate-y-1/2 backdrop-blur-3xl text-pms-430c text-xs/3 p-1 rounded-sm z-30">
+					<span className="absolute left-1 bottom-0 translate-y-1/2 backdrop-blur-3xl text-pms-429c text-xs/3 p-1 rounded-sm z-30">
 						{values.title.length}/256
 					</span>
 				</div>
@@ -65,12 +65,13 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 			</div>
 
 			<div>
-				<label htmlFor="form-description" className="font-bold text-xl ">
+				<label htmlFor="form-description" className="font-bold text-xl">
 					Description
 				</label>
 				<div className="flex lg:flex-row flex-col gap-2 relative">
 					<Field
 						as="textarea"
+						tabIndex={0}
 						name="description"
 						id="form-description"
 						maxLength={10000}
@@ -78,7 +79,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						className="min-h-36 lg:min-w-48 lg:w-1/2 min-w-full max-w-full lg:resize resize-y "
 						onFocus={() => setFieldError("description", undefined)}
 					/>
-					<span className="absolute left-1 bottom-0 translate-y-1/2 backdrop-blur-3xl px-1 text-pms-430c text-xs  z-30">
+					<span className="absolute left-1 bottom-0 translate-y-1/2 backdrop-blur-3xl px-1 text-pms-429c text-xs z-30">
 						{values.description.length}/10000
 					</span>
 
@@ -155,13 +156,13 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 
 						resetForm();
 					}}
-					className="button button-transparent text-orange border"
+					className="button button-transparent text-orange border font-medium"
 				>
 					Save As Draft
 				</button>
 				<button
 					type="button"
-					className="button button-transparent text-orange disabled:text-pms-427c border"
+					className="button button-transparent text-orange disabled:text-pms-427c border font-medium"
 					disabled={!previewEnabled}
 					onClick={() => {
 						setPreviewOpen(!previewOpen);
@@ -169,7 +170,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 				>
 					Preview
 				</button>
-				<button type="submit" className="button button-primary">
+				<button type="submit" className="button button-primary font-bold">
 					Submit
 				</button>
 

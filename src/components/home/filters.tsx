@@ -75,8 +75,13 @@ const Filters: FC<InputProps> = ({ input, setInput }) => {
 				))}
 			</div>
 			<div className="flex gap-1 items-center">
-				<b>Sort by: </b>
+				<label htmlFor="sort-field">
+					<b>Sort by: </b>
+				</label>
 				<select
+					id="sort-field"
+					name="sort-field"
+					aria-label="Field to sort by"
 					className="button border button-transparent"
 					onChange={(e) => {
 						setInput({

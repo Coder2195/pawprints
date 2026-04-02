@@ -156,7 +156,7 @@ const SignSection: FC<{
 				className="button button-red font-bold flex gap-1 items-center"
 				type="button"
 			>
-				<MdFlag size={48} className="w-7 h-7" /> Report
+				<MdFlag size={48} className="w-7 h-7" aria-label="Flag Icon" /> Report
 			</button>
 		</div>
 	);

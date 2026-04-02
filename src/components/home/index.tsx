@@ -178,7 +178,7 @@ const HomePage: FC = () => {
 								) : hasNext ? (
 									<button
 										type="button"
-										className="button button-primary"
+										className="button button-primary font-bold"
 										onClick={() => {
 											fetchNextPage();
 										}}

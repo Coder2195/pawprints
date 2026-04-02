@@ -29,7 +29,10 @@
 	--color-purple: #7d55c7;
 	--color-red: #da291c;
 	--color-yellow: #f6be00;
-	--trace-size-1: 0.25rem;
+	--trace-size-1: 0.1rem;
+	--trace-size-2: 0.2rem;
+	--trace-size-3: 0.3rem;
+	--trace-size-4: 0.4rem;
 	--trace-color-orange: var(--color-orange);
 	--trace-color-black: var(--color-black);
 	--text-2xs: 0.625rem;
@@ -52,7 +55,7 @@
 	}
 
 	*::placeholder {
-		@apply text-pms-430c;
+		@apply dark:text-pms-430c text-black/60;
 	}
 
 	:root {
@@ -237,6 +240,5 @@
 
 @utility trace-* {
 	-webkit-text-stroke-width: --value(--trace-size-*);
-
 	-webkit-text-stroke-color: --value(--trace-color-*);
 }

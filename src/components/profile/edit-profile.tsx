@@ -122,7 +122,7 @@ const EditProfile: FC = () => {
 									alt="Avatar"
 									className="w-full h-full"
 								/>
-								<div className="w-full h-full absolute top-0 left-0 flex items-center justify-center z-10 hover:opacity-100 opacity-0 bg-black/50 transition-opacity duration-300 ease-in-out ">
+								<div className="w-full h-full absolute top-0 left-0 flex items-center justify-center z-10 hover:opacity-100 opacity-0 bg-black/60 transition-opacity duration-300 ease-in-out ">
 									<input
 										type="file"
 										className="opacity-0 w-full h-full z-10 absolute top-0 left-0 cursor-pointer"

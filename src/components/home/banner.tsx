@@ -6,7 +6,7 @@ const Banner: FC = () => {
 		<header className="relative banner">
 			<span className="restrict-width">
 				<h1 className="text-white">Pawprints</h1>
-				<h2 className="text-pms-427c underline decoration-orange decoration-10">
+				<h2 className="text-pms-427c underline decoration-orange decoration-10 ">
 					For the students, without the vibe coders.
 				</h2>
 				<Image

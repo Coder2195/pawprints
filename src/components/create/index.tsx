@@ -47,7 +47,7 @@ const CreatePawprintClient: FC = () => {
 					<div className="p-4">
 						<button
 							type="button"
-							className="button button-primary w-full text-center"
+							className="button button-primary w-full text-center font-bold"
 							onClick={() => {
 								// inverted because if not creating new its gonna change to creating new
 								if (editMode) setInitialData(EMPTY_PAWPRINT);
