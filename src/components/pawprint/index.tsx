@@ -60,7 +60,7 @@ const OverlayPawprint: FC<{
 					{showDrafts &&
 						(drafts.isLoading ? (
 							<div className="p-4">Loading responses...</div>
-						) : (
+						) : drafts.data !== undefined ? (
 							<>
 								<PawprintResponseForm
 									setResponses={setResponses}
@@ -69,20 +69,18 @@ const OverlayPawprint: FC<{
 									}}
 									pawprintId={pawprint.id}
 								/>
-								{drafts.data !== undefined ? (
-									drafts.data.map((draft) => (
-										<PawprintResponseForm
-											setResponses={setResponses}
-											key={draft.id}
-											response={draft}
-											profile={draft.author || undefined}
-											pawprintId={pawprint.id}
-										/>
-									))
-								) : (
-									<div>Error</div>
-								)}
+								{drafts.data.map((draft) => (
+									<PawprintResponseForm
+										setResponses={setResponses}
+										key={draft.id}
+										response={draft}
+										profile={draft.author || undefined}
+										pawprintId={pawprint.id}
+									/>
+								))}
 							</>
+						) : (
+							<div>Error loading responses!</div>
 						))}
 				</div>
 				{showResponses && (
