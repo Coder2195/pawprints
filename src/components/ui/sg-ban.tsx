@@ -43,7 +43,7 @@ const SGBan: FC = () => {
 						href="https://google.com"
 						className="button button-red font-bold"
 					>
-						Comply, go to Google instead.
+						"Just comply", go to Google instead.
 					</Link>
 				</motion.div>
 			)}
