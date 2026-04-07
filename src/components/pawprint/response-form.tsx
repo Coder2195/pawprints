@@ -130,7 +130,7 @@ const PawprintResponseForm: FC<{
 								placeholder="Write your response..."
 								className="bg-transparent border w-full mt-2 pb-4 resize-y min-h-28"
 							/>
-							<span className="absolute left-1 bottom-0 translate-y-1/2 px-1 text-xs dark:text-pms-430c backdrop-blur-3xl p-0.5 rounded-md text-black/60">
+							<span className="absolute left-1 bottom-0 translate-y-1/2 px-1 text-xs dark:text-pms-427c backdrop-blur-3xl p-0.5 rounded-md text-black/60">
 								{values.content.length}/5000
 							</span>
 						</div>
@@ -141,7 +141,7 @@ const PawprintResponseForm: FC<{
 							{values.content ? (
 								<Markdown>{values.content}</Markdown>
 							) : (
-								<div className="text-black/60 dark:text-pms-430c text-base/4 select-none ">
+								<div className="text-black/60 dark:text-pms-429c text-base/4 select-none ">
 									Begin typing to see a live preview...
 								</div>
 							)}

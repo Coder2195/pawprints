@@ -8,6 +8,8 @@ import Navbar from "../components/ui/navbar";
 import "@/lib/rpc/server";
 import TransitionLayout from "@/components/transition";
 import Footer from "@/components/ui/footer";
+import SGBan from "@/components/ui/sg-ban";
+import Splash from "@/components/ui/splash";
 
 const monoFont = Google_Sans_Code({
 	subsets: ["latin"],
@@ -117,6 +119,8 @@ const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
 			<body className={`${ritFont.variable} ${monoFont.variable} antialiased`}>
 				<Providers>
 					<Navbar />
+					<Splash />
+					<SGBan />
 					<TransitionLayout>{children}</TransitionLayout>
 					<Footer />
 				</Providers>

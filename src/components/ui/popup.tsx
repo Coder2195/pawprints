@@ -17,15 +17,17 @@ const OverlayPopup: FC<
 			animate={{ opacity: 1, transition: { duration: 0.3, delay: 0.5 } }}
 			exit={{ opacity: 0, transition: { duration: 0.3, delay: 0.5 } }}
 			className="w-dvw h-dvh bg-pms-430c/20 backdrop-blur-xs z-50 fixed top-0 left-0 flex items-center"
+			onKeyDownCapture={(e) => {
+				if (e.key === "Escape" && e.currentTarget === e.target) onClose();
+			}}
+			onKeyPressCapture={(e) => {
+				if (e.key === "Escape" && e.currentTarget === e.target) onClose();
+			}}
 			onClick={(e) => {
 				if (e.target !== e.currentTarget) return;
 				onClose();
 			}}
-			onKeyDown={(e) => {
-				if (e.key === "Escape") onClose();
-			}}
-			onKeyUp={() => {}}
-			role="application"
+			role="document"
 		>
 			<motion.dialog
 				aria-label={`A popup dialogue for ${title}`}
