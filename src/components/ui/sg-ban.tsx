@@ -6,7 +6,7 @@ import { type FC, useEffect, useState } from "react";
 const SGBan: FC = () => {
 	const [show, setShow] = useState(true);
 
-	const [hideImmediately, setHideImmediately] = useState(false);
+	const [hideImmediately, setHideImmediately] = useState(true);
 
 	useEffect(() => {
 		if (localStorage.getItem("fuckTheBan") === "true") setHideImmediately(true);
