@@ -50,7 +50,7 @@
 
 @layer base {
 	* {
-		@apply border-pms-429c/30;
+		@apply border-pms-430c/20 dark:border-pms-427c/20;
 		line-height: 1.1;
 	}
 
