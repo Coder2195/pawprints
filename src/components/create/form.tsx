@@ -52,12 +52,12 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						type="text"
 						name="title"
 						id="form-title"
-						className="w-full pr-16f"
+						className="w-full pr-16 peer"
 						placeholder="Untitled Pawprint"
 						maxLength={256}
 						onFocus={() => setFieldError("title", undefined)}
 					/>
-					<span className="absolute left-1 bottom-0 translate-y-1/2 backdrop-blur-3xl text-pms-429c text-xs/3 p-1 rounded-sm z-30">
+					<span className="absolute left-1 bottom-0 translate-y-1/2 backdrop-blur-3xl text-xs/3 p-1 rounded-sm z-30 letter-count">
 						{values.title.length}/256
 					</span>
 				</div>
@@ -76,10 +76,10 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						id="form-description"
 						maxLength={10000}
 						placeholder="Describe what changes you want..."
-						className="min-h-36 lg:min-w-48 lg:w-1/2 min-w-full max-w-full lg:resize resize-y "
+						className="min-h-36 lg:min-w-48 lg:w-1/2 min-w-full max-w-full lg:resize resize-y peer"
 						onFocus={() => setFieldError("description", undefined)}
 					/>
-					<span className="absolute left-1 bottom-0 translate-y-1/2 backdrop-blur-3xl px-1 text-pms-429c text-xs z-30">
+					<span className="absolute left-1 bottom-0 translate-y-1/2 backdrop-blur-3xl px-1 text-xs z-30 letter-count">
 						{values.description.length}/10000
 					</span>
 
@@ -87,7 +87,7 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 						{values.description ? (
 							<Markdown>{values.description}</Markdown>
 						) : (
-							<div className="text-pms-430c text-base/4 select-none">
+							<div className="placeholder text-base/4 select-none">
 								Begin typing to see a live preview...
 							</div>
 						)}

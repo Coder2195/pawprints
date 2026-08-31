@@ -1,15 +1,13 @@
 import { createId } from "@paralleldrive/cuid2";
 import { defineRelations, sql } from "drizzle-orm";
-import {
-	cockroachEnum,
-	cockroachTable,
-	primaryKey,
-	text,
-	timestamp,
-	varchar,
-} from "drizzle-orm/cockroach-core";
+import { pgEnum } from "drizzle-orm/pg-core/columns/enum";
+import { text } from "drizzle-orm/pg-core/columns/text";
+import { timestamp } from "drizzle-orm/pg-core/columns/timestamp";
+import { varchar } from "drizzle-orm/pg-core/columns/varchar";
+import { primaryKey } from "drizzle-orm/pg-core/primary-keys";
+import { pgTable } from "drizzle-orm/pg-core/table";
 
-export const accountTypes = cockroachEnum("account_type", [
+export const accountTypes = pgEnum("account_type", [
 	"GUEST",
 	"STUDENT",
 	"PROFESSOR",
@@ -18,7 +16,7 @@ export const accountTypes = cockroachEnum("account_type", [
 
 export type AccountType = (typeof accountTypes.enumValues)[number];
 
-export const users = cockroachTable("users", {
+export const users = pgTable("users", {
 	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
 	email: varchar("email", { length: 254 }).unique().notNull(),
 	name: varchar("name", { length: 256 }).notNull(),
@@ -31,7 +29,7 @@ export const users = cockroachTable("users", {
 		.$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
-export const pawprints = cockroachTable("pawprints", {
+export const pawprints = pgTable("pawprints", {
 	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
 
 	userId: varchar("user_id", { length: 25 })
@@ -58,7 +56,7 @@ export const pawprints = cockroachTable("pawprints", {
 		.$onUpdate(() => sql`NOW()`),
 });
 
-export const signatures = cockroachTable(
+export const signatures = pgTable(
 	"signatures",
 	{
 		userId: varchar("user_id", { length: 25 })
@@ -79,7 +77,7 @@ export const signatures = cockroachTable(
 	(table) => [primaryKey({ columns: [table.userId, table.pawprintId] })],
 );
 
-export const responses = cockroachTable("responses", {
+export const responses = pgTable("responses", {
 	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
 
 	userId: varchar("user_id", { length: 25 })
@@ -106,7 +104,7 @@ export const responses = cockroachTable("responses", {
 	publishedOn: timestamp("published_on", { withTimezone: true }),
 });
 
-export const reports = cockroachTable("reports", {
+export const reports = pgTable("reports", {
 	id: varchar("id", { length: 25 }).primaryKey().$defaultFn(createId),
 
 	userId: varchar("user_id", { length: 25 })
