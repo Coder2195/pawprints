@@ -5,7 +5,7 @@ import { Field, Form, Formik, type FormikProps } from "formik";
 import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FC, useEffect, useRef, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { MdOutlineCheck } from "react-icons/md";
 import { pawprintPublishValidation } from "@/lib/arktype";
 import { authClient } from "@/lib/auth/client";
@@ -24,8 +24,6 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 	setValues,
 	resetForm,
 	initialValues,
-	errors,
-	touched,
 	setFieldError,
 }) => {
 	const saveDraft = useMutation(orpc.saveDraftPawprint.mutationOptions());
@@ -33,7 +31,6 @@ const FormContent: FC<FormikProps<PawprintContent>> = ({
 
 	const [previewOpen, setPreviewOpen] = useState(false);
 
-	const previewRef = useRef<HTMLDivElement>(null);
 	const { data } = authClient.useSession();
 	const previewEnabled = data !== null;
 

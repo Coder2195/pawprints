@@ -27,7 +27,7 @@ const PawprintResponseForm: FC<{
 	const saveDraft = useMutation(orpc.saveDraftResponse.mutationOptions());
 	const deleteDraft = useMutation(orpc.deleteResponse.mutationOptions());
 	const { addToast } = useToasts();
-	if (!data || !data?.user) return null;
+	if (!data?.user) return null;
 
 	if (data.user.accountType !== "ADMIN") return;
 
@@ -174,7 +174,7 @@ const PawprintResponseForm: FC<{
 														),
 													});
 												},
-												onSuccess(data, variables, onMutateResult, context) {
+												onSuccess() {
 													addToast({
 														type: "success",
 														title: "Draft Deleted",

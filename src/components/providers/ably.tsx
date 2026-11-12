@@ -24,7 +24,7 @@ const AppAblyProvider: FC<PropsWithChildren> = ({ children }) => {
 					new Ably.Realtime({
 						clientId: token.clientId,
 						token: token.token,
-						authCallback: async (tokenParams, callback) => {
+						authCallback: async (_tokenParams, callback) => {
 							try {
 								const token = await client.getAblySubscribeToken();
 								callback(null, token);

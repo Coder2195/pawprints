@@ -7,9 +7,9 @@ import { type FC, useEffect, useState } from "react";
 import type { AblySignPawprint } from "@/lib/ably/types";
 import { PAGE_SIZE } from "@/lib/constants";
 import {
-	type GetPawprintsInput,
-	type GetPawprintsResultItem,
-	orpc,
+  type GetPawprintsInput,
+  type GetPawprintsResultItem,
+  orpc,
 } from "@/lib/rpc";
 import { queryClient } from "@/lib/utils";
 import Banner from "./banner";
@@ -69,8 +69,6 @@ const HomePage: FC = () => {
 	});
 	const {
 		data,
-		isPlaceholderData,
-		status,
 		isFetching,
 		fetchNextPage,
 		isFetchingNextPage,

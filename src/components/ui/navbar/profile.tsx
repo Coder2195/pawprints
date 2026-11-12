@@ -12,9 +12,7 @@ import { useClickAway } from "@/lib/hooks";
 const Profile: FC = () => {
 	const {
 		data: session,
-		isPending, //loading state
-		error, //error object
-		refetch,
+		isPending,
 	} = authClient.useSession();
 
 	const [show, setShow] = useState(false);

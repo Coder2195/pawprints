@@ -12,9 +12,6 @@ const nextConfig: NextConfig = {
       new URL("https://iili.io/**"),
     ],
   },
-  experimental: {
-    viewTransition: true,
-  },
   async rewrites() {
     return [
       {

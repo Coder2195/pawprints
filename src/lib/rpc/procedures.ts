@@ -4,10 +4,10 @@ import { type } from "arktype";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { sendAblyEvent } from "../ably";
 import {
-	pawprintDraftValidation,
-	pawprintPublishValidation,
-	responseDraftValidation,
-	responsePublishValidation,
+  pawprintDraftValidation,
+  pawprintPublishValidation,
+  responseDraftValidation,
+  responsePublishValidation,
 } from "../arktype";
 import { getServerSession } from "../auth/session";
 import { PAGE_SIZE, SORTABLE_FIELDS_LIST } from "../constants";
@@ -180,7 +180,7 @@ export const getPawprints = pub
 				responses: (table) =>
 					db.$count(responses, eq(table.id, responses.pawprintId)),
 			},
-			orderBy: (t) =>
+			orderBy: () =>
 				sql.raw(`${input.orderBy.field} ${input.orderBy.direction}, id desc`),
 			offset: input.page * PAGE_SIZE,
 			limit: PAGE_SIZE + 1,
@@ -203,7 +203,6 @@ export const getPawprint = sessionOptional
 		}),
 	)
 	.handler(async ({ input: { id }, context: { session }, errors }) => {
-		const userEmail = session?.user?.email || "";
 		const userID = session?.user.id;
 
 		const pawprint = await db.query.pawprints.findFirst({
@@ -255,7 +254,7 @@ export const getPawprint = sessionOptional
 
 export const getPawprintSignStatus = sessionOptional
 	.input(type({ id: "string" }))
-	.handler(async ({ input: { id }, context: { session }, errors }) => {
+	.handler(async ({ input: { id }, context: { session } }) => {
 		const userId = session?.user?.id;
 		if (!userId) return null;
 
@@ -289,7 +288,7 @@ export const signPawprint = sessionRequired
 				},
 			});
 
-			if (!pawprint || !pawprint.publishedOn) throw errors.DOES_NOT_EXIST();
+			if (!pawprint?.publishedOn) throw errors.DOES_NOT_EXIST();
 			if (
 				pawprint.completedOn ||
 				(pawprint.expiresOn && pawprint.expiresOn < new Date())
@@ -420,8 +419,7 @@ export const deleteDraftPawprint = ritRequired
 				session: {
 					user: { id: userId },
 				},
-			},
-			errors,
+			}
 		}) => {
 			await db
 				.delete(pawprints)
@@ -442,7 +440,7 @@ export const publishPawprint = ritRequired
 			input,
 			context: {
 				session: {
-					user: { id: userId, image, name },
+					user: { id: userId, name },
 				},
 			},
 		}) => {

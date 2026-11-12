@@ -9,7 +9,7 @@ const Toast: FC<{
 	toast: ToastData;
 	remove: () => void;
 	id: string;
-}> = ({ toast: { title, body, liveTime, type }, remove, id }) => {
+}> = ({ toast: { title, body, liveTime, type }, remove }) => {
 	const [hover, setHover] = useState(false);
 
 	useEffect(() => {

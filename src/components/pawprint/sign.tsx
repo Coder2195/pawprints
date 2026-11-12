@@ -21,7 +21,7 @@ const SignSection: FC<{
 	const { data, isPending: sessionPending } = authClient.useSession();
 	const { addToast } = useToasts();
 
-	const [creationId, setCreationId] = useState<string>(createId);
+	const [creationId] = useState<string>(createId);
 
 	const signStatusOptions = orpc.getPawprintSignStatus.queryOptions({
 		input: { id: pawprint.id },
